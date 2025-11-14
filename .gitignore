@@ -26,3 +26,6 @@ screenshots/
 
 # Instructions
 instructions.*
+
+# imgcmp tool
+scripts/imgcmp.exe
