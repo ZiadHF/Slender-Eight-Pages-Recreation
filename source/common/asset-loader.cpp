@@ -68,7 +68,8 @@ namespace our {
         if(data.is_object()){
             for(auto& [name, desc] : data.items()){
                 std::string path = desc.get<std::string>();
-                assets[name] = mesh_utils::loadOBJ(path);
+                // Use loadOBJWithMaterials for better material support
+                assets[name] = mesh_utils::loadOBJWithMaterials(path);
             }
         }
     };

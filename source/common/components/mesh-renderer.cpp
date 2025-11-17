@@ -7,5 +7,15 @@ namespace our {
         if(!data.is_object()) return;
         mesh = AssetLoader<Mesh>::get(data["mesh"].get<std::string>());
         material = AssetLoader<Material>::get(data["material"].get<std::string>());
+        
+        // Load submesh materials if specified
+        if (data.contains("submeshMaterials") && data["submeshMaterials"].is_object()) {
+            for (auto& [name, matName] : data["submeshMaterials"].items()) {
+                Material* mat = AssetLoader<Material>::get(matName.get<std::string>());
+                if (mat) {
+                    submeshMaterials[name] = mat;
+                }
+            }
+        }
     }
 }

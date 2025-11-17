@@ -2,6 +2,8 @@
 
 #include <glad/gl.h>
 #include "vertex.hpp"
+#include <vector>
+#include <string>
 
 namespace our {
 
@@ -10,6 +12,13 @@ namespace our {
     #define ATTRIB_LOC_TEXCOORD 2
     #define ATTRIB_LOC_NORMAL   3
 
+    // Represents a range of elements that use the same material
+    struct Submesh {
+        std::string materialName;  // Name of the material used by this submesh
+        GLsizei elementCount;      // Number of elements in this submesh
+        GLsizei elementOffset;     // Offset in the element buffer (in bytes)
+    };
+
     class Mesh {
         // Here, we store the object names of the 3 main components of a mesh:
         // A vertex array object, A vertex buffer and an element buffer
@@ -17,6 +26,7 @@ namespace our {
         unsigned int VAO;
         // We need to remember the number of elements that will be draw by glDrawElements 
         GLsizei elementCount;
+        std::vector<Submesh> submeshes; // List of submeshes, each with a different material
     public:
 
         // The constructor takes two vectors:
@@ -80,6 +90,28 @@ namespace our {
             glDeleteBuffers(1, &EBO);
             glDeleteVertexArrays(1, &VAO);
         }
+
+        // Draw a specific submesh by index
+        void drawSubmesh(size_t submeshIndex) const {
+            if (submeshIndex >= submeshes.size()) return;
+            const Submesh& submesh = submeshes[submeshIndex];
+            glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, submesh.elementCount, GL_UNSIGNED_INT, 
+                          (void*)(submesh.elementOffset * sizeof(unsigned int)));
+            glBindVertexArray(0);
+        }
+
+        // Get the number of submeshes
+        size_t getSubmeshCount() const { return submeshes.size(); }
+
+        // Get submesh by index
+        const Submesh& getSubmesh(size_t index) const { return submeshes[index]; }
+
+        // Get all submeshes
+        const std::vector<Submesh>& getSubmeshes() const { return submeshes; }
+
+        // Set submeshes (used when loading multi-material meshes)
+        void setSubmeshes(const std::vector<Submesh>& subs) { submeshes = subs; }
 
         Mesh(Mesh const &) = delete;
         Mesh &operator=(Mesh const &) = delete;

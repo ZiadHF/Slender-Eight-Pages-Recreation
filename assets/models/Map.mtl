@@ -9,7 +9,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd baldestboy.jpg
+map_Kd ../textures/baldestboy.jpg
 
 newmtl BaldBoska_30036
 Ns 0.000000
@@ -19,7 +19,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd baldest.jpg
+map_Kd ../textures/baldest.jpg
 
 newmtl Brick_29994
 Ns 0.000000
@@ -29,7 +29,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Brick_Brick_Small_Brown_Baked.png
+map_Kd ../textures/Brick_Brick_Small_Brown_Baked.png
 
 newmtl BuildingShed_29974
 Ns 0.000000
@@ -39,7 +39,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd BuildingShed.png
+map_Kd ../textures/BuildingShed.png
 
 newmtl Concrete2_30092
 Ns 0.000000
@@ -49,7 +49,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Concrete2_Brick_Small_Brown_Baked.png
+map_Kd ../textures/Concrete2_Brick_Small_Brown_Baked.png
 
 newmtl Concrete_2_30340
 Ns 0.000000
@@ -59,7 +59,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Concrete_2_RockJagged0021Diffuse_Baked.png
+map_Kd ../textures/Concrete_2_RockJagged0021Diffuse_Baked.png
 
 newmtl Concrete_30314
 Ns 0.000000
@@ -69,7 +69,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Concrete_ConcreteBare0280_39_S_Baked.png
+map_Kd ../textures/Concrete_ConcreteBare0280_39_S_Baked.png
 
 newmtl Floor_1_30178
 Ns 0.000000
@@ -78,8 +78,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd DecalsDamageFloor0001_1_S.png
-map_d DecalsDamageFloor0001_1_S.png
+map_Kd ../textures/DecalsDamageFloor0001_1_S.png
+map_d ../textures/DecalsDamageFloor0001_1_S.png
 
 newmtl Floor_2_30374
 Ns 0.000000
@@ -88,8 +88,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd DecalsDamageFloor0004_1_S.png
-map_d DecalsDamageFloor0004_1_S.png
+map_Kd ../textures/DecalsDamageFloor0004_1_S.png
+map_d ../textures/DecalsDamageFloor0004_1_S.png
 
 newmtl Leaking_1_30382
 Ns 0.000000
@@ -98,8 +98,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd DecalsLeaking0165_1_S.png
-map_d DecalsLeaking0165_1_S.png
+map_Kd ../textures/DecalsLeaking0165_1_S.png
+map_d ../textures/DecalsLeaking0165_1_S.png
 
 newmtl Leaking_2_30336
 Ns 0.000000
@@ -108,8 +108,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd DecalsLeaking0197_1_S.png
-map_d DecalsLeaking0197_1_S.png
+map_Kd ../textures/DecalsLeaking0197_1_S.png
+map_d ../textures/DecalsLeaking0197_1_S.png
 
 newmtl Leaking_3_30252
 Ns 0.000000
@@ -118,8 +118,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd DecalsLeaking0223_1_S.png
-map_d DecalsLeaking0223_1_S.png
+map_Kd ../textures/DecalsLeaking0223_1_S.png
+map_d ../textures/DecalsLeaking0223_1_S.png
 
 newmtl Oil_Tank-Material__Untitled.tga_30316
 Ns 0.000000
@@ -129,7 +129,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png
+map_Kd ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png
 
 newmtl Optimized_Bark_Material_9_29992
 Ns 0.000000
@@ -139,7 +139,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd diffuse_1.png
+map_Kd ../textures/diffuse_1.png
 
 newmtl RockJagged0021Diffuse_30360
 Ns 0.000000
@@ -148,8 +148,8 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
-map_d RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
+map_Kd ../textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
+map_d ../textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
 
 newmtl Roof_30222
 Ns 0.000000
@@ -159,7 +159,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Roof_Roof_ao_Baked.png
+map_Kd ../textures/Roof_Roof_ao_Baked.png
 
 newmtl SiloRust_30198
 Ns 0.000000
@@ -169,7 +169,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd SiloRust_05_Baked.png
+map_Kd ../textures/SiloRust_05_Baked.png
 
 newmtl Terrain_Baked_-4838
 Ns 0.000000
@@ -179,7 +179,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Terrain_Baked.png
+map_Kd ../textures/Terrain_Baked.png
 
 newmtl Tiles_30344
 Ns 0.000000
@@ -189,7 +189,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd Tiles_TilesBroken0013_2_S_Baked.png
+map_Kd ../textures/Tiles_TilesBroken0013_2_S_Baked.png
 
 newmtl genericconcrete_30302
 Ns 0.000000
@@ -199,7 +199,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd genericconcrete_genericConcrete_Baked.png
+map_Kd ../textures/genericconcrete_genericConcrete_Baked.png
 
 newmtl transporter_01-truck_01_30288
 Ns 0.000000
@@ -209,7 +209,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd transporter_01-truck_01_truck_01g_Baked.png
+map_Kd ../textures/transporter_01-truck_01_truck_01g_Baked.png
 
 newmtl transporter_02-truck_02_30312
 Ns 0.000000
@@ -219,7 +219,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd transporter_02-truck_02_truck_02b_Baked.png
+map_Kd ../textures/transporter_02-truck_02_truck_02b_Baked.png
 
 newmtl wood_30310
 Ns 0.000000
@@ -229,4 +229,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd wood.png
+map_Kd ../textures/wood.png

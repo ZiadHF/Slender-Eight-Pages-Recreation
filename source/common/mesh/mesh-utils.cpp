@@ -121,3 +121,95 @@ our::Mesh* our::mesh_utils::sphere(const glm::ivec2& segments){
 
     return new our::Mesh(vertices, elements);
 }
+
+our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename) {
+    std::vector<our::Vertex> vertices;
+    std::vector<GLuint> elements;
+    std::unordered_map<our::Vertex, GLuint> vertex_map;
+
+    tinyobj::attrib_t attrib;
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> materials;
+    std::string warn, err;
+
+    // Extract directory from filename for loading MTL files
+    std::string mtl_basedir = filename.substr(0, filename.find_last_of("/\\") + 1);
+
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str(), mtl_basedir.c_str())) {
+        std::cerr << "Failed to load obj file \"" << filename << "\" due to error: " << err << std::endl;
+        return nullptr;
+    }
+    if (!warn.empty()) {
+        std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
+    }
+
+    std::vector<our::Submesh> submeshes;
+    
+    // Process each shape
+    for (const auto &shape : shapes) {
+        // Group faces by material
+        std::map<int, std::vector<tinyobj::index_t>> material_faces;
+        
+        for (size_t f = 0; f < shape.mesh.material_ids.size(); f++) {
+            int mat_id = shape.mesh.material_ids[f];
+            // Get indices for this face (assuming triangles)
+            for (size_t v = 0; v < 3; v++) {
+                material_faces[mat_id].push_back(shape.mesh.indices[3 * f + v]);
+            }
+        }
+        
+        // Create submesh for each material
+        for (const auto& [mat_id, indices] : material_faces) {
+            GLsizei startElement = elements.size();
+            
+            for (const auto &index : indices) {
+                Vertex vertex = {};
+
+                vertex.position = {
+                    attrib.vertices[3 * index.vertex_index + 0],
+                    attrib.vertices[3 * index.vertex_index + 1],
+                    attrib.vertices[3 * index.vertex_index + 2]
+                };
+
+                if (index.normal_index >= 0) {
+                    vertex.normal = {
+                        attrib.normals[3 * index.normal_index + 0],
+                        attrib.normals[3 * index.normal_index + 1],
+                        attrib.normals[3 * index.normal_index + 2]
+                    };
+                }
+
+                if (index.texcoord_index >= 0) {
+                    vertex.tex_coord = {
+                        attrib.texcoords[2 * index.texcoord_index + 0],
+                        1.0f - attrib.texcoords[2 * index.texcoord_index + 1] // Flip V coordinate
+                    };
+                }
+
+                vertex.color = {255, 255, 255, 255};
+
+                auto it = vertex_map.find(vertex);
+                if (it == vertex_map.end()) {
+                    auto new_vertex_index = static_cast<GLuint>(vertices.size());
+                    vertex_map[vertex] = new_vertex_index;
+                    elements.push_back(new_vertex_index);
+                    vertices.push_back(vertex);
+                } else {
+                    elements.push_back(it->second);
+                }
+            }
+            
+            // Create submesh entry
+            our::Submesh submesh;
+            submesh.elementOffset = startElement;
+            submesh.elementCount = elements.size() - startElement;
+            submesh.materialName = (mat_id >= 0 && mat_id < materials.size()) 
+                                   ? materials[mat_id].name : "default";
+            submeshes.push_back(submesh);
+        }
+    }
+
+    auto mesh = new our::Mesh(vertices, elements);
+    mesh->setSubmeshes(submeshes);
+    return mesh;
+}

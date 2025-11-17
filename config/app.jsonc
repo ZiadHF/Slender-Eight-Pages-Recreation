@@ -2,7 +2,7 @@
     "start-scene": "menu",
     "window":
     {
-        "title":"Default Game Window",
+        "title":"Slender Eight Pages",
         "size":{
             "width":1280,
             "height":720
@@ -10,249 +10,151 @@
         "fullscreen": false
     },
     "scene": {
-        "renderer":{
+        "renderer":
+        {
             "sky": "assets/textures/sky.jpg",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
-        "assets":{
-            "shaders":{
-                "tinted":{
-                    "vs":"assets/shaders/tinted.vert",
-                    "fs":"assets/shaders/tinted.frag"
-                },
-                "textured":{
+        "assets":
+        {
+            "shaders":
+            {
+                "textured":
+                {
                     "vs":"assets/shaders/textured.vert",
                     "fs":"assets/shaders/textured.frag"
                 }
             },
-            "textures":{
-                "moon": "assets/textures/moon.jpg",
-                "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png"
+            "textures":
+            {
+                "Terrain_Baked": "assets/textures/Terrain_Baked.png",
+                "Brick_Brick_Small_Brown_Baked": "assets/textures/Brick_Brick_Small_Brown_Baked.png",
+                "BuildingShed": "assets/textures/BuildingShed.png",
+                "wood": "assets/textures/wood.png",
+                "baldestboy": "assets/textures/baldestboy.jpg",
+                "baldest": "assets/textures/baldest.jpg",
+                "Concrete2_Brick_Small_Brown_Baked": "assets/textures/Concrete2_Brick_Small_Brown_Baked.png",
+                "Concrete_2_RockJagged0021Diffuse_Baked": "assets/textures/Concrete_2_RockJagged0021Diffuse_Baked.png",
+                "Concrete_ConcreteBare0280_39_S_Baked": "assets/textures/Concrete_ConcreteBare0280_39_S_Baked.png",
+                "DecalsDamageFloor0001_1_S": "assets/textures/DecalsDamageFloor0001_1_S.png",
+                "DecalsDamageFloor0004_1_S": "assets/textures/DecalsDamageFloor0004_1_S.png",
+                "DecalsLeaking0165_1_S": "assets/textures/DecalsLeaking0165_1_S.png",
+                "DecalsLeaking0197_1_S": "assets/textures/DecalsLeaking0197_1_S.png",
+                "DecalsLeaking0223_1_S": "assets/textures/DecalsLeaking0223_1_S.png",
+                "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked": "assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png",
+                "diffuse_1": "assets/textures/diffuse_1.png",
+                "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png",
+                "Roof_Roof_ao_Baked": "assets/textures/Roof_Roof_ao_Baked.png",
+                "SiloRust_05_Baked": "assets/textures/SiloRust_05_Baked.png",
+                "Tiles_TilesBroken0013_2_S_Baked": "assets/textures/Tiles_TilesBroken0013_2_S_Baked.png",
+                "genericconcrete_genericConcrete_Baked": "assets/textures/genericconcrete_genericConcrete_Baked.png",
+                "transporter_01-truck_01_truck_01g_Baked": "assets/textures/transporter_01-truck_01_truck_01g_Baked.png",
+                "transporter_02-truck_02_truck_02b_Baked": "assets/textures/transporter_02-truck_02_truck_02b_Baked.png"
             },
-            "meshes":{
-                "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
-                "plane": "assets/models/plane.obj",
-                "sphere": "assets/models/Slenderman.obj"
+            "meshes":
+            {
+                "map": "assets/models/Map.obj"
             },
-            "samplers":{
-                "default":{},
-                "pixelated":{
-                    "MAG_FILTER": "GL_NEAREST"
-                }
+            "samplers":
+            {
+                "default":{}
             },
-            "materials":{
-                "metal":{
-                    "type": "tinted",
-                    "shader": "tinted",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [0.45, 0.4, 0.5, 1]
-                },
-                "glass":{
+            "materials":
+            {
+                "Terrain_Baked_-4838":
+                {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        },
-                        "blending":{
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
-                    },
-                    "transparent": true,
-                    "tint": [1, 1, 1, 1],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
-                "grass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "grass",
+                    "texture": "Terrain_Baked",
                     "sampler": "default"
                 },
-                "monkey":{
+                "BaldBoska_1_30176":
+                {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
+                    "texture": "baldestboy",
                     "sampler": "default"
                 },
-                "moon":{
+                "BaldBoska_30036":
+                {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
                     },
                     "tint": [1, 1, 1, 1],
-                    "texture": "moon",
+                    "texture": "baldest",
+                    "sampler": "default"
+                },
+                "Brick_29994":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Brick_Brick_Small_Brown_Baked",
+                    "sampler": "default"
+                },
+                "BuildingShed_29974":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "BuildingShed",
+                    "sampler": "default"
+                },
+                "wood_30310":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "wood",
                     "sampler": "default"
                 }
             }
         },
-        "world":[
+        "world":
+        [
             {
-                "position": [0, 0, 10],
-                "components": [
-                    {
-                        "type": "Camera"
-                    },
-                    {
-                        "type": "Free Camera Controller"
-                    }
-                ],
-                "children": [
-                    {
-                        "position": [1, -1, -1],
-                        "rotation": [45, 45, 0],
-                        "scale": [0.1, 0.1, 1.0],
-                        "components": [
-                            {
-                                "type": "Mesh Renderer",
-                                "mesh": "cube",
-                                "material": "metal"
-                            }
-                        ]
-                    }
+                "position": [0, 2, 10],
+                "components":
+                [
+                    {"type": "Camera"},
+                    {"type": "Free Camera Controller"}
                 ]
             },
             {
-                "rotation": [-45, 0, 0],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "monkey",
-                        "material": "monkey"
-                    },
-                    {
-                        "type": "Movement",
-                        "linearVelocity": [0, 0.1, 0],
-                        "angularVelocity": [0, 45, 0]
-                    }
-                ]
-            },
-            {
-                "position": [0, -1, 0],
-                "rotation": [-90, 0, 0],
-                "scale": [10, 10, 1],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "grass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 1, 2],
+                "position": [0, 0, 0],
                 "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
+                "scale": [1, 1, 1],
+                "components":
+                [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 1, -2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [-2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 3, 0],
-                "rotation": [90, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 10, 0],
-                "rotation": [45, 45, 0],
-                "scale": [5, 5, 5],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "sphere",
-                        "material": "moon"
-                    },
-                    {
-                        "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
+                        "mesh": "map",
+                        "material": "Terrain_Baked_-4838"
                     }
                 ]
             }
