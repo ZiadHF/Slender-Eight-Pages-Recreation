@@ -5,6 +5,7 @@
 
 #include <application.hpp>
 
+#include <Miniaudio.h>
 #include "states/menu-state.hpp"
 #include "states/play-state.hpp"
 #include "states/shader-test-state.hpp"

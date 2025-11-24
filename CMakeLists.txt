@@ -98,10 +98,12 @@ include_directories(
         vendor/glad/include
         vendor/glm
         vendor/imgui
+        vendor/Bullet
+        vendor/Miniaudio
         vendor/utils
 )
 
-
+link_directories(${PROJECT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
