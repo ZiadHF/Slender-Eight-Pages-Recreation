@@ -11,7 +11,7 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+set(CMAKE_AUTORCC ON)
 # These are the options we select for building GLFW as a library
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)        # Don't build Documentation
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)       # Don't build Tests
@@ -61,6 +61,8 @@ set(COMMON_SOURCES
         source/common/texture/texture-utils.cpp
         source/common/texture/screenshot.hpp
         source/common/texture/screenshot.cpp
+        source/common/texture/tree-utils.hpp
+        source/common/texture/tree-utils.cpp
 
         source/common/material/pipeline-state.hpp
         source/common/material/pipeline-state.cpp
@@ -84,6 +86,8 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/instanced-renderer.hpp
+        source/common/components/instanced-renderer.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
@@ -125,7 +129,16 @@ set(STATES_SOURCES
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
-add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
+
+# Add icon resource file for Windows
+if(WIN32)
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")
+    add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
+#     add_executable(GAME_APPLICATION WIN32 source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
+else()
+    add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
+endif()
+# set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME "Slender - The Eight Pages")
 target_link_libraries(GAME_APPLICATION glfw)
 
 if(UNIX AND NOT APPLE)
