@@ -132,6 +132,150 @@
                     "tint": [1, 1, 1, 1],
                     "texture": "wood",
                     "sampler": "default"
+                },
+                "Concrete2_30092":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Concrete2_Brick_Small_Brown_Baked",
+                    "sampler": "default"
+                },
+                "Concrete_2_30340":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Concrete_2_RockJagged0021Diffuse_Baked",
+                    "sampler": "default"
+                },
+                "Concrete_30314":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Concrete_ConcreteBare0280_39_S_Baked",
+                    "sampler": "default"
+                },
+                "Oil_Tank-Material__Untitled.tga_30316":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked",
+                    "sampler": "default"
+                },
+                "Optimized_Bark_Material_9_29992":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "diffuse_1",
+                    "sampler": "default"
+                },
+                "RockJagged0021Diffuse_30360":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked",
+                    "sampler": "default"
+                },
+                "Roof_30222":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Roof_Roof_ao_Baked",
+                    "sampler": "default"
+                },
+                "SiloRust_30198":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                "Tiles_30344":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "Tiles_TilesBroken0013_2_S_Baked",
+                    "sampler": "default"
+                },
+                "genericconcrete_30302":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "genericconcrete_genericConcrete_Baked",
+                    "sampler": "default"
+                },
+                "transporter_01-truck_01_30288":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "transporter_01-truck_01_truck_01g_Baked",
+                    "sampler": "default"
+                },
+                "transporter_02-truck_02_30312":
+                {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{"enabled": true},
+                        "depthTesting":{"enabled": true}
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "transporter_02-truck_02_truck_02b_Baked",
+                    "sampler": "default"
                 }
             }
         },

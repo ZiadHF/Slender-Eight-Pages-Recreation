@@ -125,18 +125,40 @@ namespace our {
             if(!camera) camera = entity->getComponent<CameraComponent>();
             // If this entity has a mesh renderer component
             if(auto meshRenderer = entity->getComponent<MeshRendererComponent>(); meshRenderer){
-                // We construct a command from it
-                RenderCommand command;
-                command.localToWorld = meshRenderer->getOwner()->getLocalToWorldMatrix();
-                command.center = glm::vec3(command.localToWorld * glm::vec4(0, 0, 0, 1));
-                command.mesh = meshRenderer->mesh;
-                command.material = meshRenderer->material;
-                // if it is transparent, we add it to the transparent commands list
-                if(command.material->transparent){
-                    transparentCommands.push_back(command);
+                glm::mat4 localToWorld = meshRenderer->getOwner()->getLocalToWorldMatrix();
+                glm::vec3 center = glm::vec3(localToWorld * glm::vec4(0, 0, 0, 1));
+                
+                // If mesh has submeshes, create a command for each submesh with its material
+                if (meshRenderer->mesh && meshRenderer->mesh->getSubmeshCount() > 0) {
+                    for (size_t i = 0; i < meshRenderer->mesh->getSubmeshCount(); i++) {
+                        const auto& submesh = meshRenderer->mesh->getSubmeshes()[i];
+                        RenderCommand command;
+                        command.localToWorld = localToWorld;
+                        command.center = center;
+                        command.mesh = meshRenderer->mesh;
+                        command.submeshIndex = i;
+                        command.material = meshRenderer->getMaterialForSubmesh(submesh.materialName);
+                        
+                        if(command.material->transparent){
+                            transparentCommands.push_back(command);
+                        } else {
+                            opaqueCommands.push_back(command);
+                        }
+                    }
                 } else {
-                // Otherwise, we add it to the opaque command list
-                    opaqueCommands.push_back(command);
+                    // No submeshes, use default material
+                    RenderCommand command;
+                    command.localToWorld = localToWorld;
+                    command.center = center;
+                    command.mesh = meshRenderer->mesh;
+                    command.submeshIndex = -1;
+                    command.material = meshRenderer->material;
+                    
+                    if(command.material->transparent){
+                        transparentCommands.push_back(command);
+                    } else {
+                        opaqueCommands.push_back(command);
+                    }
                 }
             }
         }
@@ -188,7 +210,11 @@ namespace our {
             // Set the "transform" uniform
             command.material->shader->set("transform", MVP);
             // Draw the mesh
-            command.mesh->draw();
+            if (command.submeshIndex >= 0) {
+                command.mesh->drawSubmesh(command.submeshIndex);
+            } else {
+                command.mesh->draw();
+            }
         }
 
         // If there is a sky material, draw the sky
@@ -226,7 +252,11 @@ namespace our {
             // Set the "transform" uniform
             command.material->shader->set("transform", MVP);
             // Draw the mesh
-            command.mesh->draw();
+            if (command.submeshIndex >= 0) {
+                command.mesh->drawSubmesh(command.submeshIndex);
+            } else {
+                command.mesh->draw();
+            }
         }
 
         // If there is a postprocess material, apply postprocessing

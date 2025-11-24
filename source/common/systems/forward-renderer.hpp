@@ -20,6 +20,7 @@ namespace our
         glm::vec3 center;
         Mesh* mesh;
         Material* material;
+        int submeshIndex = -1; // -1 means draw entire mesh, >= 0 means draw specific submesh
     };
 
     // A forward renderer is a renderer that draw the object final color directly to the framebuffer

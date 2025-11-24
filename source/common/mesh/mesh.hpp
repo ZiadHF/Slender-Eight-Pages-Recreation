@@ -94,10 +94,15 @@ namespace our {
         // Draw a specific submesh by index
         void drawSubmesh(size_t submeshIndex) const {
             if (submeshIndex >= submeshes.size()) return;
-            const Submesh& submesh = submeshes[submeshIndex];
+            
+            // Bind the VAO before drawing
             glBindVertexArray(VAO);
+            
+            const auto& submesh = submeshes[submeshIndex];
             glDrawElements(GL_TRIANGLES, submesh.elementCount, GL_UNSIGNED_INT, 
-                          (void*)(submesh.elementOffset * sizeof(unsigned int)));
+                          (void*)(submesh.elementOffset * sizeof(GLuint)));
+            
+            // Unbind VAO after drawing
             glBindVertexArray(0);
         }
 
