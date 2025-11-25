@@ -1,7 +1,7 @@
 # Blender v2.73 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib SM Model.mtl
-o SM_Model
+mtllib Slenderman.mtl
+o Slenderman
 v 0.078800 0.100000 0.307600
 v 0.072300 0.089400 0.259300
 v 0.060900 0.089300 0.293000
