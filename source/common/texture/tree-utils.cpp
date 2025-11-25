@@ -19,8 +19,8 @@ namespace our
    
         std::random_device dev;
         std::mt19937 gen(dev());
-        std::uniform_real_distribution<float> randomOffset(-10.0f, 10.0f); // Increased range for more variation
-        std::uniform_real_distribution<float> randomScale(0.5f, 1.5f);   // Wider scale range
+        std::uniform_real_distribution<float> randomOffset(-3.0f, 3.0f); // Increased range for more variation
+        std::uniform_real_distribution<float> randomScale(1.0f, 1.5f);   // Wider scale range
         std::uniform_real_distribution<float> randomRotation(0.0f, 6.28318530718f); // 0 to 2*PI radians
         std::uniform_real_distribution<float> randomWidthScale(0.7f, 2.4f); // Width variation
         std::vector<TreeInstance> instances;
