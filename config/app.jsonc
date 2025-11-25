@@ -687,6 +687,9 @@
                     },
                     {
                         "type": "Free Camera Controller"
+                    },
+                    {
+                        "type": "Audio Controller"
                     }
                 ]
             },
@@ -768,7 +771,11 @@
                         "rotationMultiplier": [0.0, 0.0, 0.0],
                         "rotationRandomRange": [0.0, 6.28318530718, 0.0],
                         "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0]
+                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "maxRenderDistance": 100.0,
+                        "cullingBoundingRadius": 20.0,
+                        "enableDistanceCulling": true,
+                        "enableFrustumCulling": true
                     }
                 ]
             },
@@ -807,7 +814,11 @@
                         "rotationMultiplier": [0.0, 0.0, 0.0],
                         "rotationRandomRange": [0.0, 6.28318530718, 0.0],
                         "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0]
+                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "maxRenderDistance": 100.0,
+                        "cullingBoundingRadius": 20.0,
+                        "enableDistanceCulling": true,
+                        "enableFrustumCulling": true
                     }
                 ]
             },
@@ -834,15 +845,19 @@
                         "mesh": "grass",
                         "material":"Grass.002",
                         "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.002,
+                        "Density": 0.018,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [2.0, 4.0, 2.0],
-                        "scaleRandomRange": [0.0, 0.5],
+                        "scaleMultiplier": [1.0, 4.0, 2.0],
+                        "scaleRandomRange": [0.0, 0.0],
                         "rotationMultiplier": [0.0, 0.0, 0.0],
                         "rotationRandomRange": [0.0, 6.28318530718, 0.0],
                         "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0]
+                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "maxRenderDistance": 60.0,
+                        "cullingBoundingRadius": 5.0,
+                        "enableDistanceCulling": true,
+                        "enableFrustumCulling": true
                     }
                 ]
             }

@@ -88,6 +88,8 @@ set(COMMON_SOURCES
         source/common/components/component-deserializer.hpp
         source/common/components/instanced-renderer.hpp
         source/common/components/instanced-renderer.cpp
+        source/common/components/audio-controller.hpp
+        source/common/components/audio-controller.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
@@ -125,11 +127,11 @@ set(STATES_SOURCES
 if(WIN32)
     set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")
     add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
-#     add_executable(GAME_APPLICATION WIN32 source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
+#    add_executable(GAME_APPLICATION WIN32 source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
 else()
     add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 endif()
-# set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME "Slender - The Eight Pages")
+set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME Slender)
 target_link_libraries(GAME_APPLICATION glfw)
 
 if(UNIX AND NOT APPLE)

@@ -10,19 +10,7 @@
 #include <texture/texture-utils.hpp>
 #include <texture/texture2d.hpp>
 #include <vector>
-
-#define MINIAUDIO_IMPLEMENTATION
-#include <miniaudio.h>
-
-// I encountered build issues due to the 'near' and 'far' macros defined in
-// Windows headers conflicting with variable names in this file. To resolve
-// this, I undefine these macros.
-#ifdef near
-#undef near
-#endif
-#ifdef far
-#undef far
-#endif
+#include "../common/components/audio-controller.hpp"
 
 // This struct is used to store the location and size of a button and the code
 // it should execute when clicked
@@ -92,10 +80,8 @@ class Menustate : public our::State {
     std::mt19937 rng;
     our::TexturedMaterial* imageMaterial;
 
-    // Audio members
-    ma_engine audioEngine;
-    ma_sound backgroundMusic;
-    bool musicStarted = false;
+    // Audio controller
+    our::AudioController* audioController = nullptr;
 
     void onInitialize() override {
         // First, we create a material for the menu's background
@@ -134,23 +120,11 @@ class Menustate : public our::State {
         highlightMaterial->pipelineState.blending.sourceFactor = GL_ONE;
         highlightMaterial->pipelineState.blending.destinationFactor = GL_ONE;
 
-        // Initialize the audio engine
-        ma_result result = ma_engine_init(NULL, &audioEngine);
-        if (result != MA_SUCCESS) {
-            std::cerr << "Failed to initialize audio engine." << std::endl;
-        }
-        else {
-            // Now that the engine is initialized, load the background music
-            result = ma_sound_init_from_file(&audioEngine, "assets/sounds/menu.wav", MA_SOUND_FLAG_STREAM, NULL, NULL, &backgroundMusic);
-            if (result != MA_SUCCESS) {
-                std::cerr << "Failed to load background music." << std::endl;
-            }
-            else {
-                // Background music loaded successfully, we start playing it and loop it
-                ma_sound_set_looping(&backgroundMusic, MA_TRUE);
-                ma_sound_start(&backgroundMusic);
-                musicStarted = true;
-            }
+        // Initialize the audio controller
+        audioController = new our::AudioController();
+        if (audioController->initializeMusic("assets/sounds/menu.wav", true)) {
+            audioController->setVolume(0.5f);
+            audioController->playMusic();
         }
 
         // Then we create a rectangle whose top-left corner is at the origin and
@@ -474,9 +448,10 @@ class Menustate : public our::State {
         delete highlightMaterial;
 
         // Clean up audio resources
-        if (musicStarted) {
-            ma_sound_uninit(&backgroundMusic);
-            ma_engine_uninit(&audioEngine);
+        if (audioController) {
+            audioController->stopMusic();
+            delete audioController;
+            audioController = nullptr;
         }
 
         // Clean up animated images
