@@ -199,12 +199,18 @@ class Menustate : public our::State {
         // receive when it is called.
         //      We leave it empty since button actions receive no input.
         // - The body {} which contains the code to be executed.
-        buttons[0].position = {441.0f, 608.0f};
-        buttons[0].size = {400.0f, 33.0f};
+        
+        // Adjustments for different window sizes
+        float scaleX = getApp()->getFrameBufferSize().x / 1280.0f;
+        float scaleY = getApp()->getFrameBufferSize().y / 720.0f;
+        float scaleSize = (scaleX + scaleY) / 2.0f;
+
+        buttons[0].position = {441.0f * scaleX, 608.0f * scaleY}; // This is for a 1280x720 window so we have to adjust it if the window size is different
+        buttons[0].size = {400.0f * scaleSize, 33.0f * scaleSize}; // Size has to be adjusted too so it can take the correct relative space
         buttons[0].action = [this]() { this->getApp()->changeState("play"); };
 
-        buttons[1].position = {441.0f, 641.0f};
-        buttons[1].size = {400.0f, 33.0f};
+        buttons[1].position = {441.0f * scaleX, 641.0f * scaleY};
+        buttons[1].size = {400.0f * scaleSize, 33.0f * scaleSize};
         buttons[1].action = [this]() { this->getApp()->close(); };
 
         // Initialize random number generator
