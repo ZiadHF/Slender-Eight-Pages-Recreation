@@ -49,17 +49,42 @@
                 "genericconcrete_genericConcrete_Baked": "assets/textures/genericconcrete_genericConcrete_Baked.png",
                 "transporter_01-truck_01_truck_01g_Baked": "assets/textures/transporter_01-truck_01_truck_01g_Baked.png",
                 "transporter_02-truck_02_truck_02b_Baked": "assets/textures/transporter_02-truck_02_truck_02b_Baked.png",
-                "slenderman_texture": "assets/textures/slenderman_color.png"
+                "slenderman_texture": "assets/textures/slenderman_color.png",
+                "BarkMat_diffuse": "assets/textures/BarkMat_diffuse.png",
+                "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
+                "Grass" : "assets/textures/Grass.png"
             },
             "meshes": {
                 "map": "assets/models/Map.obj",
                 "tree": "assets/models/tree.obj",
+                "tree2": "assets/models/tree2.obj",
+                "grass" : "assets/models/grass.obj",
                 "slender": "assets/models/Slenderman.obj"
             },
             "samplers": {
                 "default": {}
             },
             "materials": {
+                "Grass.002":{
+                     "type": "textured",
+                    "shader": "instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Grass",
+                    "sampler": "default"
+                },
                 "Slenderman": {
                     "type": "textured",
                     "shader": "textured",
@@ -78,6 +103,26 @@
                         1
                     ],
                     "texture": "slenderman_texture",
+                    "sampler": "default"
+                },
+                "BarkMat2": {
+                    "type": "textured",
+                    "shader": "instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "BarkMat_diffuse",
                     "sampler": "default"
                 },
                 "BarkMat": {
@@ -99,6 +144,33 @@
                     ],
                     "texture": "diffuse_3",
                     "sampler": "default"
+                },
+                "BranchMat": {
+                    "type": "textured",
+                    "shader": "instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "BranchMat_diffuse",
+                    "sampler": "default",
+                    "transparent": true,
+                    "alphaThreshold": 0.5
                 },
                 "LeafMat": {
                     "type": "textured",
@@ -688,9 +760,89 @@
                         "mesh": "tree",
                         "material": "TreeInstancedMaterial",
                         "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.0002,
+                        "Density": 0.00006,
                         "worldWidth": 400.0,
-                        "worldHeight": 400.0
+                        "worldHeight": 400.0,
+                        "scaleMultiplier": [2.0, 4.0, 2.0],
+                        "scaleRandomRange": [0.0, 0.5],
+                        "rotationMultiplier": [0.0, 0.0, 0.0],
+                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
+                        "positionOffset": [0.0, 0.0, 0.0],
+                        "positionRandomRange": [3.0, 0.0, 3.0]
+                    }
+                ]
+            },
+             {
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                
+                "components": [
+                    {
+                        "type": "Instanced Renderer",
+                        "mesh": "tree2",
+                        "material":"BarkMat2",
+                        "submeshMaterials": {
+                            "BarkMat2": "BarkMat2",
+                            "BranchMat": "BranchMat"
+                        },
+                        "Map": "assets/textures/greyscale_tree_map.png",
+                        "Density": 0.00002,
+                        "worldWidth": 400.0,
+                        "worldHeight": 400.0,
+                        "scaleMultiplier": [2.0, 4.0, 2.0],
+                        "scaleRandomRange": [0.0, 0.5],
+                        "rotationMultiplier": [0.0, 0.0, 0.0],
+                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
+                        "positionOffset": [0.0, 0.0, 0.0],
+                        "positionRandomRange": [3.0, 0.0, 3.0]
+                    }
+                ]
+            },
+             {
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                
+                "components": [
+                    {
+                        "type": "Instanced Renderer",
+                        "mesh": "grass",
+                        "material":"Grass.002",
+                        "Map": "assets/textures/greyscale_tree_map.png",
+                        "Density": 0.002,
+                        "worldWidth": 400.0,
+                        "worldHeight": 400.0,
+                        "scaleMultiplier": [2.0, 4.0, 2.0],
+                        "scaleRandomRange": [0.0, 0.5],
+                        "rotationMultiplier": [0.0, 0.0, 0.0],
+                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
+                        "positionOffset": [0.0, 0.0, 0.0],
+                        "positionRandomRange": [3.0, 0.0, 3.0]
                     }
                 ]
             }

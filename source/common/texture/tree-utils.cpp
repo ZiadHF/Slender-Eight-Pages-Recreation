@@ -5,7 +5,10 @@
 #include <iostream>
 namespace our
 {
-    std::vector<TreeInstance> generateFromMap(const std::string &mapFilename, glm::vec2 worldSize, float density)
+    std::vector<TreeInstance> generateFromMap(const std::string &mapFilename, glm::vec2 worldSize, float density,
+                                              glm::vec3 posRandomRange,
+                                              glm::vec3 rotRandomRange,
+                                              glm::vec2 scaleRandomRange)
     {
         int width, height, channels;
         // Load the image
@@ -19,10 +22,19 @@ namespace our
    
         std::random_device dev;
         std::mt19937 gen(dev());
-        std::uniform_real_distribution<float> randomOffset(-3.0f, 3.0f); // Increased range for more variation
-        std::uniform_real_distribution<float> randomScale(1.0f, 1.5f);   // Wider scale range
-        std::uniform_real_distribution<float> randomRotation(0.0f, 6.28318530718f); // 0 to 2*PI radians
-        std::uniform_real_distribution<float> randomWidthScale(0.7f, 2.4f); // Width variation
+        
+        // Create distributions based on provided ranges
+        std::uniform_real_distribution<float> randomOffsetX(-posRandomRange.x, posRandomRange.x);
+        std::uniform_real_distribution<float> randomOffsetY(-posRandomRange.y, posRandomRange.y);
+        std::uniform_real_distribution<float> randomOffsetZ(-posRandomRange.z, posRandomRange.z);
+        
+        std::uniform_real_distribution<float> randomRotX(-rotRandomRange.x, rotRandomRange.x);
+        std::uniform_real_distribution<float> randomRotY(-rotRandomRange.y, rotRandomRange.y);
+        std::uniform_real_distribution<float> randomRotZ(-rotRandomRange.z, rotRandomRange.z);
+        
+        std::uniform_real_distribution<float> randomScale(scaleRandomRange.x, scaleRandomRange.y);
+        std::uniform_real_distribution<float> randomWidthScale(0.7f, 2.4f);
+        
         std::vector<TreeInstance> instances;
         // How many pixels to traverse according to the density 
         float pixelsPerTree = 1.0f/density;
@@ -44,12 +56,27 @@ namespace our
                     
                     TreeInstance instance;
                     instance.pos = glm::vec3(
-                        (normalizedX - 0.5f) * worldSize.x + randomOffset(gen),
+                        (normalizedX - 0.5f) * worldSize.x,
                         0.0f,
-                        (normalizedY - 0.5f) * worldSize.y + randomOffset(gen)
+                        (normalizedY - 0.5f) * worldSize.y
                     );
-                    instance.scale = randomScale(gen);
-                    instance.rotation = randomRotation(gen);
+                    
+                    instance.posRandom = glm::vec3(
+                        randomOffsetX(gen),
+                        randomOffsetY(gen),
+                        randomOffsetZ(gen)
+                    );
+                    
+                    instance.scale = 1.0f;
+                    instance.scaleRandom = randomScale(gen);
+                    
+                    instance.rotation = 0.0f;
+                    instance.rotationRandom = glm::vec3(
+                        randomRotX(gen),
+                        randomRotY(gen),
+                        randomRotZ(gen)
+                    );
+                    
                     instance.widthScale = randomWidthScale(gen);
                     
                     instances.push_back(instance);

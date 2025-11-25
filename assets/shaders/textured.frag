@@ -12,7 +12,7 @@ uniform sampler2D tex;
 
 void main(){
     frag_color = tint * fs_in.color * texture(tex, fs_in.tex_coord);
-    if(frag_color.a < 0.08) {
+    if(frag_color.a < 0.01) {
         discard;
     }
 }

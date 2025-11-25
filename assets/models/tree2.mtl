@@ -1,0 +1,24 @@
+# Blender 4.3.2 MTL File: 'None'
+# www.blender.org
+
+newmtl BarkMat2
+Ns 14.400002
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+d 1.000000
+illum 2
+map_Kd BarkMat_diffuse.png
+map_Bump -bm 1.000000 BarkMat_normal.png
+
+newmtl BranchMat
+Ns 105.624992
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1000.000000
+illum 2
+map_Kd BranchMat_diffuse.png
+map_d BranchMat_diffuse.png
+map_Bump -bm 1.000000 BranchMat_normal.png

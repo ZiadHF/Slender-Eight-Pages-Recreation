@@ -205,6 +205,8 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename) {
             submesh.elementCount = elements.size() - startElement;
             submesh.materialName = (mat_id >= 0 && mat_id < materials.size()) 
                                    ? materials[mat_id].name : "default";
+            std::cout << "Created submesh with material: " << submesh.materialName 
+                      << " (elements: " << submesh.elementCount << ")" << std::endl;
             submeshes.push_back(submesh);
         }
     }

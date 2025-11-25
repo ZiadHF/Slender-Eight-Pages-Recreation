@@ -165,6 +165,9 @@ namespace our
         // Set submeshes (used when loading multi-material meshes)
         void setSubmeshes(const std::vector<Submesh> &subs) { submeshes = subs; }
 
+        // Get VAO for manual drawing
+        unsigned int getVAO() const { return VAO; }
+
         Mesh(Mesh const &) = delete;
         Mesh &operator=(Mesh const &) = delete;
     };

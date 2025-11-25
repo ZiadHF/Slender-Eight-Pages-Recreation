@@ -253,10 +253,29 @@ namespace our
             if (instancedRenderer->mesh && instancedRenderer->material &&
                 !instancedRenderer->InstanceMats.empty())
             {
-                instancedRenderer->material->setup();
-                instancedRenderer->material->shader->set("VP", VP);
                 instancedRenderer->mesh->setupInstancing(instancedRenderer->InstanceMats);
-                instancedRenderer->mesh->drawInstanced(instancedRenderer->InstanceMats.size());
+                
+                // Check if mesh has submeshes
+                if (instancedRenderer->mesh->getSubmeshCount() > 0) {
+                    // Render each submesh with its specific material
+                    for (size_t i = 0; i < instancedRenderer->mesh->getSubmeshCount(); i++) {
+                        const auto& submesh = instancedRenderer->mesh->getSubmesh(i);
+                        Material* submeshMaterial = instancedRenderer->getMaterialForSubmesh(submesh.materialName);
+                        
+                        submeshMaterial->setup();
+                        submeshMaterial->shader->set("VP", VP);
+                        
+                        glBindVertexArray(instancedRenderer->mesh->getVAO());
+                        glDrawElementsInstanced(GL_TRIANGLES, submesh.elementCount, GL_UNSIGNED_INT,
+                                              (void*)(submesh.elementOffset * sizeof(GLuint)),
+                                              instancedRenderer->InstanceMats.size());
+                    }
+                } else {
+                    // No submeshes, use default material
+                    instancedRenderer->material->setup();
+                    instancedRenderer->material->shader->set("VP", VP);
+                    instancedRenderer->mesh->drawInstanced(instancedRenderer->InstanceMats.size());
+                }
             }
         }
         // If there is a sky material, draw the sky
