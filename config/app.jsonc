@@ -1,33 +1,32 @@
 {
     "start-scene": "menu",
-    "window":
-    {
-        "title":"Slender Eight Pages",
-        "size":{
-            "width":1280,
-            "height":720
+    "window": {
+        "title": "Slender Eight Pages",
+        "size": {
+            "width": 1280,
+            "height": 720
         },
         "fullscreen": false
     },
     "scene": {
-        "renderer":
-        {
+        "renderer": {
             "sky": "assets/textures/sky.png",
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
-        "assets":
-        {
-            "shaders":
-            {
-                "textured":
-                {
-                    "vs":"assets/shaders/textured.vert",
-                    "fs":"assets/shaders/textured.frag"
+        "assets": {
+            "shaders": {
+                "textured": {
+                    "vs": "assets/shaders/textured.vert",
+                    "fs": "assets/shaders/textured.frag"
+                },
+                "instanced": {
+                    "vs": "assets/shaders/instanced.vert",
+                    "fs": "assets/shaders/instanced.frag"
                 }
             },
-            "textures":
-            {
+            "textures": {
                 "Terrain_Baked": "assets/textures/Terrain_Baked.png",
+                "diffuse_3": "assets/textures/diffuse_3.png",
                 "Brick_Brick_Small_Brown_Baked": "assets/textures/Brick_Brick_Small_Brown_Baked.png",
                 "BuildingShed": "assets/textures/BuildingShed.png",
                 "wood": "assets/textures/wood.png",
@@ -51,254 +50,601 @@
                 "transporter_01-truck_01_truck_01g_Baked": "assets/textures/transporter_01-truck_01_truck_01g_Baked.png",
                 "transporter_02-truck_02_truck_02b_Baked": "assets/textures/transporter_02-truck_02_truck_02b_Baked.png"
             },
-            "meshes":
-            {
-                "map": "assets/models/Map.obj"
+            "meshes": {
+                "map": "assets/models/Map.obj",
+                "tree": "assets/models/tree.obj"
             },
-            "samplers":
-            {
-                "default":{}
+            "samplers": {
+                "default": {}
             },
-            "materials":
-            {
-                "Terrain_Baked_-4838":
-                {
+            "materials": {
+                "BarkMat": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_3",
+                    "sampler": "default"
+                },
+                "LeafMat": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_3",
+                    "sampler": "default"
+                },
+                "Terrain_Baked_-4838": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Terrain_Baked",
                     "sampler": "default"
                 },
-                "BaldBoska_1_30176":
-                {
+                "BaldBoska_1_30176": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "baldestboy",
                     "sampler": "default"
                 },
-                "BaldBoska_30036":
-                {
+                "BaldBoska_30036": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "baldest",
                     "sampler": "default"
                 },
-                "Brick_29994":
-                {
+                "Brick_29994": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Brick_Brick_Small_Brown_Baked",
                     "sampler": "default"
                 },
-                "BuildingShed_29974":
-                {
+                "BuildingShed_29974": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "BuildingShed",
                     "sampler": "default"
                 },
-                "wood_30310":
-                {
+                "wood_30310": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "wood",
                     "sampler": "default"
                 },
-                "Concrete2_30092":
-                {
+                "Concrete2_30092": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Concrete2_Brick_Small_Brown_Baked",
                     "sampler": "default"
                 },
-                "Concrete_2_30340":
-                {
+                "Concrete_2_30340": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Concrete_2_RockJagged0021Diffuse_Baked",
                     "sampler": "default"
                 },
-                "Concrete_30314":
-                {
+                "Concrete_30314": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Concrete_ConcreteBare0280_39_S_Baked",
                     "sampler": "default"
                 },
-                "Oil_Tank-Material__Untitled.tga_30316":
-                {
+                "Oil_Tank-Material__Untitled.tga_30316": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked",
                     "sampler": "default"
                 },
-                "Optimized_Bark_Material_9_29992":
-                {
+                "Optimized_Bark_Material_9_29992": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "diffuse_1",
                     "sampler": "default"
                 },
-                "RockJagged0021Diffuse_30360":
-                {
+                "RockJagged0021Diffuse_30360": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked",
                     "sampler": "default"
                 },
-                "Roof_30222":
-                {
+                "Roof_30222": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Roof_Roof_ao_Baked",
                     "sampler": "default"
                 },
-                "SiloRust_30198":
-                {
+                "SiloRust_30198": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "SiloRust_05_Baked",
                     "sampler": "default"
                 },
-                "Tiles_30344":
-                {
+                "Tiles_30344": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "Tiles_TilesBroken0013_2_S_Baked",
                     "sampler": "default"
                 },
-                "genericconcrete_30302":
-                {
+                "genericconcrete_30302": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "genericconcrete_genericConcrete_Baked",
                     "sampler": "default"
                 },
-                "transporter_01-truck_01_30288":
-                {
+                "Floor_1_30178": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsDamageFloor0001_1_S",
+                    "sampler": "default"
+                },
+                "Floor_2_30374": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsDamageFloor0004_1_S",
+                    "sampler": "default"
+                },
+                "Leaking_1_30382L": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsLeaking0165_1_S",
+                    "sampler": "default"
+                },
+                "Leaking_2_30336": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsLeaking0197_1_S",
+                    "sampler": "default"
+                },
+                "Leaking_3_30252": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsLeaking0223_1_S",
+                    "sampler": "default"
+                },
+                "transporter_01-truck_01_30288": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "transporter_01-truck_01_truck_01g_Baked",
                     "sampler": "default"
                 },
-                "transporter_02-truck_02_30312":
-                {
+                "transporter_02-truck_02_30312": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
-                        "faceCulling":{"enabled": true},
-                        "depthTesting":{"enabled": true}
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "transporter_02-truck_02_truck_02b_Baked",
+                    "sampler": "default"
+                },
+                "TreeInstancedMaterial": {
+                    "type": "textured",
+                    "shader": "instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_3",
                     "sampler": "default"
                 }
             }
         },
-        "world":
-        [
+        "world": [
             {
-                "position": [0, 2, 10],
-                "components":
-                [
-                    {"type": "Camera"},
-                    {"type": "Free Camera Controller"}
+                "position": [
+                    0,
+                    2,
+                    10
+                ],
+                "components": [
+                    {
+                        "type": "Camera"
+                    },
+                    {
+                        "type": "Free Camera Controller"
+                    }
                 ]
             },
             {
-                "position": [0, 0, 0],
-                "rotation": [0, 0, 0],
-                "scale": [1, 1, 1],
-                "components":
-                [
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "components": [
                     {
                         "type": "Mesh Renderer",
                         "mesh": "map",
                         "material": "Terrain_Baked_-4838"
+                    }
+                ]
+            },
+            {
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "components": [
+                    {
+                        "type": "Instanced Renderer",
+                        "mesh": "tree",
+                        "material": "TreeInstancedMaterial",
+                        "Map": "assets/textures/greyscale_tree_map.png",
+                        "Density": 0.0002,
+                        "worldWidth": 400.0,
+                        "worldHeight": 400.0
                     }
                 ]
             }
