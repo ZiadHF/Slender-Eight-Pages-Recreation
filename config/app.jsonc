@@ -58,7 +58,7 @@
                 "map": "assets/models/Map.obj",
                 "tree": "assets/models/tree.obj",
                 "tree2": "assets/models/tree2.obj",
-                "grass" : "assets/models/grass.obj",
+                "grass" : "assets/models/testgrass.obj",
                 "slender": "assets/models/Slenderman.obj"
             },
             "samplers": {
@@ -839,20 +839,20 @@
                     1
                 ],
                 
-                "components": [
+                 "components": [
                     {
                         "type": "Instanced Renderer",
                         "mesh": "grass",
                         "material":"Grass.002",
-                        "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.018,
+                        "Map": "assets/textures/greyscale_grass_map.png",
+                        "Density": 0.05,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [1.0, 4.0, 2.0],
+                        "scaleMultiplier": [1.0, 1.0, 2.0],
                         "scaleRandomRange": [0.0, 0.0],
                         "rotationMultiplier": [0.0, 0.0, 0.0],
                         "rotationRandomRange": [0.0, 6.28318530718, 0.0],
-                        "positionOffset": [0.0, 0.0, 0.0],
+                        "positionOffset": [0.0, 1.0, 0.0],
                         "positionRandomRange": [3.0, 0.0, 3.0],
                         "maxRenderDistance": 60.0,
                         "cullingBoundingRadius": 5.0,
@@ -860,6 +860,7 @@
                         "enableFrustumCulling": true
                     }
                 ]
+
             }
         ]
     }
