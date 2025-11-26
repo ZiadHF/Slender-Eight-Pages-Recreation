@@ -90,11 +90,15 @@ set(COMMON_SOURCES
         source/common/components/instanced-renderer.cpp
         source/common/components/audio-controller.hpp
         source/common/components/audio-controller.cpp
+        source/common/components/player.hpp
+        source/common/components/slenderman.hpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
+        source/common/systems/static-effect.hpp
+        source/common/systems/slenderman-ai.hpp
 )
 
 # Define the directories in which to search for the included headers

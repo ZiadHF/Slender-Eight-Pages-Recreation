@@ -7,6 +7,8 @@
 #include "instanced-renderer.hpp"
 #include "mesh-renderer.hpp"
 #include "movement.hpp"
+#include "../components/player.hpp"
+#include "../components/slenderman.hpp"
 
 namespace our {
 
@@ -28,6 +30,12 @@ inline void deserializeComponent(const nlohmann::json& data, Entity* entity) {
         component = entity->addComponent<InstancedRendererComponent>();
     } else if (type == AudioController::getID()) {
         component = entity->addComponent<AudioController>();
+    }
+    else if (type == our::PlayerComponent::getID()) {
+        component = entity->addComponent<our::PlayerComponent>();
+    }
+    else if (type == our::SlendermanComponent::getID()) {
+        component = entity->addComponent<our::SlendermanComponent>();
     }
     if (component) component->deserialize(data);
 }

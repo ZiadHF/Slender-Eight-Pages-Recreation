@@ -2,6 +2,7 @@
 
 #include "../components/instanced-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
+#include <GLFW/glfw3.h>
 #include "../texture/texture-utils.hpp"
 namespace our {
 
@@ -357,6 +358,12 @@ void ForwardRenderer::render(World* world) {
 
         // Render postprocess quad
         postprocessMaterial->setup();
+
+        // Values that will be set by the game logic
+        postprocessMaterial->shader->set("distance", postprocessUniforms.distance);
+        postprocessMaterial->shader->set("angle", postprocessUniforms.angle);
+        postprocessMaterial->shader->set("time", postprocessUniforms.time);
+
         glBindVertexArray(postProcessVertexArray);
         glDrawArrays(GL_TRIANGLES, 0, 3);
         glBindVertexArray(0);

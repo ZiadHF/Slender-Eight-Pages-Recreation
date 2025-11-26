@@ -1,0 +1,137 @@
+#pragma once
+#include <GLFW/glfw3.h>
+#include <string>
+#include <unordered_map>
+
+namespace our {
+
+inline int stringToGLFWKey(const std::string& keyName) {
+    static const std::unordered_map<std::string, int> keyMap = {
+        // Letters
+        {"A", GLFW_KEY_A},
+        {"B", GLFW_KEY_B},
+        {"C", GLFW_KEY_C},
+        {"D", GLFW_KEY_D},
+        {"E", GLFW_KEY_E},
+        {"F", GLFW_KEY_F},
+        {"G", GLFW_KEY_G},
+        {"H", GLFW_KEY_H},
+        {"I", GLFW_KEY_I},
+        {"J", GLFW_KEY_J},
+        {"K", GLFW_KEY_K},
+        {"L", GLFW_KEY_L},
+        {"M", GLFW_KEY_M},
+        {"N", GLFW_KEY_N},
+        {"O", GLFW_KEY_O},
+        {"P", GLFW_KEY_P},
+        {"Q", GLFW_KEY_Q},
+        {"R", GLFW_KEY_R},
+        {"S", GLFW_KEY_S},
+        {"T", GLFW_KEY_T},
+        {"U", GLFW_KEY_U},
+        {"V", GLFW_KEY_V},
+        {"W", GLFW_KEY_W},
+        {"X", GLFW_KEY_X},
+        {"Y", GLFW_KEY_Y},
+        {"Z", GLFW_KEY_Z},
+        // Numbers
+        {"0", GLFW_KEY_0},
+        {"1", GLFW_KEY_1},
+        {"2", GLFW_KEY_2},
+        {"3", GLFW_KEY_3},
+        {"4", GLFW_KEY_4},
+        {"5", GLFW_KEY_5},
+        {"6", GLFW_KEY_6},
+        {"7", GLFW_KEY_7},
+        {"8", GLFW_KEY_8},
+        {"9", GLFW_KEY_9},
+        // Special keys
+        {"SPACE", GLFW_KEY_SPACE},
+        {"ESCAPE", GLFW_KEY_ESCAPE},
+        {"ENTER", GLFW_KEY_ENTER},
+        {"TAB", GLFW_KEY_TAB},
+        {"BACKSPACE", GLFW_KEY_BACKSPACE},
+        {"LEFT_SHIFT", GLFW_KEY_LEFT_SHIFT},
+        {"RIGHT_SHIFT", GLFW_KEY_RIGHT_SHIFT},
+        {"LEFT_CONTROL", GLFW_KEY_LEFT_CONTROL},
+        {"RIGHT_CONTROL", GLFW_KEY_RIGHT_CONTROL},
+        {"LEFT_ALT", GLFW_KEY_LEFT_ALT},
+        {"RIGHT_ALT", GLFW_KEY_RIGHT_ALT},
+        // Mouse buttons
+        {"MOUSE_LEFT", GLFW_MOUSE_BUTTON_LEFT},
+        {"MOUSE_RIGHT", GLFW_MOUSE_BUTTON_RIGHT},
+        {"MOUSE_MIDDLE", GLFW_MOUSE_BUTTON_MIDDLE},
+    };
+
+    auto it = keyMap.find(keyName);
+    return (it != keyMap.end()) ? it->second : -1;
+}
+
+class PlayerComponent : public Component {
+   public:
+    // Number of pages collected by the player
+    int collectedPages = 0;
+
+    // Player health
+    float maxHealth = 100.0f;
+    float health = maxHealth;
+    float healthRegenRate = 5.0f; // Health regeneration rate per second
+
+    // Slenderman interaction
+    float lookTime = 0.0f;  // Time the player has been looking at Slenderman
+    float distanceToSlenderman = 0.0f;  // Distance to Slenderman
+    float angleToSlenderman = 0.0f;     // Angle to Slenderman
+
+    // Movement speeds
+    float walkSpeed = 3.0f;    // Walking speed in units per second
+    float sprintSpeed = 6.5f;  // Sprinting speed in units per second
+
+    // Movement controls
+    int moveForward = GLFW_KEY_W;
+    int moveBackward = GLFW_KEY_S;
+    int moveLeft = GLFW_KEY_A;
+    int moveRight = GLFW_KEY_D;
+    int toggleFlashlight = GLFW_KEY_F;
+    int sprintKey = GLFW_KEY_LEFT_SHIFT;
+    int interactKey = GLFW_MOUSE_BUTTON_LEFT;
+
+    // Flashlight state
+    bool flashlightOn = true;
+
+    // Mouse sensitivity
+    float mouseSensitivity = 1.2f;
+
+    static std::string getID() { return "Player Component"; }
+
+    void deserialize(const nlohmann::json& data) override {
+        if (!data.is_object()) return;
+        // Health parameters
+        maxHealth = data.value("maxHealth", 100.0f);
+        healthRegenRate = data.value("healthRegenRate", 5.0f);
+
+        // Movement parameters
+        walkSpeed = data.value("walkSpeed", 3.0f);
+        sprintSpeed = data.value("sprintSpeed", 6.5f);
+
+        // Mouse sensitivity
+        mouseSensitivity = data.value("mouseSensitivity", 1.2f);
+
+        if (data.contains("moveForward") && data["moveForward"].is_string())
+            moveForward = stringToGLFWKey(data["moveForward"]);
+        if (data.contains("moveBackward") && data["moveBackward"].is_string())
+            moveBackward = stringToGLFWKey(data["moveBackward"]);
+        if (data.contains("moveLeft") && data["moveLeft"].is_string())
+            moveLeft = stringToGLFWKey(data["moveLeft"]);
+        if (data.contains("moveRight") && data["moveRight"].is_string())
+            moveRight = stringToGLFWKey(data["moveRight"]);
+        if (data.contains("toggleFlashlight") &&
+            data["toggleFlashlight"].is_string())
+            toggleFlashlight = stringToGLFWKey(data["toggleFlashlight"]);
+        if (data.contains("sprintKey") && data["sprintKey"].is_string())
+            sprintKey = stringToGLFWKey(data["sprintKey"]);
+        if (data.contains("interactKey") && data["interactKey"].is_string())
+            interactKey = stringToGLFWKey(data["interactKey"]);
+    }
+};
+
+};  // namespace our

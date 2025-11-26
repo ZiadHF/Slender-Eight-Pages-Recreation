@@ -11,7 +11,7 @@
     "scene": {
         "renderer": {
             "sky": "assets/textures/sky.png",
-            "postprocess": "assets/shaders/postprocess/vignette.frag"
+            "postprocess": "assets/shaders/postprocess/static.frag"
         },
         "assets": {
             "shaders": {
@@ -690,6 +690,9 @@
                     },
                     {
                         "type": "Audio Controller"
+                    },
+                    {
+                        "type": "Player Component"
                     }
                 ]
             },
@@ -738,6 +741,9 @@
                         "type": "Mesh Renderer",
                         "mesh": "slender",
                         "material": "Slenderman"
+                    },
+                    {
+                        "type": "Slenderman Component"
                     }
                 ]
             },
@@ -839,7 +845,7 @@
                     1
                 ],
                 
-                 "components": [
+                "components": [
                     {
                         "type": "Instanced Renderer",
                         "mesh": "grass",
@@ -860,7 +866,6 @@
                         "enableFrustumCulling": true
                     }
                 ]
-
             }
         ]
     }

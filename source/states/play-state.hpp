@@ -6,6 +6,8 @@
 #include <systems/forward-renderer.hpp>
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
+#include <systems/slenderman-ai.hpp>
+#include <systems/static-effect.hpp>
 #include <asset-loader.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
@@ -15,6 +17,8 @@ class Playstate: public our::State {
     our::ForwardRenderer renderer;
     our::FreeCameraControllerSystem cameraController;
     our::MovementSystem movementSystem;
+    our::SlendermanAISystem slendermanAISystem;
+    our::StaticEffectSystem staticEffectSystem;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -32,12 +36,17 @@ class Playstate: public our::State {
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
+        // Initialize Slenderman AI
+        slendermanAISystem.initialize(&world);
+        staticEffectSystem.initialize(&world);
     }
 
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
+        slendermanAISystem.update(&world, (float)deltaTime);
+        staticEffectSystem.update(&world, &renderer);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
 

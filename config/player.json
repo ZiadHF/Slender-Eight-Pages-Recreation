@@ -8,7 +8,6 @@
         "backward": "S",
         "left": "A",
         "right": "D",
-        "jump": "SPACE",
         "interact": "LEFT_CLICK",
         "toggle_flashlight": "F",
         "sprint": "LEFT_SHIFT"

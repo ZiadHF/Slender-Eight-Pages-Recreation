@@ -23,6 +23,12 @@ namespace our
         int submeshIndex = -1; // -1 means draw entire mesh, >= 0 means draw specific submesh
     };
 
+    struct StaticPostprocessUniforms {
+        float distance = 999.0f;  // Default: far away (no static)
+        float angle = 180.0f;     // Default: not looking (no static)
+        float time = 0.0f;        // Default: not looking (no static)
+    };
+
     // A forward renderer is a renderer that draw the object final color directly to the framebuffer
     // In other words, the fragment shader in the material should output the color that we should see on the screen
     // This is different from more complex renderers that could draw intermediate data to a framebuffer before computing the final color
@@ -41,6 +47,7 @@ namespace our
         GLuint postprocessFrameBuffer, postProcessVertexArray;
         Texture2D *colorTarget, *depthTarget;
         TexturedMaterial* postprocessMaterial;
+        StaticPostprocessUniforms postprocessUniforms;
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
         // windowSize is the width & height of the window (in pixels).
@@ -50,6 +57,11 @@ namespace our
         // This function should be called every frame to draw the given world
         void render(World* world);
 
+        void setStaticParams(const float distance, const float angle, const float time) {
+            postprocessUniforms.distance = distance;
+            postprocessUniforms.angle = angle;
+            postprocessUniforms.time = time;
+        }
 
     };
 
