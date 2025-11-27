@@ -4,6 +4,7 @@
 #include "../components/camera.hpp"
 #include "../components/mesh-renderer.hpp"
 #include "../asset-loader.hpp"
+#include "../common/components/instanced-renderer.hpp"
 
 #include <glad/gl.h>
 #include <vector>
@@ -24,9 +25,9 @@ namespace our
     };
 
     struct StaticPostprocessUniforms {
-        float distance = 999.0f;  // Default: far away (no static)
-        float angle = 180.0f;     // Default: not looking (no static)
-        float time = 0.0f;        // Default: not looking (no static)
+        float maxHealth;
+        float health;
+        float time;
     };
 
     // A forward renderer is a renderer that draw the object final color directly to the framebuffer
@@ -43,10 +44,13 @@ namespace our
         // Objects used for rendering a skybox
         Mesh* skySphere;
         TexturedMaterial* skyMaterial;
+        // Frustum
+        Frustum frustum;
         // Objects used for Postprocessing
         GLuint postprocessFrameBuffer, postProcessVertexArray;
         Texture2D *colorTarget, *depthTarget;
         TexturedMaterial* postprocessMaterial;
+        // Struct to hold player health
         StaticPostprocessUniforms postprocessUniforms;
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
@@ -57,11 +61,9 @@ namespace our
         // This function should be called every frame to draw the given world
         void render(World* world);
 
-        void setStaticParams(const float distance, const float angle, const float time) {
-            postprocessUniforms.distance = distance;
-            postprocessUniforms.angle = angle;
-            postprocessUniforms.time = time;
-        }
+        void setStaticParams(const float maxHealth, const float health);
+
+        const Frustum& getFrustum() const;
 
     };
 

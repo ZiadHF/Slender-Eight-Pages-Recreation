@@ -19,14 +19,11 @@ namespace our {
             // Distance and angle thresholds for player interaction
             float detectionDistance = 20.0f;
             float closeDistance = 5.0f;
-            float detectionAngle = 60.0f; // degrees
-            float lookAtAngleThreshold = 30.0f; // degrees
-            float proximityDeltaTime = 0.5f; // time increment when player is in proximity
 
             // Health decrease parameters
             float distanceFactor = 0.01f; // factor for distance-based health decrease
             float lookTimeFactor = 0.5f; // factor for look time-based health decrease
-            float damageRate = 10.0f; // damage per second when looking at Slenderman
+            float damageRate = 0.5f; // damage per second when looking at Slenderman
 
             // The AI works this way:
             // Each teleportCooldown, we generate a random integer between minAIValue and maxAIValue
@@ -61,12 +58,9 @@ namespace our {
                 // Teleportation parameters
                 teleportCooldown = data.value("teleportCooldown", 3.0f);
 
-                // Distance and angle thresholds
+                // Distance threshold
                 detectionDistance = data.value("detectionDistance", 20.0f);
                 closeDistance = data.value("closeDistance", 5.0f);
-                detectionAngle = data.value("detectionAngle", 60.0f);
-                lookAtAngleThreshold = data.value("lookAtAngleThreshold", 30.0f);
-                proximityDeltaTime = data.value("proximityDeltaTime", 0.5f);
                 damageRate = data.value("damageRate", 10.0f);
 
                 // Health decrease parameters

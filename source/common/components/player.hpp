@@ -45,6 +45,11 @@ inline int stringToGLFWKey(const std::string& keyName) {
         {"7", GLFW_KEY_7},
         {"8", GLFW_KEY_8},
         {"9", GLFW_KEY_9},
+        // Arrows
+        {"UP", GLFW_KEY_UP},
+        {"DOWN", GLFW_KEY_DOWN},
+        {"LEFT", GLFW_KEY_LEFT},
+        {"RIGHT", GLFW_KEY_RIGHT},
         // Special keys
         {"SPACE", GLFW_KEY_SPACE},
         {"ESCAPE", GLFW_KEY_ESCAPE},
@@ -80,7 +85,6 @@ class PlayerComponent : public Component {
     // Slenderman interaction
     float lookTime = 0.0f;  // Time the player has been looking at Slenderman
     float distanceToSlenderman = 0.0f;  // Distance to Slenderman
-    float angleToSlenderman = 0.0f;     // Angle to Slenderman
 
     // Movement speeds
     float walkSpeed = 3.0f;    // Walking speed in units per second

@@ -1,8 +1,9 @@
 #include "forward-renderer.hpp"
 
+#include <GLFW/glfw3.h>
+
 #include "../components/instanced-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
-#include <GLFW/glfw3.h>
 #include "../texture/texture-utils.hpp"
 namespace our {
 
@@ -205,6 +206,9 @@ void ForwardRenderer::render(World* world) {
     glm::mat4 VP =
         camera->getProjectionMatrix(windowSize) * camera->getViewMatrix();
 
+    // Extract frustum for culling
+    frustum.extractFromVP(VP);
+
     // Set the OpenGL viewport using viewportStart and viewportSize
     glViewport(0, 0, windowSize.x, windowSize.y);
 
@@ -245,10 +249,6 @@ void ForwardRenderer::render(World* world) {
             command.mesh->draw();
         }
     }
-
-    // Extract frustum for culling
-    Frustum frustum;
-    frustum.extractFromVP(VP);
 
     for (auto& instancedRenderer : instancedRenderers) {
         if (instancedRenderer->mesh && instancedRenderer->material &&
@@ -360,8 +360,8 @@ void ForwardRenderer::render(World* world) {
         postprocessMaterial->setup();
 
         // Values that will be set by the game logic
-        postprocessMaterial->shader->set("distance", postprocessUniforms.distance);
-        postprocessMaterial->shader->set("angle", postprocessUniforms.angle);
+        postprocessMaterial->shader->set("health", postprocessUniforms.health);
+        postprocessMaterial->shader->set("maxHealth", postprocessUniforms.maxHealth);
         postprocessMaterial->shader->set("time", postprocessUniforms.time);
 
         glBindVertexArray(postProcessVertexArray);
@@ -370,4 +370,11 @@ void ForwardRenderer::render(World* world) {
     }
 }
 
+void ForwardRenderer::setStaticParams(const float maxHealth, const float health) {
+    postprocessUniforms.maxHealth = maxHealth;
+    postprocessUniforms.health = health;
+    postprocessUniforms.time = (float)glfwGetTime();
+}
+
+const Frustum& ForwardRenderer::getFrustum() const { return frustum; }
 }  // namespace our

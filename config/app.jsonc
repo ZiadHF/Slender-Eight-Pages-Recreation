@@ -11,7 +11,7 @@
     "scene": {
         "renderer": {
             "sky": "assets/textures/sky.png",
-            "postprocess": "assets/shaders/postprocess/static.frag"
+            "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets": {
             "shaders": {
@@ -743,7 +743,15 @@
                         "material": "Slenderman"
                     },
                     {
-                        "type": "Slenderman Component"
+                        "type": "Slenderman Component",
+                        "startingAIValue": 20,
+                        "spawnPoints": [
+                            [1,1,0],
+                            [6,1,0],
+                            [9,1,0],
+                            [-5,1,0],
+                            [5,1,-10]
+                        ]
                     }
                 ]
             },
