@@ -6,12 +6,11 @@ in vec2 tex_coord;
 out vec4 frag_color;
 
 // Uniforms for controlling the static effect intensity
-// distance: distance between player and slenderman (large = far = no static)
-// angle: angle between player's view direction and slenderman's position (large = not looking = no static)
-// time: how long player has been looking at slenderman
-uniform float distance = 999.0;  // Default: far away (no static)
-uniform float angle = 180.0;     // Default: not looking (no static)  
-uniform float time = 0.0;        // Default: not looking (no static)
+// health: player health (low = more static)
+// maxHealth: maximum player health
+uniform float health = 100.0;    // Default: full health (no static)
+uniform float maxHealth = 100.0; // Default: maximum health
+uniform float time = 0.0; // Time uniform for animation
 
 // Random noise function
 float random(vec2 st) {
@@ -21,11 +20,8 @@ float random(vec2 st) {
 void main(){
     vec4 originalColor = texture(tex, tex_coord);
 
-    // Calculate intensity based on distance, angle, and time
-    float distanceFactor = clamp(1.0 - (distance / 50.0), 0.0, 1.0);
-    float angleFactor = clamp(1.0 - (angle / 1.57), 0.0, 1.0);
-    float timeFactor = clamp(time / 5.0, 0.0, 1.0);
-    float intensity = distanceFactor * angleFactor * (0.3 + 0.7 * timeFactor);
+    // Calculate intensity based on health
+    float intensity = clamp(1.0 - (health / maxHealth), 0.0, 1.0);
 
     // CRT TV Static with horizontal banding
     // Create horizontal bands that shift over time
