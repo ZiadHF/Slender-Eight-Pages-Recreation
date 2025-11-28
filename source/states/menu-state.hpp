@@ -71,7 +71,7 @@ class Menustate : public our::State {
     // for the fading effect).
     float time;
     // An array of the button that we can interact with
-    std::array<Button, 2> buttons;
+    std::array<Button, 3> buttons;
 
     // New members for animated images
     // We will have a pool of images to choose from, and choose one at random to animate
@@ -119,6 +119,9 @@ class Menustate : public our::State {
         highlightMaterial->pipelineState.blending.equation = GL_FUNC_SUBTRACT;
         highlightMaterial->pipelineState.blending.sourceFactor = GL_ONE;
         highlightMaterial->pipelineState.blending.destinationFactor = GL_ONE;
+
+        imagePool.clear();
+        currentImage = nullptr;
 
         // Initialize the audio controller
         audioController = new our::AudioController();
@@ -179,13 +182,17 @@ class Menustate : public our::State {
         float scaleY = getApp()->getFrameBufferSize().y / 720.0f;
         float scaleSize = (scaleX + scaleY) / 2.0f;
 
-        buttons[0].position = {441.0f * scaleX, 608.0f * scaleY}; // This is for a 1280x720 window so we have to adjust it if the window size is different
+        buttons[0].position = {441.0f * scaleX, 573.0f * scaleY}; // This is for a 1280x720 window so we have to adjust it if the window size is different
         buttons[0].size = {400.0f * scaleSize, 33.0f * scaleSize}; // Size has to be adjusted too so it can take the correct relative space
         buttons[0].action = [this]() { this->getApp()->changeState("play"); };
 
-        buttons[1].position = {441.0f * scaleX, 641.0f * scaleY};
+        buttons[1].position = {441.0f * scaleX, 608.0f * scaleY};
         buttons[1].size = {400.0f * scaleSize, 33.0f * scaleSize};
-        buttons[1].action = [this]() { this->getApp()->close(); };
+        buttons[1].action = [this]() { this->getApp()->changeState("settings"); };
+
+        buttons[2].position = {441.0f * scaleX, 643.0f * scaleY};
+        buttons[2].size = {400.0f * scaleSize, 33.0f * scaleSize};
+        buttons[2].action = [this]() { this->getApp()->close(); };
 
         // Initialize random number generator
         rng.seed(std::random_device{}());
@@ -330,6 +337,10 @@ class Menustate : public our::State {
         } else if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
             // If the escape key is pressed in this frame, exit the game
             getApp()->close();
+        }
+        else if (keyboard.justPressed(GLFW_KEY_S)) {
+            // If the S key is pressed in this frame, go to the settings state
+            getApp()->changeState("settings");
         }
 
         // Get a reference to the mouse object and get the current mouse

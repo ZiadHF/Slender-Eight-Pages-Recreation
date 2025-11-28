@@ -326,6 +326,9 @@ class SettingsState : public our::State
     {
         // Load config first
         loadConfig();
+
+        // Clear keyboardTextures in case of re-initialization
+        keyboardTextures.clear();
         
         // Setting up the materials
         keyboardRectMat = new our::TintedMaterial();
