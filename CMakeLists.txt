@@ -92,6 +92,8 @@ set(COMMON_SOURCES
         source/common/components/audio-controller.cpp
         source/common/components/player.hpp
         source/common/components/slenderman.hpp
+        source/common/components/page.hpp
+        source/common/components/page-spawner.hpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
@@ -136,7 +138,7 @@ else()
     add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 endif()
 set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME Slender)
-target_link_libraries(GAME_APPLICATION glfw)
+target_link_libraries(GAME_APPLICATION glfw BulletDynamics BulletCollision LinearMath miniaudio)
 
 if(UNIX AND NOT APPLE)
         target_link_libraries(GAME_APPLICATION OpenGL::GL)
