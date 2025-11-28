@@ -63,6 +63,8 @@ set(COMMON_SOURCES
         source/common/texture/screenshot.cpp
         source/common/texture/tree-utils.hpp
         source/common/texture/tree-utils.cpp
+        source/common/text-renderer.cpp
+        source/common/text-renderer.hpp
 
         source/common/material/pipeline-state.hpp
         source/common/material/pipeline-state.cpp
@@ -114,6 +116,7 @@ include_directories(
         vendor/Bullet
         vendor/Miniaudio
         vendor/utils
+        vendor/freetype-2.10.0/include
 )
 
 link_directories(${PROJECT_SOURCE_DIR}/lib)
@@ -124,6 +127,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
 set(STATES_SOURCES
         source/states/play-state.hpp
         source/states/menu-state.hpp
+        source/states/settings-state.hpp
 )
 
 # For each example, we add an executable target
@@ -139,7 +143,14 @@ else()
     add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 endif()
 set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME Slender)
-target_link_libraries(GAME_APPLICATION glfw BulletDynamics BulletCollision LinearMath miniaudio)
+target_link_libraries(GAME_APPLICATION glfw freetyped )
+target_link_directories(GAME_APPLICATION PRIVATE ${CMAKE_SOURCE_DIR}/libs)
+target_link_libraries(GAME_APPLICATION 
+    BulletDynamics
+    BulletCollision
+    LinearMath
+    BulletSoftBody
+)
 
 if(UNIX AND NOT APPLE)
         target_link_libraries(GAME_APPLICATION OpenGL::GL)

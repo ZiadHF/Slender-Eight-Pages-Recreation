@@ -8,6 +8,7 @@
 #include <Miniaudio.h>
 #include "states/menu-state.hpp"
 #include "states/play-state.hpp"
+#include "states/settings-state.hpp"
 
 int main(int argc, char** argv) {
     
@@ -36,6 +37,7 @@ int main(int argc, char** argv) {
     // Register all the states of the project in the application
     app.registerState<Menustate>("menu");
     app.registerState<Playstate>("play");
+    app.registerState<SettingsState>("settings");
     
     // Then choose the state to run based on the option "start-scene" in the config
     if(app_config.contains(std::string{"start-scene"})){
