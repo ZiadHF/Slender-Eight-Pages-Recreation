@@ -104,6 +104,7 @@ set(COMMON_SOURCES
         source/common/systems/static-effect.hpp
         source/common/systems/slenderman-ai.hpp
         source/common/systems/page-system.hpp
+        source/common/systems/physics-system.hpp
 )
 
 # Define the directories in which to search for the included headers
@@ -142,8 +143,22 @@ if(WIN32)
 else()
     add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 endif()
+
+# Disable optional freetype dependencies and packaging
+set(FT_WITH_HARFBUZZ OFF CACHE BOOL "" FORCE)
+set(FT_WITH_PNG OFF CACHE BOOL "" FORCE)
+set(FT_WITH_BZIP2 OFF CACHE BOOL "" FORCE)
+set(FT_WITH_ZLIB OFF CACHE BOOL "" FORCE)
+set(SKIP_INSTALL_ALL ON CACHE BOOL "" FORCE)
+set(CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz TRUE)
+set(CMAKE_DISABLE_FIND_PACKAGE_PNG TRUE)
+set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
+set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
+add_subdirectory(vendor/freetype-2.10.0)
+
+
 set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME Slender)
-target_link_libraries(GAME_APPLICATION glfw freetyped )
+target_link_libraries(GAME_APPLICATION glfw freetype)
 target_link_directories(GAME_APPLICATION PRIVATE ${CMAKE_SOURCE_DIR}/libs)
 target_link_libraries(GAME_APPLICATION 
     BulletDynamics
