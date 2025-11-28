@@ -166,47 +166,47 @@ class SlendermanAISystem {
                         validSpawns[index].first;
                 }
 
-                // DEBUG: Print teleportation info
-                std::cout << "=== TELEPORTATION DEBUG ===" << std::endl;
-                std::cout << "[SlenderAI] canTeleport: " << canTeleport
-                          << std::endl;
-                std::cout << "[SlenderAI] timeSinceLastTeleport: "
-                          << slenderComp->timeSinceLastTeleport << std::endl;
-                std::cout << "[SlenderAI] teleportCooldown: "
-                          << slenderComp->teleportCooldown << std::endl;
-                std::cout << "[SlenderAI] isPlayerLooking: " << isPlayerLooking
-                          << std::endl;
-                std::cout << "[SlenderAI] isPlayerInProximity: "
-                          << isPlayerInProximity << std::endl;
-                std::cout << "[SlenderAI] randomValue: " << randomValue
-                          << std::endl;
-                std::cout << "[SlenderAI] currentAIValue: "
-                          << slenderComp->currentAIValue << std::endl;
-                std::cout << "[SlenderAI] aggressivenessRatio: "
-                          << aggressivenessRatio << std::endl;
-                std::cout << "[SlenderAI] Total spawn points: "
-                          << spawnPointDistances.size() << std::endl;
-                std::cout << "[SlenderAI] Valid spawn points: "
-                          << validSpawns.size() << std::endl;
+                // // DEBUG: Print teleportation info
+                // std::cout << "=== TELEPORTATION DEBUG ===" << std::endl;
+                // std::cout << "[SlenderAI] canTeleport: " << canTeleport
+                //           << std::endl;
+                // std::cout << "[SlenderAI] timeSinceLastTeleport: "
+                //           << slenderComp->timeSinceLastTeleport << std::endl;
+                // std::cout << "[SlenderAI] teleportCooldown: "
+                //           << slenderComp->teleportCooldown << std::endl;
+                // std::cout << "[SlenderAI] isPlayerLooking: " << isPlayerLooking
+                //           << std::endl;
+                // std::cout << "[SlenderAI] isPlayerInProximity: "
+                //           << isPlayerInProximity << std::endl;
+                // std::cout << "[SlenderAI] randomValue: " << randomValue
+                //           << std::endl;
+                // std::cout << "[SlenderAI] currentAIValue: "
+                //           << slenderComp->currentAIValue << std::endl;
+                // std::cout << "[SlenderAI] aggressivenessRatio: "
+                //           << aggressivenessRatio << std::endl;
+                // std::cout << "[SlenderAI] Total spawn points: "
+                //           << spawnPointDistances.size() << std::endl;
+                // std::cout << "[SlenderAI] Valid spawn points: "
+                //           << validSpawns.size() << std::endl;
 
-                for (size_t i = 0; i < validSpawns.size(); i++) {
-                    std::cout << "[SlenderAI] Valid Spawn #" << i << ": ("
-                              << validSpawns[i].first.x << ", "
-                              << validSpawns[i].first.y << ", "
-                              << validSpawns[i].first.z
-                              << ") Dist: " << validSpawns[i].second
-                              << std::endl;
-                }
+                // for (size_t i = 0; i < validSpawns.size(); i++) {
+                //     std::cout << "[SlenderAI] Valid Spawn #" << i << ": ("
+                //               << validSpawns[i].first.x << ", "
+                //               << validSpawns[i].first.y << ", "
+                //               << validSpawns[i].first.z
+                //               << ") Dist: " << validSpawns[i].second
+                //               << std::endl;
+                // }
 
-                if (!validSpawns.empty()) {
-                    std::cout << "[SlenderAI] Selected index: " << index
-                              << std::endl;
-                    std::cout << "[SlenderAI] Teleporting to: ("
-                              << validSpawns[index].first.x << ", "
-                              << validSpawns[index].first.y << ", "
-                              << validSpawns[index].first.z << ")" << std::endl;
-                }
-                std::cout << "===========================" << std::endl;
+                // if (!validSpawns.empty()) {
+                //     std::cout << "[SlenderAI] Selected index: " << index
+                //               << std::endl;
+                //     std::cout << "[SlenderAI] Teleporting to: ("
+                //               << validSpawns[index].first.x << ", "
+                //               << validSpawns[index].first.y << ", "
+                //               << validSpawns[index].first.z << ")" << std::endl;
+                // }
+                // std::cout << "===========================" << std::endl;
             }
         }
 

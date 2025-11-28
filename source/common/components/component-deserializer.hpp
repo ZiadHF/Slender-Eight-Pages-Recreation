@@ -9,6 +9,8 @@
 #include "movement.hpp"
 #include "../components/player.hpp"
 #include "../components/slenderman.hpp"
+#include "../components/page.hpp"
+#include "../components/page-spawner.hpp"
 
 namespace our {
 
@@ -36,6 +38,12 @@ inline void deserializeComponent(const nlohmann::json& data, Entity* entity) {
     }
     else if (type == our::SlendermanComponent::getID()) {
         component = entity->addComponent<our::SlendermanComponent>();
+    }
+    else if (type == our::PageSpawnerComponent::getID()) {
+        component = entity->addComponent<our::PageSpawnerComponent>();
+    }
+    else if (type == our::PageComponent::getID()) {
+        component = entity->addComponent<our::PageComponent>();
     }
     if (component) component->deserialize(data);
 }

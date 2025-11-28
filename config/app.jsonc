@@ -11,7 +11,7 @@
     "scene": {
         "renderer": {
             "sky": "assets/textures/sky.png",
-            "postprocess": "assets/shaders/postprocess/static.frag"
+            "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets": {
             "shaders": {
@@ -520,10 +520,17 @@
                         "faceCulling": {
                             "enabled": true
                         },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
                         "depthTesting": {
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         1,
                         1,
@@ -540,10 +547,17 @@
                         "faceCulling": {
                             "enabled": true
                         },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
                         "depthTesting": {
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         1,
                         1,
@@ -553,17 +567,24 @@
                     "texture": "DecalsDamageFloor0004_1_S",
                     "sampler": "default"
                 },
-                "Leaking_1_30382L": {
+                "Leaking_1_30382": {
                     "type": "textured",
                     "shader": "textured",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
                         },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
                         "depthTesting": {
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         1,
                         1,
@@ -580,10 +601,17 @@
                         "faceCulling": {
                             "enabled": true
                         },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
                         "depthTesting": {
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         1,
                         1,
@@ -600,10 +628,17 @@
                         "faceCulling": {
                             "enabled": true
                         },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
                         "depthTesting": {
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         1,
                         1,
@@ -694,6 +729,65 @@
                     },
                     {
                         "type": "Player Component"
+                    }
+                ]
+            },
+            {
+                "position": [
+                    100,
+                    100,
+                    100
+                ],
+                "components": [
+                    {
+                        "type": "Page Spawner Component",
+                        "totalPages": 8,
+                        "spawnPoints": [
+                            {
+                                "spawnPoint": [10,1,-22],
+                                "rotation": [1.577, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [10,1,-15],
+                                "rotation": [0, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [10,1,-17],
+                                "rotation": [0, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [10,1,-19],
+                                "rotation": [0, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [10,1,-12],
+                                "rotation": [0, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [10,1,-25],
+                                "rotation": [0, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [15,1,-25],
+                                "rotation": [0, 0, 0]
+                            },
+                            {
+                                "spawnPoint": [15,1,-17],
+                                "rotation": [0, 0, 0]
+                            }
+                        ],
+                        "pageTextures": [
+                            "assets/textures/pages/page1.png",
+                            "assets/textures/pages/page2.png",
+                            "assets/textures/pages/page3.png",
+                            "assets/textures/pages/smpage1.png",
+                            "assets/textures/pages/smpage2.png",
+                            "assets/textures/pages/smpage3.png",
+                            "assets/textures/pages/smpage5.png",
+                            "assets/textures/pages/smpage6.png",
+                            "assets/textures/pages/smpage7.png",
+                            "assets/textures/pages/smpage8.png"
+                        ]
                     }
                 ]
             },

@@ -68,7 +68,7 @@ void ForwardRenderer::initialize(glm::ivec2 windowSize,
         // with 8 bits for each channel). The depth format can be (Depth
         // component with 24 bits).
         colorTarget = texture_utils::empty(GL_RGBA8, windowSize);
-        depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT24, windowSize);
+        depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT32F, windowSize);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                                GL_TEXTURE_2D, colorTarget->getOpenGLName(), 0);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
