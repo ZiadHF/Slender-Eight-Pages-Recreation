@@ -19,7 +19,7 @@
 
 #if !defined(NDEBUG)
 // If NDEBUG (no debug) is not defined, enable OpenGL debug messages
-//#define ENABLE_OPENGL_DEBUG_MESSAGES
+// #define ENABLE_OPENGL_DEBUG_MESSAGES
 #endif
 
 #include "texture/screenshot.hpp"

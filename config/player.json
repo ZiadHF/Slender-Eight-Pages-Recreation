@@ -1,14 +1,14 @@
 {
-    "controls": {
-        "forward": "W",
-        "backward": "S",
-        "left": "A",
-        "right": "D",
-        "interact": "LEFT_CLICK",
-        "toggle_flashlight": "F",
-        "sprint": "LEFT_SHIFT"
-    },
     "camera": {
-        "sensitivity": 1.2
+        "sensitivity": 0.8699994683265686
+    },
+    "controls": {
+        "backward": "S",
+        "forward": "A",
+        "interact": "Q",
+        "left": "RIGHT_CLICK",
+        "right": "D",
+        "sprint": "LEFT_CLICK",
+        "toggle_flashlight": "DOWN_ARROW"
     }
 }
