@@ -101,6 +101,7 @@ set(COMMON_SOURCES
         source/common/systems/movement.hpp
         source/common/systems/static-effect.hpp
         source/common/systems/slenderman-ai.hpp
+        source/common/systems/page-system.hpp
 )
 
 # Define the directories in which to search for the included headers
