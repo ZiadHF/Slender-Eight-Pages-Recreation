@@ -60,8 +60,7 @@ class PageSystem {
         std::vector<std::string> pageTextures = spawnerComp->pageTextures;
 
         // Choose random spawn locations from the spawner's list
-        std::vector<glm::vec3> spawnLocations = spawnerComp->spawnPoints;
-        std::vector<glm::vec3> spawnRotations = spawnerComp->spawnRotations;
+        std::vector<std::pair<glm::vec3, glm::vec3>> spawnLocations = spawnerComp->spawnPoints;
         int size = spawnLocations.size();
         if (size < totalPages) {
             std::cerr
@@ -74,14 +73,14 @@ class PageSystem {
         std::random_device rd;
         std::mt19937 gen(rd());
         std::shuffle(spawnLocations.begin(), spawnLocations.end(), gen);
-        std::shuffle(spawnRotations.begin(), spawnRotations.end(), gen);
 
 
         std::cout << "Spawning " << totalPages << " pages." << std::endl;
         for (int i = 0; i < totalPages; i++) {
             Entity* pageEntity = world->add();
             pageEntity->name = "Page_" + std::to_string(i);
-            pageEntity->localTransform.position = spawnLocations[i];
+            pageEntity->localTransform.position = spawnLocations[i].first;
+            pageEntity->localTransform.rotation = spawnLocations[i].second;
 
             // Add MeshComponent
             auto* meshComp = pageEntity->addComponent<MeshRendererComponent>();
