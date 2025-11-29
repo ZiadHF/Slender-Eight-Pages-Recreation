@@ -78,11 +78,10 @@ class PageSystem {
             totalPages = size;
         }
 
-        // Randomly shuffle and pick locations
+        // Randomly shuffle spawn locations
         std::random_device rd;
         std::mt19937 gen(rd());
         std::shuffle(spawnLocations.begin(), spawnLocations.end(), gen);
-
 
         std::cout << "Spawning " << totalPages << " pages." << std::endl;
         pageShader = new our::ShaderProgram();
@@ -90,11 +89,46 @@ class PageSystem {
         pageShader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
         pageShader->link();
 
+        // Select spawn locations ensuring minimum distance between pages
+        std::vector<std::pair<glm::vec3, glm::vec3>> selectedSpawns;
+        float minDistanceBetweenPages = 20.0f;  // Minimum distance between pages
+
+        for (const auto& candidate : spawnLocations) {
+            if (selectedSpawns.size() >= static_cast<size_t>(totalPages)) break;
+            
+            bool tooClose = false;
+            for (const auto& selected : selectedSpawns) {
+                float dist = glm::length(candidate.first - selected.first);
+                if (dist < minDistanceBetweenPages) {
+                    tooClose = true;
+                    break;
+                }
+            }
+            
+            if (!tooClose) {
+                selectedSpawns.push_back(candidate);
+            }
+        }
+
+        // Warn if we couldn't find enough spread-out locations
+        if (selectedSpawns.size() < static_cast<size_t>(totalPages)) {
+            std::cerr << "PageSystem: Could only find " << selectedSpawns.size() 
+                      << " spread-out locations (wanted " << totalPages << ")" << std::endl;
+            totalPages = selectedSpawns.size();
+        }
+
+        // Check we have enough textures
+        if (pageTextures.size() < static_cast<size_t>(totalPages)) {
+            std::cerr << "PageSystem: Not enough page textures for total pages!"
+                      << std::endl;
+            totalPages = pageTextures.size();
+        }
+
         for (int i = 0; i < totalPages; i++) {
             Entity* pageEntity = world->add();
             pageEntity->name = "Page_" + std::to_string(i);
-            pageEntity->localTransform.position = spawnLocations[i].first;
-            pageEntity->localTransform.rotation = spawnLocations[i].second;
+            pageEntity->localTransform.position = selectedSpawns[i].first;
+            pageEntity->localTransform.rotation = selectedSpawns[i].second;
 
             // Add MeshComponent
             auto* meshComp = pageEntity->addComponent<MeshRendererComponent>();
