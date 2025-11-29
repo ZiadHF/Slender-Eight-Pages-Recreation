@@ -101,18 +101,21 @@ std::vector<KeyboardIcon> keyboardIcons = {
 
 };
 
-struct ControlLabel {
+struct ControlLabel
+{
     std::string displayName;
     std::string configKey;
     glm::vec2 position;
     glm::vec2 size;
-    
-    bool isInside(const glm::vec2& v) const {
+
+    bool isInside(const glm::vec2 &v) const
+    {
         return position.x <= v.x && position.y <= v.y &&
                v.x <= position.x + size.x && v.y <= position.y + size.y;
     }
-    
-    glm::mat4 getLocalToWorld(float scaleX, float scaleY) const {
+
+    glm::mat4 getLocalToWorld(float scaleX, float scaleY) const
+    {
         return glm::translate(glm::mat4(1.0f),
                               glm::vec3(position.x * scaleX, position.y * scaleY, 0.0f)) *
                glm::scale(glm::mat4(1.0f), glm::vec3(size.x * scaleX, size.y * scaleY, 1.0f));
@@ -129,53 +132,83 @@ class SettingsState : public our::State
     our::Mesh *rectangle;
     our::Mesh *keyboardBackdrop;
     std::vector<our::Texture2D *> keyboardTextures;
-    
+    our::Texture2D *background;
     // Text renderer
-    our::TextRenderer* textRenderer;
-    
+    our::TextRenderer *textRenderer;
+
     // Settings data
     nlohmann::json playerConfig;
     std::string configPath = "config/player.json";
-    
+
     // Current control being rebound
     std::string rebindingControl = "";
     bool isRebinding = false;
     float flashTimer = 0.0f;
-    
+
     // Control labels for UI
     std::vector<ControlLabel> controlLabels;
-    
+
     // Camera sensitivity
     float cameraSensitivity = 1.2f;
     bool adjustingSensitivity = false;
-    
+
     // Map GLFW keys to texture filenames for all visible keys
     std::map<int, std::string> keyToTexture = {
         {GLFW_KEY_ESCAPE, "Escape.png"},
-        {GLFW_KEY_F1, "F1.png"}, {GLFW_KEY_F2, "F2.png"}, {GLFW_KEY_F3, "F3.png"},
-        {GLFW_KEY_F4, "F4.png"}, {GLFW_KEY_F5, "F5.png"}, {GLFW_KEY_F6, "F6.png"},
-        {GLFW_KEY_F7, "F7.png"}, {GLFW_KEY_F8, "F8.png"}, {GLFW_KEY_F9, "F9.png"},
-        {GLFW_KEY_F10, "F10.png"}, {GLFW_KEY_F11, "F11.png"}, {GLFW_KEY_F12, "F12.png"},
-        {GLFW_KEY_1, "1.png"}, {GLFW_KEY_2, "2.png"}, {GLFW_KEY_3, "3.png"},
-        {GLFW_KEY_4, "4.png"}, {GLFW_KEY_5, "5.png"}, {GLFW_KEY_6, "6.png"},
-        {GLFW_KEY_7, "7.png"}, {GLFW_KEY_8, "8.png"}, {GLFW_KEY_9, "9.png"},
+        {GLFW_KEY_F1, "F1.png"},
+        {GLFW_KEY_F2, "F2.png"},
+        {GLFW_KEY_F3, "F3.png"},
+        {GLFW_KEY_F4, "F4.png"},
+        {GLFW_KEY_F5, "F5.png"},
+        {GLFW_KEY_F6, "F6.png"},
+        {GLFW_KEY_F7, "F7.png"},
+        {GLFW_KEY_F8, "F8.png"},
+        {GLFW_KEY_F9, "F9.png"},
+        {GLFW_KEY_F10, "F10.png"},
+        {GLFW_KEY_F11, "F11.png"},
+        {GLFW_KEY_F12, "F12.png"},
+        {GLFW_KEY_1, "1.png"},
+        {GLFW_KEY_2, "2.png"},
+        {GLFW_KEY_3, "3.png"},
+        {GLFW_KEY_4, "4.png"},
+        {GLFW_KEY_5, "5.png"},
+        {GLFW_KEY_6, "6.png"},
+        {GLFW_KEY_7, "7.png"},
+        {GLFW_KEY_8, "8.png"},
+        {GLFW_KEY_9, "9.png"},
         {GLFW_KEY_0, "0.png"},
         {GLFW_KEY_MINUS, "Hypen_Underscore.png"},
         {GLFW_KEY_EQUAL, "Equal_Plus.png"},
         {GLFW_KEY_BACKSPACE, "Backspace.png"},
         {GLFW_KEY_TAB, "Tab.png"},
-        {GLFW_KEY_Q, "Q.png"}, {GLFW_KEY_W, "W.png"}, {GLFW_KEY_E, "E.png"},
-        {GLFW_KEY_R, "R.png"}, {GLFW_KEY_T, "T.png"}, {GLFW_KEY_Y, "Y.png"},
-        {GLFW_KEY_U, "U.png"}, {GLFW_KEY_I, "I.png"}, {GLFW_KEY_O, "O.png"},
+        {GLFW_KEY_Q, "Q.png"},
+        {GLFW_KEY_W, "W.png"},
+        {GLFW_KEY_E, "E.png"},
+        {GLFW_KEY_R, "R.png"},
+        {GLFW_KEY_T, "T.png"},
+        {GLFW_KEY_Y, "Y.png"},
+        {GLFW_KEY_U, "U.png"},
+        {GLFW_KEY_I, "I.png"},
+        {GLFW_KEY_O, "O.png"},
         {GLFW_KEY_P, "P.png"},
         {GLFW_KEY_CAPS_LOCK, "CapsLock.png"},
-        {GLFW_KEY_A, "A.png"}, {GLFW_KEY_S, "S.png"}, {GLFW_KEY_D, "D.png"},
-        {GLFW_KEY_F, "F.png"}, {GLFW_KEY_G, "G.png"}, {GLFW_KEY_H, "H.png"},
-        {GLFW_KEY_J, "J.png"}, {GLFW_KEY_K, "K.png"}, {GLFW_KEY_L, "L.png"},
+        {GLFW_KEY_A, "A.png"},
+        {GLFW_KEY_S, "S.png"},
+        {GLFW_KEY_D, "D.png"},
+        {GLFW_KEY_F, "F.png"},
+        {GLFW_KEY_G, "G.png"},
+        {GLFW_KEY_H, "H.png"},
+        {GLFW_KEY_J, "J.png"},
+        {GLFW_KEY_K, "K.png"},
+        {GLFW_KEY_L, "L.png"},
         {GLFW_KEY_ENTER, "Enter.png"},
         {GLFW_KEY_LEFT_SHIFT, "Shift.png"},
-        {GLFW_KEY_Z, "Z.png"}, {GLFW_KEY_X, "X.png"}, {GLFW_KEY_C, "C.png"},
-        {GLFW_KEY_V, "V.png"}, {GLFW_KEY_B, "B.png"}, {GLFW_KEY_N, "N.png"},
+        {GLFW_KEY_Z, "Z.png"},
+        {GLFW_KEY_X, "X.png"},
+        {GLFW_KEY_C, "C.png"},
+        {GLFW_KEY_V, "V.png"},
+        {GLFW_KEY_B, "B.png"},
+        {GLFW_KEY_N, "N.png"},
         {GLFW_KEY_M, "M.png"},
         {GLFW_KEY_LEFT_CONTROL, "LeftControl.png"},
         {GLFW_KEY_LEFT_ALT, "Alt.png"},
@@ -185,134 +218,201 @@ class SettingsState : public our::State
         {GLFW_KEY_LEFT, "LeftArrow.png"},
         {GLFW_KEY_RIGHT, "RightArrow.png"},
         {GLFW_KEY_DOWN, "DownArrow.png"},
-        {GLFW_KEY_UP, "UpArrow.png"}
-    };
-    
+        {GLFW_KEY_UP, "UpArrow.png"}};
+
     // Helper function to get key name from GLFW key code
-    std::string getKeyName(int key) {
-        if (key == GLFW_KEY_W) return "W";
-        if (key == GLFW_KEY_A) return "A";
-        if (key == GLFW_KEY_S) return "S";
-        if (key == GLFW_KEY_D) return "D";
-        if (key == GLFW_KEY_F) return "F";
-        if (key == GLFW_KEY_LEFT_SHIFT) return "LEFT_SHIFT";
-        if (key == GLFW_KEY_ESCAPE) return "ESCAPE";
-        if (key == GLFW_KEY_SPACE) return "SPACE";
-        if (key == GLFW_KEY_TAB) return "TAB";
-        if (key == GLFW_KEY_CAPS_LOCK) return "CAPS_LOCK";
-        if (key == GLFW_KEY_ENTER) return "ENTER";
-        if (key == GLFW_KEY_BACKSPACE) return "BACKSPACE";
-        if (key == GLFW_KEY_LEFT_CONTROL) return "LEFT_CONTROL";
-        if (key == GLFW_KEY_RIGHT_CONTROL) return "RIGHT_CONTROL";
-        if (key == GLFW_KEY_LEFT_ALT) return "LEFT_ALT";
-        if (key == GLFW_KEY_RIGHT_ALT) return "RIGHT_ALT";
-        if (key == GLFW_KEY_LEFT) return "LEFT_ARROW";
-        if (key == GLFW_KEY_RIGHT) return "RIGHT_ARROW";
-        if (key == GLFW_KEY_UP) return "UP_ARROW";
-        if (key == GLFW_KEY_DOWN) return "DOWN_ARROW";
-        if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9) return std::string(1, '0' + (key - GLFW_KEY_0));
-        if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z) return std::string(1, 'A' + (key - GLFW_KEY_A));
-        if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F12) return "F" + std::to_string(key - GLFW_KEY_F1 + 1);
+    std::string getKeyName(int key)
+    {
+        if (key == GLFW_KEY_W)
+            return "W";
+        if (key == GLFW_KEY_A)
+            return "A";
+        if (key == GLFW_KEY_S)
+            return "S";
+        if (key == GLFW_KEY_D)
+            return "D";
+        if (key == GLFW_KEY_F)
+            return "F";
+        if (key == GLFW_KEY_LEFT_SHIFT)
+            return "LEFT_SHIFT";
+        if (key == GLFW_KEY_ESCAPE)
+            return "ESCAPE";
+        if (key == GLFW_KEY_SPACE)
+            return "SPACE";
+        if (key == GLFW_KEY_TAB)
+            return "TAB";
+        if (key == GLFW_KEY_CAPS_LOCK)
+            return "CAPS_LOCK";
+        if (key == GLFW_KEY_ENTER)
+            return "ENTER";
+        if (key == GLFW_KEY_BACKSPACE)
+            return "BACKSPACE";
+        if (key == GLFW_KEY_LEFT_CONTROL)
+            return "LEFT_CONTROL";
+        if (key == GLFW_KEY_RIGHT_CONTROL)
+            return "RIGHT_CONTROL";
+        if (key == GLFW_KEY_LEFT_ALT)
+            return "LEFT_ALT";
+        if (key == GLFW_KEY_RIGHT_ALT)
+            return "RIGHT_ALT";
+        if (key == GLFW_KEY_LEFT)
+            return "LEFT_ARROW";
+        if (key == GLFW_KEY_RIGHT)
+            return "RIGHT_ARROW";
+        if (key == GLFW_KEY_UP)
+            return "UP_ARROW";
+        if (key == GLFW_KEY_DOWN)
+            return "DOWN_ARROW";
+        if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9)
+            return std::string(1, '0' + (key - GLFW_KEY_0));
+        if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z)
+            return std::string(1, 'A' + (key - GLFW_KEY_A));
+        if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F12)
+            return "F" + std::to_string(key - GLFW_KEY_F1 + 1);
         // Add more keys as needed
         return "UNKNOWN";
     }
-    
+
     // Helper function to get mouse button name
-    std::string getMouseButtonName(int button) {
-        if (button == GLFW_MOUSE_BUTTON_LEFT) return "LEFT_CLICK";
-        if (button == GLFW_MOUSE_BUTTON_RIGHT) return "RIGHT_CLICK";
+    std::string getMouseButtonName(int button)
+    {
+        if (button == GLFW_MOUSE_BUTTON_LEFT)
+            return "LEFT_CLICK";
+        if (button == GLFW_MOUSE_BUTTON_RIGHT)
+            return "RIGHT_CLICK";
         return "UNKNOWN";
     }
-    
+
     // Helper function to get GLFW key from string
-    int getKeyFromString(const std::string& keyStr) {
-        if (keyStr == "W") return GLFW_KEY_W;
-        if (keyStr == "A") return GLFW_KEY_A;
-        if (keyStr == "S") return GLFW_KEY_S;
-        if (keyStr == "D") return GLFW_KEY_D;
-        if (keyStr == "F") return GLFW_KEY_F;
-        if (keyStr == "LEFT_SHIFT") return GLFW_KEY_LEFT_SHIFT;
-        if (keyStr == "ESCAPE") return GLFW_KEY_ESCAPE;
-        if (keyStr == "SPACE") return GLFW_KEY_SPACE;
-        if (keyStr == "TAB") return GLFW_KEY_TAB;
-        if (keyStr == "CAPS_LOCK") return GLFW_KEY_CAPS_LOCK;
-        if (keyStr == "ENTER") return GLFW_KEY_ENTER;
-        if (keyStr == "BACKSPACE") return GLFW_KEY_BACKSPACE;
-        if (keyStr == "LEFT_CONTROL") return GLFW_KEY_LEFT_CONTROL;
-        if (keyStr == "RIGHT_CONTROL") return GLFW_KEY_RIGHT_CONTROL;
-        if (keyStr == "LEFT_ALT") return GLFW_KEY_LEFT_ALT;
-        if (keyStr == "RIGHT_ALT") return GLFW_KEY_RIGHT_ALT;
-        if (keyStr == "LEFT_ARROW") return GLFW_KEY_LEFT;
-        if (keyStr == "RIGHT_ARROW") return GLFW_KEY_RIGHT;
-        if (keyStr == "UP_ARROW") return GLFW_KEY_UP;
-        if (keyStr == "DOWN_ARROW") return GLFW_KEY_DOWN;
+    int getKeyFromString(const std::string &keyStr)
+    {
+        if (keyStr == "W")
+            return GLFW_KEY_W;
+        if (keyStr == "A")
+            return GLFW_KEY_A;
+        if (keyStr == "S")
+            return GLFW_KEY_S;
+        if (keyStr == "D")
+            return GLFW_KEY_D;
+        if (keyStr == "F")
+            return GLFW_KEY_F;
+        if (keyStr == "LEFT_SHIFT")
+            return GLFW_KEY_LEFT_SHIFT;
+        if (keyStr == "ESCAPE")
+            return GLFW_KEY_ESCAPE;
+        if (keyStr == "SPACE")
+            return GLFW_KEY_SPACE;
+        if (keyStr == "TAB")
+            return GLFW_KEY_TAB;
+        if (keyStr == "CAPS_LOCK")
+            return GLFW_KEY_CAPS_LOCK;
+        if (keyStr == "ENTER")
+            return GLFW_KEY_ENTER;
+        if (keyStr == "BACKSPACE")
+            return GLFW_KEY_BACKSPACE;
+        if (keyStr == "LEFT_CONTROL")
+            return GLFW_KEY_LEFT_CONTROL;
+        if (keyStr == "RIGHT_CONTROL")
+            return GLFW_KEY_RIGHT_CONTROL;
+        if (keyStr == "LEFT_ALT")
+            return GLFW_KEY_LEFT_ALT;
+        if (keyStr == "RIGHT_ALT")
+            return GLFW_KEY_RIGHT_ALT;
+        if (keyStr == "LEFT_ARROW")
+            return GLFW_KEY_LEFT;
+        if (keyStr == "RIGHT_ARROW")
+            return GLFW_KEY_RIGHT;
+        if (keyStr == "UP_ARROW")
+            return GLFW_KEY_UP;
+        if (keyStr == "DOWN_ARROW")
+            return GLFW_KEY_DOWN;
         // Mouse buttons (return negative values to distinguish from keys)
-        if (keyStr == "LEFT_CLICK") return -1;
-        if (keyStr == "RIGHT_CLICK") return -2;
-        if (keyStr.length() == 1 && keyStr[0] >= '0' && keyStr[0] <= '9') return GLFW_KEY_0 + (keyStr[0] - '0');
-        if (keyStr.length() == 1 && keyStr[0] >= 'A' && keyStr[0] <= 'Z') return GLFW_KEY_A + (keyStr[0] - 'A');
-        if (keyStr[0] == 'F' && keyStr.length() > 1) {
+        if (keyStr == "LEFT_CLICK")
+            return -1;
+        if (keyStr == "RIGHT_CLICK")
+            return -2;
+        if (keyStr.length() == 1 && keyStr[0] >= '0' && keyStr[0] <= '9')
+            return GLFW_KEY_0 + (keyStr[0] - '0');
+        if (keyStr.length() == 1 && keyStr[0] >= 'A' && keyStr[0] <= 'Z')
+            return GLFW_KEY_A + (keyStr[0] - 'A');
+        if (keyStr[0] == 'F' && keyStr.length() > 1)
+        {
             int num = std::stoi(keyStr.substr(1));
-            if (num >= 1 && num <= 12) return GLFW_KEY_F1 + num - 1;
+            if (num >= 1 && num <= 12)
+                return GLFW_KEY_F1 + num - 1;
         }
         return -1000; // Return distinct value for unknown
     }
-    
+
     // Load player config
-    void loadConfig() {
+    void loadConfig()
+    {
         std::ifstream file(configPath);
-        if (file.is_open()) {
+        if (file.is_open())
+        {
             file >> playerConfig;
             file.close();
             cameraSensitivity = playerConfig["camera"]["sensitivity"].get<float>();
         }
     }
-    
+
     // Save player config
-    void saveConfig() {
+    void saveConfig()
+    {
         playerConfig["camera"]["sensitivity"] = cameraSensitivity;
         std::ofstream file(configPath);
-        if (file.is_open()) {
+        if (file.is_open())
+        {
             file << playerConfig.dump(4);
             file.close();
         }
     }
-    
+
     // Highlight key based on current setting
-    void updateKeyHighlights() {
+    void updateKeyHighlights()
+    {
         // Reset all highlights
-        for (auto& icon : keyboardIcons) {
+        for (auto &icon : keyboardIcons)
+        {
             icon.highlighted = false;
         }
-        
-        if (playerConfig.contains("controls")) {
+
+        if (playerConfig.contains("controls"))
+        {
             auto controls = playerConfig["controls"];
-            
+
             // Get all control bindings
-            for (auto& [key, value] : controls.items()) {
+            for (auto &[key, value] : controls.items())
+            {
                 std::string keyBinding = value.get<std::string>();
-                
+
                 // Handle mouse buttons
-                if (keyBinding == "LEFT_CLICK" || keyBinding == "RIGHT_CLICK") {
+                if (keyBinding == "LEFT_CLICK" || keyBinding == "RIGHT_CLICK")
+                {
                     std::string texName = (keyBinding == "LEFT_CLICK") ? "LeftClick.png" : "RightClick.png";
-                    for (size_t i = 0; i < keyboardIcons.size(); i++) {
-                        if (keyboardIcons[i].TextureFile.find(texName) != std::string::npos) {
+                    for (size_t i = 0; i < keyboardIcons.size(); i++)
+                    {
+                        if (keyboardIcons[i].TextureFile.find(texName) != std::string::npos)
+                        {
                             keyboardIcons[i].highlighted = true;
                             break;
                         }
                     }
                     continue;
                 }
-                
+
                 // Handle keyboard keys
                 int glfwKey = getKeyFromString(keyBinding);
-                
-                if (glfwKey != -1000 && keyToTexture.find(glfwKey) != keyToTexture.end()) {
+
+                if (glfwKey != -1000 && keyToTexture.find(glfwKey) != keyToTexture.end())
+                {
                     std::string texName = keyToTexture[glfwKey];
-                    
+
                     // Find and highlight the corresponding icon
-                    for (size_t i = 0; i < keyboardIcons.size(); i++) {
-                        if (keyboardIcons[i].TextureFile.find(texName) != std::string::npos) {
+                    for (size_t i = 0; i < keyboardIcons.size(); i++)
+                    {
+                        if (keyboardIcons[i].TextureFile.find(texName) != std::string::npos)
+                        {
                             keyboardIcons[i].highlighted = true;
                             break;
                         }
@@ -321,15 +421,15 @@ class SettingsState : public our::State
             }
         }
     }
-    
+
     void onInitialize() override
     {
         // Load config first
         loadConfig();
-
+        background = our::texture_utils::loadImage("assets/textures/Keyboard/scratchy.png");
         // Clear keyboardTextures in case of re-initialization
         keyboardTextures.clear();
-        
+
         // Setting up the materials
         keyboardRectMat = new our::TintedMaterial();
         keyboardRectMat->shader = new our::ShaderProgram();
@@ -359,7 +459,7 @@ class SettingsState : public our::State
         keyboardKeyMat->pipelineState.blending.equation = GL_FUNC_ADD;
         keyboardKeyMat->pipelineState.blending.sourceFactor = GL_SRC_ALPHA;
         keyboardKeyMat->pipelineState.blending.destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
-        
+
         // Create material for control labels
         controlLabelMat = new our::TintedMaterial();
         controlLabelMat->shader = new our::ShaderProgram();
@@ -367,7 +467,7 @@ class SettingsState : public our::State
         controlLabelMat->shader->attach("assets/shaders/tinted.frag", GL_FRAGMENT_SHADER);
         controlLabelMat->shader->link();
         controlLabelMat->tint = glm::vec4(200.0f / 255.0f, 200.0f / 255.0f, 200.0f / 255.0f, 1.0f);
-        
+
         // Create material for flashing effect
         flashMat = new our::TintedMaterial();
         flashMat->shader = new our::ShaderProgram();
@@ -378,7 +478,7 @@ class SettingsState : public our::State
         flashMat->pipelineState.blending.equation = GL_FUNC_ADD;
         flashMat->pipelineState.blending.sourceFactor = GL_SRC_ALPHA;
         flashMat->pipelineState.blending.destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
-        
+
         rectangle = new our::Mesh(
             {
                 {{0.0f, 0.0f, 0.0f},
@@ -412,7 +512,7 @@ class SettingsState : public our::State
         {
             keyboardTextures.push_back(our::texture_utils::loadImage(icon.TextureFile, true));
         }
-        
+
         // Setup control labels at bottom in 2 columns
         float startY = 440.0f;
         float spacingY = 55.0f;
@@ -427,50 +527,60 @@ class SettingsState : public our::State
             {"Sprint", "sprint", glm::vec2(col2X, startY + spacingY), glm::vec2(200.0f, 50.0f)},
             {"Flashlight", "toggle_flashlight", glm::vec2(col2X, startY + spacingY * 2), glm::vec2(200.0f, 50.0f)},
         };
-        
+
         updateKeyHighlights();
-        
+
         // Initialize text renderer
         textRenderer = new our::TextRenderer();
     }
-    
+
     void onDraw(double deltaTime) override
     {
         // Clear the screen
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        auto& keyboard = getApp()->getKeyboard();
-        auto& mouse = getApp()->getMouse();
-        
+
+        auto &keyboard = getApp()->getKeyboard();
+        auto &mouse = getApp()->getMouse();
+
         // Update flash timer
-        if (isRebinding) {
+        if (isRebinding)
+        {
             flashTimer += deltaTime;
         }
-        
+
         // Handle rebinding
-        if (isRebinding) {
+        if (isRebinding)
+        {
             // Check for mouse button press
-            if (mouse.justPressed(GLFW_MOUSE_BUTTON_LEFT)) {
+            if (mouse.justPressed(GLFW_MOUSE_BUTTON_LEFT))
+            {
                 playerConfig["controls"][rebindingControl] = "LEFT_CLICK";
                 isRebinding = false;
                 rebindingControl = "";
                 flashTimer = 0.0f;
                 updateKeyHighlights();
                 saveConfig();
-            } else if (mouse.justPressed(GLFW_MOUSE_BUTTON_RIGHT)) {
+            }
+            else if (mouse.justPressed(GLFW_MOUSE_BUTTON_RIGHT))
+            {
                 playerConfig["controls"][rebindingControl] = "RIGHT_CLICK";
                 isRebinding = false;
                 rebindingControl = "";
                 flashTimer = 0.0f;
                 updateKeyHighlights();
                 saveConfig();
-            } else {
+            }
+            else
+            {
                 // Check for key press
-                for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; key++) {
-                    if (keyboard.justPressed(key)) {
+                for (int key = GLFW_KEY_SPACE; key <= GLFW_KEY_LAST; key++)
+                {
+                    if (keyboard.justPressed(key))
+                    {
                         std::string keyName = getKeyName(key);
-                        if (keyName != "UNKNOWN") {
+                        if (keyName != "UNKNOWN")
+                        {
                             playerConfig["controls"][rebindingControl] = keyName;
                             isRebinding = false;
                             rebindingControl = "";
@@ -483,34 +593,42 @@ class SettingsState : public our::State
                 }
             }
             // ESC to cancel rebinding
-            if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
+            if (keyboard.justPressed(GLFW_KEY_ESCAPE))
+            {
                 isRebinding = false;
                 rebindingControl = "";
                 flashTimer = 0.0f;
             }
-        } else {
+        }
+        else
+        {
             // Handle sensitivity adjustment with arrow keys
-            if (keyboard.isPressed(GLFW_KEY_UP)) {
+            if (keyboard.isPressed(GLFW_KEY_UP))
+            {
                 cameraSensitivity = std::min(5.0f, cameraSensitivity + 0.01f);
                 saveConfig();
             }
-            if (keyboard.isPressed(GLFW_KEY_DOWN)) {
+            if (keyboard.isPressed(GLFW_KEY_DOWN))
+            {
                 cameraSensitivity = std::max(0.1f, cameraSensitivity - 0.01f);
                 saveConfig();
             }
-            
+
             // Click on control labels to rebind
             glm::vec2 mousePosition = mouse.getMousePosition();
-            if (mouse.justPressed(0)) {
-                for (auto& label : controlLabels) {
+            if (mouse.justPressed(0))
+            {
+                for (auto &label : controlLabels)
+                {
                     glm::ivec2 size = getApp()->getFrameBufferSize();
                     float scaleX = size.x / 1280.0f;
                     float scaleY = size.y / 720.0f;
                     glm::vec2 scaledPos = glm::vec2(label.position.x * scaleX, label.position.y * scaleY);
                     glm::vec2 scaledSize = glm::vec2(label.size.x * scaleX, label.size.y * scaleY);
-                    
+
                     if (mousePosition.x >= scaledPos.x && mousePosition.x <= scaledPos.x + scaledSize.x &&
-                        mousePosition.y >= scaledPos.y && mousePosition.y <= scaledPos.y + scaledSize.y) {
+                        mousePosition.y >= scaledPos.y && mousePosition.y <= scaledPos.y + scaledSize.y)
+                    {
                         isRebinding = true;
                         rebindingControl = label.configKey;
                         flashTimer = 0.0f;
@@ -518,13 +636,14 @@ class SettingsState : public our::State
                     }
                 }
             }
-            
+
             // ESC to go back to menu
-            if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
+            if (keyboard.justPressed(GLFW_KEY_ESCAPE))
+            {
                 getApp()->changeState("menu");
             }
         }
-        
+
         glm::ivec2 size = getApp()->getFrameBufferSize();
 
         float scaleX = size.x / 1280.0f;
@@ -535,6 +654,12 @@ class SettingsState : public our::State
 
         glm::mat4 M =
             glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+        // BG
+        keyboardKeyMat->texture = background;
+        keyboardKeyMat->setup();
+        keyboardKeyMat->shader->set("transform", VP * glm::translate(glm::mat4(1.0f), glm::vec3(0 *scaleX, 0*scaleY, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1280.0f * scaleX, 720.0f * scaleY, 1.0f)));
+        keyboardKeyMat->shader->set("highlighted", false);
+        rectangle->draw();
 
         keyboardRectBackdropMat->setup();
         keyboardRectBackdropMat->shader->set("transform", VP * glm::translate(glm::mat4(1.0f), glm::vec3(176.0f * scaleX, 80.0f * scaleY, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(927.0f * scaleX, 334.0f * scaleY, 1.0f)));
@@ -550,73 +675,88 @@ class SettingsState : public our::State
             keyboardKeyMat->shader->set("highlighted", keyboardIcons[i].highlighted);
             rectangle->draw();
         }
-        
+
         // Draw control labels section
-        for (auto& label : controlLabels) {
+        for (auto &label : controlLabels)
+        {
             // Draw label background (sized to fit text + icon)
             controlLabelMat->setup();
             glm::mat4 labelTransform = glm::translate(glm::mat4(1.0f), glm::vec3(label.position.x * scaleX, label.position.y * scaleY, 0.0f)) *
-                                      glm::scale(glm::mat4(1.0f), glm::vec3(label.size.x * scaleX, label.size.y * scaleY, 1.0f));
+                                       glm::scale(glm::mat4(1.0f), glm::vec3(label.size.x * scaleX, label.size.y * scaleY, 1.0f));
             controlLabelMat->shader->set("transform", VP * labelTransform);
             rectangle->draw();
-            
+
             // Draw flashing effect if this control is being rebound
-            if (isRebinding && rebindingControl == label.configKey) {
+            if (isRebinding && rebindingControl == label.configKey)
+            {
                 float flashAlpha = (sin(flashTimer * 8.0f) + 1.0f) / 2.0f;
                 flashMat->tint = glm::vec4(1.0f, 1.0f, 0.0f, flashAlpha * 0.5f);
                 flashMat->setup();
                 flashMat->shader->set("transform", VP * labelTransform);
                 rectangle->draw();
             }
-            
+
             // Render text for label name and current binding
             std::string displayText = label.displayName + ": ";
-            if (isRebinding && rebindingControl == label.configKey) {
+            if (isRebinding && rebindingControl == label.configKey)
+            {
                 displayText = label.displayName + ": [Press Key]";
-            } else if (playerConfig.contains("controls") && playerConfig["controls"].contains(label.configKey)) {
-                
+            }
+            else if (playerConfig.contains("controls") && playerConfig["controls"].contains(label.configKey))
+            {
+
                 displayText = label.displayName + ": ";
             }
-            
+
             glm::vec2 textPos = glm::vec2(
                 label.position.x + 5.0f,
-                label.position.y + 35.0f
-            );
+                label.position.y + 35.0f);
             glm::vec4 textColor = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); // Black text
-            
+
             textRenderer->renderText(displayText, textPos, 0.5f, textColor, VP);
-            
+
             // Draw keyboard/mouse icon for the current binding
-            if (!isRebinding || rebindingControl != label.configKey) {
-                if (playerConfig.contains("controls") && playerConfig["controls"].contains(label.configKey)) {
+            if (!isRebinding || rebindingControl != label.configKey)
+            {
+                if (playerConfig.contains("controls") && playerConfig["controls"].contains(label.configKey))
+                {
                     std::string currentKey = playerConfig["controls"][label.configKey].get<std::string>();
                     int keyCode = getKeyFromString(currentKey);
                     std::string texturePath = "";
-                    
+
                     // Check if it's a mouse button
-                    if (currentKey == "LEFT_CLICK") {
+                    if (currentKey == "LEFT_CLICK")
+                    {
                         texturePath = "assets/textures/Keyboard/LeftClick.png";
-                    } else if (currentKey == "RIGHT_CLICK") {
+                    }
+                    else if (currentKey == "RIGHT_CLICK")
+                    {
                         texturePath = "assets/textures/Keyboard/RightClick.png";
-                    } else if (keyCode != -1000 && keyToTexture.find(keyCode) != keyToTexture.end()) {
+                    }
+                    else if (keyCode != -1000 && keyToTexture.find(keyCode) != keyToTexture.end())
+                    {
                         texturePath = "assets/textures/Keyboard/" + keyToTexture[keyCode];
                     }
-                    
-                    if (!texturePath.empty()) {
+
+                    if (!texturePath.empty())
+                    {
                         // Find or load the texture
-                        our::Texture2D* keyTexture = nullptr;
-                        for (size_t i = 0; i < keyboardIcons.size(); i++) {
-                            if (keyboardIcons[i].TextureFile == texturePath) {
+                        our::Texture2D *keyTexture = nullptr;
+                        for (size_t i = 0; i < keyboardIcons.size(); i++)
+                        {
+                            if (keyboardIcons[i].TextureFile == texturePath)
+                            {
                                 keyTexture = keyboardTextures[i];
                                 break;
                             }
                         }
-                        
-                        if (keyTexture) {
+
+                        if (keyTexture)
+                        {
                             keyboardKeyMat->texture = keyTexture;
                             keyboardKeyMat->setup();
                             glm::mat4 iconTransform = glm::translate(glm::mat4(1.0f), glm::vec3((label.position.x + 140.0f) * scaleX, (label.position.y + 2.5f) * scaleY, 0.0f)) *
-                                                     glm::scale(glm::mat4(1.0f), glm::vec3(45.0f * scaleX, 45.0f * scaleY, 1.0f));
+                                                      glm::scale(glm::mat4(1.0f), glm::vec3(45.0f * scaleX, 45.0f * scaleY, 1.0f));
                             keyboardKeyMat->shader->set("transform", VP * iconTransform);
                             keyboardKeyMat->shader->set("highlighted", false);
                             rectangle->draw();
@@ -625,23 +765,23 @@ class SettingsState : public our::State
                 }
             }
         }
-        
+
         // Render camera sensitivity text
         std::string sensitivityText = "Camera Sensitivity: " + std::to_string(cameraSensitivity).substr(0, 4);
         std::string instructionText = "(Use UP/DOWN arrows to adjust)";
-        
+
         glm::vec2 sensPos = glm::vec2(550.0f, 440.0f + 55.0f * 3.5f);
         glm::vec2 instrPos = glm::vec2(550.0f, 440.0f + 55.0f * 3.9f);
-        
+
         textRenderer->renderText(sensitivityText, sensPos, 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), VP);
         textRenderer->renderText(instructionText, instrPos, 0.4f, glm::vec4(0.7f, 0.7f, 0.7f, 1.0f), VP);
-        
+
         // Render ESC instruction at top
         std::string escText = "Press ESC to return to menu";
-        glm::vec2 escPos = glm::vec2(20.0f, 20.0f);
+        glm::vec2 escPos = glm::vec2(0.0f, 20.0f);
         textRenderer->renderText(escText, escPos, 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), VP);
     }
-    
+
     void onDestroy() override
     {
         for (auto *tex : keyboardTextures)
@@ -659,6 +799,7 @@ class SettingsState : public our::State
         delete controlLabelMat;
         delete flashMat->shader;
         delete flashMat;
+        delete background;
         delete textRenderer;
     }
 };
