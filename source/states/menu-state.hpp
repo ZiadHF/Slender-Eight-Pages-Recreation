@@ -480,6 +480,7 @@ class Menustate : public our::State {
         // Clean up animated images
         for (auto& img : imagePool) {
             delete img.texture;
+            img.texture = nullptr;
         }
         delete imageMaterial->shader;
         delete imageMaterial;
