@@ -50,6 +50,17 @@ namespace our {
             return nullptr;
         }
 
+        // This template method returns all components of type T
+        template<typename T>
+        std::vector<T*> getComponents(){
+            std::vector<T*> result;
+            for(auto it = components.begin(); it != components.end(); it++){
+                T* component = dynamic_cast<T*>(*it);
+                if(component) result.push_back(component);
+            }
+            return result;
+        }
+
         // This template method dynamic_casts and returns a pointer to it
         // If no component of type T was found, it returns a nullptr 
         template<typename T>

@@ -90,6 +90,10 @@ class PlayerComponent : public Component {
     float walkSpeed = 3.0f;    // Walking speed in units per second
     float sprintSpeed = 6.5f;  // Sprinting speed in units per second
 
+    // Player states
+    bool isMoving = true;
+    bool isSprinting = false;
+
     // Movement controls
     int moveForward = GLFW_KEY_W;
     int moveBackward = GLFW_KEY_S;
