@@ -70,6 +70,7 @@ set(COMMON_SOURCES
         source/common/material/pipeline-state.cpp
         source/common/material/material.hpp
         source/common/material/material.cpp
+        source/common/material/mtl-material-registry.hpp
 
         source/common/ecs/component.hpp
         source/common/ecs/transform.hpp
@@ -96,6 +97,7 @@ set(COMMON_SOURCES
         source/common/components/slenderman.hpp
         source/common/components/page.hpp
         source/common/components/page-spawner.hpp
+        source/common/components/light.hpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp

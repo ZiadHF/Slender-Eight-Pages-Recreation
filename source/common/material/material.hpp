@@ -21,7 +21,7 @@ namespace our {
         PipelineState pipelineState;
         ShaderProgram* shader;
         bool transparent;
-        
+
         // This function does 2 things: setup the pipeline state and set the shader program to be used
         virtual void setup() const;
         // This function read a material from a json object
@@ -50,16 +50,40 @@ namespace our {
         float alphaThreshold;
 
         void setup() const override;
-        void deserialize(const nlohmann::json& data) override;
+        void deserialize(const nlohmann::json &data) override;
+    };
+
+    // This material extends TexturedMaterial with Blinn-Phong lighting properties
+    // It adds ambient, diffuse, specular colors and shininess for lighting calculations
+    class LitMaterial : public TexturedMaterial
+    {
+    public:
+        glm::vec3 ambient = glm::vec3(0.1f);
+        glm::vec3 diffuse = glm::vec3(0.8f);
+        glm::vec3 specular = glm::vec3(0.5f);
+        float shininess = 32.0f;
+
+        void setup() const override;
+        void deserialize(const nlohmann::json &data) override;
     };
 
     // This function returns a new material instance based on the given type
-    inline Material* createMaterialFromType(const std::string& type){
-        if(type == "tinted"){
+    inline Material *createMaterialFromType(const std::string &type)
+    {
+        if (type == "tinted")
+        {
             return new TintedMaterial();
-        } else if(type == "textured"){
+        }
+        else if (type == "textured")
+        {
             return new TexturedMaterial();
-        } else {
+        }
+        else if (type == "lit")
+        {
+            return new LitMaterial();
+        }
+        else
+        {
             return new Material();
         }
     }

@@ -85,7 +85,7 @@ class Playstate : public our::State {
                       << playerPos.y << ", " << playerPos.z << ")\n";
         }
         // And finally we use the renderer system to draw the scene
-        renderer.render(&world);
+        renderer.render(&world, (float)deltaTime);
 
         // Get a reference to the keyboard object
         auto& keyboard = getApp()->getKeyboard();

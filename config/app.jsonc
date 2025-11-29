@@ -19,9 +19,17 @@
                     "vs": "assets/shaders/textured.vert",
                     "fs": "assets/shaders/textured.frag"
                 },
+                "lit": {
+                    "vs": "assets/shaders/lit.vert",
+                    "fs": "assets/shaders/lit.frag"
+                },
                 "instanced": {
                     "vs": "assets/shaders/instanced.vert",
                     "fs": "assets/shaders/instanced.frag"
+                },
+                "lit-instanced": {
+                    "vs": "assets/shaders/lit-instanced.vert",
+                    "fs": "assets/shaders/lit-instanced.frag"
                 }
             },
             "textures": {
@@ -52,13 +60,13 @@
                 "slenderman_texture": "assets/textures/slenderman_color.png",
                 "BarkMat_diffuse": "assets/textures/BarkMat_diffuse.png",
                 "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
-                "Grass" : "assets/textures/Grass.png"
+                "Grass": "assets/textures/Grass.png"
             },
             "meshes": {
                 "map": "assets/models/Map.obj",
                 "tree": "assets/models/tree.obj",
                 "tree2": "assets/models/tree2.obj",
-                "grass" : "assets/models/testgrass.obj",
+                "grass": "assets/models/testgrass.obj",
                 "slender": "assets/models/Slenderman.obj",
                 "page": "assets/models/page.obj"
             },
@@ -66,9 +74,9 @@
                 "default": {}
             },
             "materials": {
-                "Grass.002":{
-                     "type": "textured",
-                    "shader": "instanced",
+                "Grass.002": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -84,11 +92,27 @@
                         1
                     ],
                     "texture": "Grass",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.1,
+                        0.12,
+                        0.08
+                    ],
+                    "diffuse": [
+                        0.6,
+                        0.7,
+                        0.5
+                    ],
+                    "specular": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "shininess": 4.0
                 },
                 "Slenderman": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -104,11 +128,27 @@
                         1
                     ],
                     "texture": "slenderman_texture",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.2,
+                        0.2,
+                        0.2
+                    ],
+                    "shininess": 16.0
                 },
                 "BarkMat2": {
-                    "type": "textured",
-                    "shader": "instanced",
+                    "type": "lit",
+                    "shader": "lit-instanced",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -124,11 +164,27 @@
                         1
                     ],
                     "texture": "BarkMat_diffuse",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.04,
+                        0.03
+                    ],
+                    "diffuse": [
+                        0.6,
+                        0.5,
+                        0.4
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "BarkMat": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -144,11 +200,27 @@
                         1
                     ],
                     "texture": "diffuse_3",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.7,
+                        0.7,
+                        0.7
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "BranchMat": {
-                    "type": "textured",
-                    "shader": "instanced",
+                    "type": "lit",
+                    "shader": "lit-instanced",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": false
@@ -171,11 +243,27 @@
                     "texture": "BranchMat_diffuse",
                     "sampler": "default",
                     "transparent": true,
-                    "alphaThreshold": 0.5
+                    "alphaThreshold": 0.5,
+                    "ambient": [
+                        0.08,
+                        0.1,
+                        0.06
+                    ],
+                    "diffuse": [
+                        0.5,
+                        0.6,
+                        0.4
+                    ],
+                    "specular": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "shininess": 4.0
                 },
                 "LeafMat": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -191,11 +279,27 @@
                         1
                     ],
                     "texture": "diffuse_3",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.7,
+                        0.7,
+                        0.7
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Terrain_Baked_-4838": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -211,11 +315,27 @@
                         1
                     ],
                     "texture": "Terrain_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "BaldBoska_1_30176": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -231,11 +351,27 @@
                         1
                     ],
                     "texture": "baldestboy",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.2,
+                        0.2,
+                        0.2
+                    ],
+                    "shininess": 16.0
                 },
                 "BaldBoska_30036": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -251,11 +387,27 @@
                         1
                     ],
                     "texture": "baldest",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.2,
+                        0.2,
+                        0.2
+                    ],
+                    "shininess": 16.0
                 },
                 "Brick_29994": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -271,11 +423,27 @@
                         1
                     ],
                     "texture": "Brick_Brick_Small_Brown_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "BuildingShed_29974": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -291,11 +459,27 @@
                         1
                     ],
                     "texture": "BuildingShed",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "wood_30310": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -311,11 +495,27 @@
                         1
                     ],
                     "texture": "wood",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Concrete2_30092": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -331,11 +531,27 @@
                         1
                     ],
                     "texture": "Concrete2_Brick_Small_Brown_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Concrete_2_30340": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -351,11 +567,27 @@
                         1
                     ],
                     "texture": "Concrete_2_RockJagged0021Diffuse_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Concrete_30314": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -371,11 +603,27 @@
                         1
                     ],
                     "texture": "Concrete_ConcreteBare0280_39_S_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Oil_Tank-Material__Untitled.tga_30316": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -391,11 +639,27 @@
                         1
                     ],
                     "texture": "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shininess": 32.0
                 },
                 "Optimized_Bark_Material_9_29992": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -411,11 +675,27 @@
                         1
                     ],
                     "texture": "diffuse_1",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.7,
+                        0.7,
+                        0.7
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "RockJagged0021Diffuse_30360": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -431,11 +711,27 @@
                         1
                     ],
                     "texture": "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Roof_30222": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -451,11 +747,27 @@
                         1
                     ],
                     "texture": "Roof_Roof_ao_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "SiloRust_30198": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -471,11 +783,27 @@
                         1
                     ],
                     "texture": "SiloRust_05_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.2,
+                        0.2,
+                        0.2
+                    ],
+                    "shininess": 16.0
                 },
                 "Tiles_30344": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -491,11 +819,27 @@
                         1
                     ],
                     "texture": "Tiles_TilesBroken0013_2_S_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.2,
+                        0.2,
+                        0.2
+                    ],
+                    "shininess": 16.0
                 },
                 "genericconcrete_30302": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -511,11 +855,27 @@
                         1
                     ],
                     "texture": "genericconcrete_genericConcrete_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Floor_1_30178": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -538,11 +898,27 @@
                         1
                     ],
                     "texture": "DecalsDamageFloor0001_1_S",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Floor_2_30374": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -565,11 +941,27 @@
                         1
                     ],
                     "texture": "DecalsDamageFloor0004_1_S",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 },
                 "Leaking_1_30382": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -592,11 +984,27 @@
                         1
                     ],
                     "texture": "DecalsLeaking0165_1_S",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shininess": 32.0
                 },
                 "Leaking_2_30336": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -619,11 +1027,27 @@
                         1
                     ],
                     "texture": "DecalsLeaking0197_1_S",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shininess": 32.0
                 },
                 "Leaking_3_30252": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -646,11 +1070,27 @@
                         1
                     ],
                     "texture": "DecalsLeaking0223_1_S",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shininess": 32.0
                 },
                 "transporter_01-truck_01_30288": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -666,11 +1106,27 @@
                         1
                     ],
                     "texture": "transporter_01-truck_01_truck_01g_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shininess": 32.0
                 },
                 "transporter_02-truck_02_30312": {
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -686,11 +1142,27 @@
                         1
                     ],
                     "texture": "transporter_02-truck_02_truck_02b_Baked",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.8,
+                        0.8,
+                        0.8
+                    ],
+                    "specular": [
+                        0.3,
+                        0.3,
+                        0.3
+                    ],
+                    "shininess": 32.0
                 },
                 "TreeInstancedMaterial": {
-                    "type": "textured",
-                    "shader": "instanced",
+                    "type": "lit",
+                    "shader": "lit-instanced",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -706,7 +1178,23 @@
                         1
                     ],
                     "texture": "diffuse_3",
-                    "sampler": "default"
+                    "sampler": "default",
+                    "ambient": [
+                        0.05,
+                        0.05,
+                        0.05
+                    ],
+                    "diffuse": [
+                        0.7,
+                        0.7,
+                        0.7
+                    ],
+                    "specular": [
+                        0.1,
+                        0.1,
+                        0.1
+                    ],
+                    "shininess": 8.0
                 }
             }
         },
@@ -729,6 +1217,53 @@
                     },
                     {
                         "type": "Player Component"
+                    },
+                    {
+                        "type": "Light",
+                        "lightType": "spot",
+                        "color": [
+                            1.0,
+                            0.95,
+                            0.85
+                        ],
+                        "direction": [
+                            0,
+                            0,
+                            -1
+                        ],
+                        "attenuation": [
+                            1.0,
+                            0.045,
+                            0.00075
+                        ],
+                        "innerConeAngle": 10.0,
+                        "outerConeAngle": 50.0,
+                        "flickerMode": "candle",
+                        "flickerIntensity": 0.8,
+                        "flickerFrequency": 1.0
+                    }
+                ]
+            },
+            {
+                "position": [
+                    0,
+                    100,
+                    0
+                ],
+                "components": [
+                    {
+                        "type": "Light",
+                        "lightType": "directional",
+                        "color": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "direction": [
+                            0.3,
+                            -1.0,
+                            0.2
+                        ]
                     }
                 ]
             },
@@ -744,36 +1279,100 @@
                         "totalPages": 8,
                         "spawnPoints": [
                             {
-                                "spawnPoint": [10,1,-22],
-                                "rotation": [1.577, 0, 0]
+                                "spawnPoint": [
+                                    10,
+                                    1,
+                                    -22
+                                ],
+                                "rotation": [
+                                    1.577,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [10,1,-15],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    10,
+                                    1,
+                                    -15
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [10,1,-17],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    10,
+                                    1,
+                                    -17
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [10,1,-19],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    10,
+                                    1,
+                                    -19
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [10,1,-12],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    10,
+                                    1,
+                                    -12
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [10,1,-25],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    10,
+                                    1,
+                                    -25
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [15,1,-25],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    15,
+                                    1,
+                                    -25
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [15,1,-17],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    15,
+                                    1,
+                                    -17
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             }
                         ],
                         "pageTextures": [
@@ -841,11 +1440,31 @@
                         "type": "Slenderman Component",
                         "startingAIValue": 20,
                         "spawnPoints": [
-                            [1,1,0],
-                            [6,1,0],
-                            [9,1,0],
-                            [-5,1,0],
-                            [5,1,-10]
+                            [
+                                1,
+                                1,
+                                0
+                            ],
+                            [
+                                6,
+                                1,
+                                0
+                            ],
+                            [
+                                9,
+                                1,
+                                0
+                            ],
+                            [
+                                -5,
+                                1,
+                                0
+                            ],
+                            [
+                                5,
+                                1,
+                                -10
+                            ]
                         ]
                     }
                 ]
@@ -875,12 +1494,35 @@
                         "Density": 0.00006,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [2.0, 4.0, 2.0],
-                        "scaleRandomRange": [0.0, 0.5],
-                        "rotationMultiplier": [0.0, 0.0, 0.0],
-                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
-                        "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "scaleMultiplier": [
+                            2.0,
+                            4.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            0.0,
+                            0.5
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
                         "maxRenderDistance": 100.0,
                         "cullingBoundingRadius": 20.0,
                         "enableDistanceCulling": true,
@@ -888,7 +1530,7 @@
                     }
                 ]
             },
-             {
+            {
                 "position": [
                     0,
                     0,
@@ -904,12 +1546,11 @@
                     1,
                     1
                 ],
-                
                 "components": [
                     {
                         "type": "Instanced Renderer",
                         "mesh": "tree2",
-                        "material":"BarkMat2",
+                        "material": "BarkMat2",
                         "submeshMaterials": {
                             "BarkMat2": "BarkMat2",
                             "BranchMat": "BranchMat"
@@ -918,12 +1559,35 @@
                         "Density": 0.00002,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [2.0, 4.0, 2.0],
-                        "scaleRandomRange": [0.0, 0.5],
-                        "rotationMultiplier": [0.0, 0.0, 0.0],
-                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
-                        "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "scaleMultiplier": [
+                            2.0,
+                            4.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            0.0,
+                            0.5
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
                         "maxRenderDistance": 100.0,
                         "cullingBoundingRadius": 20.0,
                         "enableDistanceCulling": true,
@@ -931,7 +1595,7 @@
                     }
                 ]
             },
-             {
+            {
                 "position": [
                     0,
                     0,
@@ -947,22 +1611,44 @@
                     1,
                     1
                 ],
-                
                 "components": [
                     {
                         "type": "Instanced Renderer",
                         "mesh": "grass",
-                        "material":"Grass.002",
+                        "material": "Grass.002",
                         "Map": "assets/textures/greyscale_grass_map.png",
                         "Density": 0.05,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [1.0, 1.0, 2.0],
-                        "scaleRandomRange": [0.0, 0.0],
-                        "rotationMultiplier": [0.0, 0.0, 0.0],
-                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
-                        "positionOffset": [0.0, 1.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "scaleMultiplier": [
+                            1.0,
+                            1.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            0.0,
+                            0.0
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
                         "maxRenderDistance": 60.0,
                         "cullingBoundingRadius": 5.0,
                         "enableDistanceCulling": true,
