@@ -42,7 +42,7 @@ class AmbientTensionSystem {
             if (firstPlay) {
                 // First time, just play directly
                 if (ambienceAudio->initializeMusic(audioFile.c_str(), true)) {
-                    ambienceAudio->setVolume(0.4f);
+                    ambienceAudio->setVolume(0.1f);
                     ambienceAudio->playMusic();
                 }
                 firstPlay = false;

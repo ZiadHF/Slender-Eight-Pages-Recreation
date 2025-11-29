@@ -75,7 +75,7 @@ namespace our {
                     walkingAudio->uninitializeMusic();
                     // Set and play sound
                     walkingAudio->initializeMusic(soundFile.c_str(), false);
-                    walkingAudio->setVolume(0.5f);
+                    walkingAudio->setVolume(0.1f);
                     walkingAudio->playMusic();
                 }
             } else {

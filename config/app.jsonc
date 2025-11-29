@@ -868,7 +868,7 @@
             },
             {
                 "position": [
-                    0,
+                    45,
                     1,
                     0
                 ],
@@ -903,7 +903,7 @@
                     },
                     {
                         "type": "Slenderman Component",
-                        "startingAIValue": 20,
+                        "startingAIValue": 0,
                         "spawnPoints": [
                             [1,1,0],
                             [6,1,0],
