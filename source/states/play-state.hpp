@@ -57,7 +57,7 @@ class Playstate : public our::State {
         // Initialize footstep system
         footstepSystem.initialize(&world);
         ambientTensionSystem.initialize(&world);
-        staticSoundSystem.initialize(&world);
+        // staticSoundSystem.initialize(&world);
     }
 
     void onDraw(double deltaTime) override {
@@ -68,7 +68,7 @@ class Playstate : public our::State {
         staticEffectSystem.update(&world, &renderer);
         footstepSystem.update(&world, (float)deltaTime);
         ambientTensionSystem.update(&world, (float)deltaTime);
-        staticSoundSystem.update(&world, (float)deltaTime);
+        // staticSoundSystem.update(&world, (float)deltaTime);
 
         // Update physics
         physicsSystem.update((float)deltaTime);
