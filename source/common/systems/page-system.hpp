@@ -22,6 +22,7 @@ class PageSystem {
     Entity* pageSpawner = nullptr;
     int totalPages = 0;
     std::vector<Entity*> spawnedPages;
+    our::ShaderProgram* pageShader = nullptr;
 
     // Physics reference
     PhysicsSystem* physics = nullptr;
@@ -35,6 +36,14 @@ class PageSystem {
     void initialize(World* world, PhysicsSystem* physicsSystem) {
         physics = physicsSystem;
         totalPages = 0;
+
+        // Clear any existing data
+        spawnedPages.clear();
+        pageColliders.clear();
+        if (pageShader) {
+            delete pageShader;
+            pageShader = nullptr;
+        }
 
         for (auto entity : world->getEntities()) {
             if (entity->getComponent<PlayerComponent>()) {
@@ -76,6 +85,11 @@ class PageSystem {
 
 
         std::cout << "Spawning " << totalPages << " pages." << std::endl;
+        pageShader = new our::ShaderProgram();
+        pageShader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
+        pageShader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
+        pageShader->link();
+
         for (int i = 0; i < totalPages; i++) {
             Entity* pageEntity = world->add();
             pageEntity->name = "Page_" + std::to_string(i);
@@ -87,15 +101,12 @@ class PageSystem {
             meshComp->mesh = AssetLoader<Mesh>::get("page");
             // Create a material
             TexturedMaterial* pageMaterial = new TexturedMaterial();
-            pageMaterial->shader = new our::ShaderProgram();
-            pageMaterial->shader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
-            pageMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
+            pageMaterial->shader = pageShader;
             pageMaterial->tint = glm::vec4(1.0f);
             pageMaterial->sampler = AssetLoader<Sampler>::get("default");
             pageMaterial->pipelineState.faceCulling.enabled = true;
             pageMaterial->pipelineState.depthTesting.enabled = true;
             pageMaterial->pipelineState.depthTesting.function = GL_LEQUAL;
-            pageMaterial->shader->link();
 
             // Load a random texture for the page
             int rand = std::rand() % pageTextures.size();
@@ -117,6 +128,43 @@ class PageSystem {
 
         std::cout << "PageSystem initialized with " << totalPages << " pages"
                   << std::endl;
+    }
+
+    void destroy() {
+        // Destroy all uncollected pages
+        for (Entity* page : spawnedPages) {
+            auto* pageComp = page->getComponent<PageComponent>();
+            if (pageComp && !pageComp->isCollected) {
+                // Delete the material and texture
+                auto* meshComp = page->getComponent<MeshRendererComponent>();
+                if (meshComp) {
+                    auto* material = dynamic_cast<TexturedMaterial*>(meshComp->material);
+                    if (material) {
+                        if (material->texture) {
+                            delete material->texture;
+                            material->texture = nullptr;
+                        }
+                        delete material;
+                    }
+                }
+
+                // Remove mesh component
+                page->deleteComponent<MeshRendererComponent>();
+            }
+        }
+        spawnedPages.clear();
+        
+        // Cleanup page colliders
+        for (auto& pair : pageColliders) {
+            physics->removeBody(pair.second);
+        }
+        pageColliders.clear();
+
+        // Cleanup shader
+        if (pageShader) {
+            delete pageShader;
+            pageShader = nullptr;
+        }
     }
 
     void registerPageCollider(Entity* entity) {
@@ -170,6 +218,19 @@ class PageSystem {
         if (it != pageColliders.end()) {
             physics->removeBody(it->second);
             pageColliders.erase(it);
+        }
+        
+        // Delete the material and texture
+        auto* meshComp = entity->getComponent<MeshRendererComponent>();
+        if (meshComp) {
+            auto* material = dynamic_cast<TexturedMaterial*>(meshComp->material);
+            if (material) {
+                if (material->texture) {
+                    delete material->texture;
+                    material->texture = nullptr;
+                }
+                delete material;
+            }
         }
 
         // Remove mesh component

@@ -120,8 +120,20 @@ class Menustate : public our::State {
         highlightMaterial->pipelineState.blending.sourceFactor = GL_ONE;
         highlightMaterial->pipelineState.blending.destinationFactor = GL_ONE;
 
+        // Clear any existing images in the pool
+        for (auto& img : imagePool) {
+            if (img.texture) {
+                delete img.texture;
+            }
+        }
         imagePool.clear();
         currentImage = nullptr;
+
+        // Check if audio controller is already initialized and clear it
+        if (audioController) {
+            delete audioController;
+            audioController = nullptr;
+        }
 
         // Initialize the audio controller
         audioController = new our::AudioController();
