@@ -3,12 +3,12 @@
         "sensitivity": 0.8699994683265686
     },
     "controls": {
-        "backward": "S",
+        "backward": "Z",
         "forward": "A",
         "interact": "Q",
         "left": "RIGHT_CLICK",
         "right": "D",
-        "sprint": "LEFT_CLICK",
-        "toggle_flashlight": "DOWN_ARROW"
+        "sprint": "S",
+        "toggle_flashlight": "T"
     }
 }

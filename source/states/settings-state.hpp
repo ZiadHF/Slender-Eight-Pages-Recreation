@@ -132,6 +132,7 @@ class SettingsState : public our::State
     our::Mesh *rectangle;
     our::Mesh *keyboardBackdrop;
     std::vector<our::Texture2D *> keyboardTextures;
+    std::vector<our::Texture2D *> keyboardTexturesRed; // Red textures for non-highlighted keys
     our::Texture2D *background;
     // Text renderer
     our::TextRenderer *textRenderer;
@@ -429,6 +430,7 @@ class SettingsState : public our::State
         background = our::texture_utils::loadImage("assets/textures/Keyboard/scratchy.png");
         // Clear keyboardTextures in case of re-initialization
         keyboardTextures.clear();
+        keyboardTexturesRed.clear();
 
         // Setting up the materials
         keyboardRectMat = new our::TintedMaterial();
@@ -438,7 +440,7 @@ class SettingsState : public our::State
         keyboardRectMat->shader->attach("assets/shaders/tinted.frag",
                                         GL_FRAGMENT_SHADER);
         keyboardRectMat->shader->link();
-        keyboardRectMat->tint = glm::vec4(152.0f / 255.0f, 152.0f / 255.0f, 152.0f / 255.0f, 1.0f);
+        keyboardRectMat->tint = glm::vec4(61.0f / 255.0f, 61.0f / 255.0f, 61.0f / 255.0f, 1.0f);
 
         keyboardRectBackdropMat = new our::TintedMaterial();
         keyboardRectBackdropMat->shader = new our::ShaderProgram();
@@ -447,7 +449,7 @@ class SettingsState : public our::State
         keyboardRectBackdropMat->shader->attach("assets/shaders/tinted.frag",
                                                 GL_FRAGMENT_SHADER);
         keyboardRectBackdropMat->shader->link();
-        keyboardRectBackdropMat->tint = glm::vec4(106.0f / 255.0f, 106.0f / 255.0f, 106.0f / 255.0f, 1.0f);
+        keyboardRectBackdropMat->tint = glm::vec4(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
 
         keyboardKeyMat = new our::TexturedMaterial();
         keyboardKeyMat->shader = new our::ShaderProgram();
@@ -459,7 +461,13 @@ class SettingsState : public our::State
         keyboardKeyMat->pipelineState.blending.equation = GL_FUNC_ADD;
         keyboardKeyMat->pipelineState.blending.sourceFactor = GL_SRC_ALPHA;
         keyboardKeyMat->pipelineState.blending.destinationFactor = GL_ONE_MINUS_SRC_ALPHA;
-
+        keyboardKeyMat->sampler = new our::Sampler();
+        keyboardKeyMat->sampler->set(GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        keyboardKeyMat->sampler->set(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        keyboardKeyMat->sampler->set(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        keyboardKeyMat->sampler->set(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        keyboardKeyMat->sampler->set(GL_TEXTURE_MAX_ANISOTROPY_EXT, 16.0f);
+        keyboardKeyMat->sampler->set(GL_TEXTURE_LOD_BIAS, -0.5f);
         // Create material for control labels
         controlLabelMat = new our::TintedMaterial();
         controlLabelMat->shader = new our::ShaderProgram();
@@ -508,9 +516,18 @@ class SettingsState : public our::State
             });
 
         keyboardTextures.reserve(keyboardIcons.size());
+        keyboardTexturesRed.reserve(keyboardIcons.size());
         for (const auto &icon : keyboardIcons)
         {
             keyboardTextures.push_back(our::texture_utils::loadImage(icon.TextureFile, true));
+            // Load red version by replacing "Keyboard/" with "Keyboard/red/"
+            std::string redPath = icon.TextureFile;
+            size_t pos = redPath.find("Keyboard/");
+            if (pos != std::string::npos)
+            {
+                redPath.replace(pos, 9, "Keyboard/red/");
+            }
+            keyboardTexturesRed.push_back(our::texture_utils::loadImage(redPath, true));
         }
 
         // Setup control labels at bottom in 2 columns
@@ -657,7 +674,7 @@ class SettingsState : public our::State
         // BG
         keyboardKeyMat->texture = background;
         keyboardKeyMat->setup();
-        keyboardKeyMat->shader->set("transform", VP * glm::translate(glm::mat4(1.0f), glm::vec3(0 *scaleX, 0*scaleY, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1280.0f * scaleX, 720.0f * scaleY, 1.0f)));
+        keyboardKeyMat->shader->set("transform", VP * glm::translate(glm::mat4(1.0f), glm::vec3(0 * scaleX, 0 * scaleY, 0.0f)) * glm::scale(glm::mat4(1.0f), glm::vec3(1280.0f * scaleX, 720.0f * scaleY, 1.0f)));
         keyboardKeyMat->shader->set("highlighted", false);
         rectangle->draw();
 
@@ -669,13 +686,14 @@ class SettingsState : public our::State
         rectangle->draw();
         for (int i = 0; i < keyboardIcons.size(); i++)
         {
-            keyboardKeyMat->texture = keyboardTextures[i];
+            // Use highlighted texture if highlighted, red texture otherwise
+            keyboardKeyMat->texture = keyboardIcons[i].highlighted ? keyboardTextures[i] : keyboardTexturesRed[i];
             keyboardKeyMat->setup();
             keyboardKeyMat->shader->set("transform", VP * keyboardIcons[i].getLocalToWorld(scaleX, scaleY));
             keyboardKeyMat->shader->set("highlighted", keyboardIcons[i].highlighted);
             rectangle->draw();
         }
-
+        glBindSampler(0, 0);
         // Draw control labels section
         for (auto &label : controlLabels)
         {
@@ -746,7 +764,7 @@ class SettingsState : public our::State
                         {
                             if (keyboardIcons[i].TextureFile == texturePath)
                             {
-                                keyTexture = keyboardTextures[i];
+                                keyTexture = keyboardTexturesRed[i];
                                 break;
                             }
                         }
@@ -765,6 +783,7 @@ class SettingsState : public our::State
                 }
             }
         }
+        
 
         // Render camera sensitivity text
         std::string sensitivityText = "Camera Sensitivity: " + std::to_string(cameraSensitivity).substr(0, 4);
@@ -787,6 +806,14 @@ class SettingsState : public our::State
         for (auto *tex : keyboardTextures)
         {
             delete tex;
+        }
+        for (auto *tex : keyboardTexturesRed)
+        {
+            delete tex;
+        }
+        if (keyboardKeyMat->sampler)
+        {
+            delete keyboardKeyMat->sampler;
         }
         delete rectangle;
         delete keyboardRectMat->shader;

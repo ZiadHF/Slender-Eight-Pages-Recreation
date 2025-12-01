@@ -116,7 +116,7 @@ bool TextRenderer::loadFont(const std::string& fontPath, unsigned int fontSize) 
 
 void TextRenderer::renderText(const std::string& text, glm::vec2 position, float scale, glm::vec4 color, const glm::mat4& projection) {
     if (!textShader) return;
-    
+    glBindSampler(0, 0);
     // Activate corresponding render state
     textShader->use();
     textShader->set("projection", projection);
