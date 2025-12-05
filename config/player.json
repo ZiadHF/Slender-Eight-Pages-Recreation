@@ -8,7 +8,7 @@
         "interact": "Q",
         "left": "RIGHT_CLICK",
         "right": "D",
-        "sprint": "S",
-        "toggle_flashlight": "T"
+        "sprint": "LEFT_SHIFT",
+        "toggle_flashlight": "F"
     }
 }

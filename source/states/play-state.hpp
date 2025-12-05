@@ -11,6 +11,9 @@
 #include <systems/physics-system.hpp>
 #include <systems/slenderman-ai.hpp>
 #include <systems/static-effect.hpp>
+#include <systems/footstep-system.hpp>
+#include <systems/ambient-tension-system.hpp>
+#include <systems/static-sound-system.hpp>
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -22,6 +25,9 @@ class Playstate : public our::State {
     our::StaticEffectSystem staticEffectSystem;
     our::PhysicsSystem physicsSystem;
     our::PageSystem pageSystem;
+    our::FootstepSystem footstepSystem;
+    our::AmbientTensionSystem ambientTensionSystem;
+    our::StaticSoundSystem staticSoundSystem;
 
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
@@ -48,6 +54,10 @@ class Playstate : public our::State {
         staticEffectSystem.initialize(&world);
         // Initialize page system with physics
         pageSystem.initialize(&world, &physicsSystem);
+        // Initialize footstep system
+        footstepSystem.initialize(&world);
+        ambientTensionSystem.initialize(&world);
+        staticSoundSystem.initialize(&world);
     }
 
     void onDraw(double deltaTime) override {
@@ -56,6 +66,9 @@ class Playstate : public our::State {
         cameraController.update(&world, (float)deltaTime);
         slendermanAISystem.update(&world, (float)deltaTime, &renderer);
         staticEffectSystem.update(&world, &renderer);
+        footstepSystem.update(&world, (float)deltaTime);
+        ambientTensionSystem.update(&world, (float)deltaTime);
+        staticSoundSystem.update(&world, (float)deltaTime);
 
         // Update physics
         physicsSystem.update((float)deltaTime);
