@@ -1207,9 +1207,9 @@
                             -1
                         ],
                         "attenuation": [
-                            1.0,
-                            0.0045,
-                            0.025
+                            0.6,
+                            0.00045,
+                            0.005
                         ],
                         "innerConeAngle": 15.0,
                         "outerConeAngle": 35.0,
