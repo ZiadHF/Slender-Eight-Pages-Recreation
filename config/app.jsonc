@@ -184,7 +184,7 @@
                 },
                 "BarkMat": {
                     "type": "lit",
-                    "shader": "lit",
+                    "shader": "lit-instanced",
                     "pipelineState": {
                         "faceCulling": {
                             "enabled": true
@@ -200,23 +200,7 @@
                         1
                     ],
                     "texture": "diffuse_3",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.7,
-                        0.7,
-                        0.7
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "BranchMat": {
                     "type": "lit",
@@ -263,13 +247,18 @@
                 },
                 "LeafMat": {
                     "type": "lit",
-                    "shader": "lit",
+                    "shader": "lit-instanced",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": true
+                            "enabled": false
                         },
                         "depthTesting": {
                             "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
                         }
                     },
                     "tint": [
@@ -280,22 +269,8 @@
                     ],
                     "texture": "diffuse_3",
                     "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.7,
-                        0.7,
-                        0.7
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "transparent": true,
+                    "alphaThreshold": 0.5
                 },
                 "Terrain_Baked_-4838": {
                     "type": "lit",
@@ -1489,7 +1464,11 @@
                     {
                         "type": "Instanced Renderer",
                         "mesh": "tree",
-                        "material": "TreeInstancedMaterial",
+                        "material": "BarkMat",
+                        "submeshMaterials": {
+                            "BarkMat": "BarkMat",
+                            "LeafMat": "LeafMat"
+                        },
                         "Map": "assets/textures/greyscale_tree_map.png",
                         "Density": 0.0001,
                         "worldWidth": 400.0,
