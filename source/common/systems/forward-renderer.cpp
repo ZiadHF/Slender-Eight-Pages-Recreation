@@ -5,23 +5,26 @@
 #include "../components/instanced-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
-namespace our {
+namespace our
+{
 
     void ForwardRenderer::initialize(glm::ivec2 windowSize,
-                                 const nlohmann::json& config) {
+                                     const nlohmann::json &config)
+    {
         // First, we store the window size for later use
         this->windowSize = windowSize;
 
         // Then we check if there is a sky texture in the configuration
-    if (config.contains("sky")) {
+        if (config.contains("sky"))
+        {
             // First, we create a sphere which will be used to draw the sky
             this->skySphere = mesh_utils::sphere(glm::ivec2(16, 16));
 
-            // We can draw the sky using the same shader used to draw textured
-            // objects
-        ShaderProgram* skyShader = new ShaderProgram();
-            skyShader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
-            skyShader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
+            // We can draw the sky using dedicated sky shaders
+            // which have Y-level fog for proper tree occlusion
+            ShaderProgram *skyShader = new ShaderProgram();
+            skyShader->attach("assets/shaders/sky.vert", GL_VERTEX_SHADER);
+            skyShader->attach("assets/shaders/sky.frag", GL_FRAGMENT_SHADER);
             skyShader->link();
 
             // Then, we setup the pipeline state for rendering the sky
@@ -38,10 +41,10 @@ namespace our {
             // Load the sky texture (note that we don't need mipmaps since we want
             // to avoid any unnecessary blurring while rendering the sky)
             std::string skyTextureFile = config.value<std::string>("sky", "");
-        Texture2D* skyTexture = texture_utils::loadImage(skyTextureFile, false);
+            Texture2D *skyTexture = texture_utils::loadImage(skyTextureFile, false);
 
             // Setup a sampler for the sky
-        Sampler* skySampler = new Sampler();
+            Sampler *skySampler = new Sampler();
             skySampler->set(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             skySampler->set(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             skySampler->set(GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -60,7 +63,8 @@ namespace our {
         }
 
         // Then we check if there is a postprocessing shader in the configuration
-    if (config.contains("postprocess")) {
+        if (config.contains("postprocess"))
+        {
             glGenFramebuffers(1, &postprocessFrameBuffer);
             glBindFramebuffer(GL_FRAMEBUFFER, postprocessFrameBuffer);
 
@@ -82,14 +86,14 @@ namespace our {
 
             // Create a sampler to use for sampling the scene texture in the post
             // processing shader
-        Sampler* postprocessSampler = new Sampler();
+            Sampler *postprocessSampler = new Sampler();
             postprocessSampler->set(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             postprocessSampler->set(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
             postprocessSampler->set(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             postprocessSampler->set(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
             // Create the post processing shader
-        ShaderProgram* postprocessShader = new ShaderProgram();
+            ShaderProgram *postprocessShader = new ShaderProgram();
             postprocessShader->attach("assets/shaders/fullscreen.vert",
                                       GL_VERTEX_SHADER);
             postprocessShader->attach(config.value<std::string>("postprocess", ""),
@@ -107,9 +111,11 @@ namespace our {
         }
     }
 
-void ForwardRenderer::destroy() {
+    void ForwardRenderer::destroy()
+    {
         // Delete all objects related to the sky
-    if (skyMaterial) {
+        if (skyMaterial)
+        {
             delete skySphere;
             delete skyMaterial->shader;
             delete skyMaterial->texture;
@@ -117,7 +123,8 @@ void ForwardRenderer::destroy() {
             delete skyMaterial;
         }
         // Delete all objects related to post processing
-    if (postprocessMaterial) {
+        if (postprocessMaterial)
+        {
             glDeleteFramebuffers(1, &postprocessFrameBuffer);
             glDeleteVertexArrays(1, &postProcessVertexArray);
             delete colorTarget;
@@ -131,17 +138,20 @@ void ForwardRenderer::destroy() {
     void ForwardRenderer::render(World *world, float deltaTime)
     {
         // First of all, we search for a camera and for all the mesh renderers
-    CameraComponent* camera = nullptr;
+        CameraComponent *camera = nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
         lightCommands.clear();
-    std::vector<InstancedRendererComponent*> instancedRenderers;
-    for (auto entity : world->getEntities()) {
+        std::vector<InstancedRendererComponent *> instancedRenderers;
+        for (auto entity : world->getEntities())
+        {
             // If we hadn't found a camera yet, we look for a camera in this entity
-        if (!camera) camera = entity->getComponent<CameraComponent>();
+            if (!camera)
+                camera = entity->getComponent<CameraComponent>();
             if (auto instancedRenderer =
                     entity->getComponent<InstancedRendererComponent>();
-            instancedRenderer) {
+                instancedRenderer)
+            {
                 instancedRenderers.push_back(instancedRenderer);
             }
             // Collect light components and update their flicker
@@ -152,7 +162,8 @@ void ForwardRenderer::destroy() {
             }
             // If this entity has a mesh renderer component
             if (auto meshRenderer = entity->getComponent<MeshRendererComponent>();
-            meshRenderer) {
+                meshRenderer)
+            {
                 glm::mat4 localToWorld =
                     meshRenderer->getOwner()->getLocalToWorldMatrix();
                 glm::vec3 center = glm::vec3(localToWorld * glm::vec4(0, 0, 0, 1));
@@ -160,10 +171,12 @@ void ForwardRenderer::destroy() {
                 // If mesh has submeshes, create a command for each submesh with its
                 // material
                 if (meshRenderer->mesh &&
-                meshRenderer->mesh->getSubmeshCount() > 0) {
+                    meshRenderer->mesh->getSubmeshCount() > 0)
+                {
                     for (size_t i = 0; i < meshRenderer->mesh->getSubmeshCount();
-                     i++) {
-                    const auto& submesh = meshRenderer->mesh->getSubmeshes()[i];
+                         i++)
+                    {
+                        const auto &submesh = meshRenderer->mesh->getSubmeshes()[i];
                         RenderCommand command;
                         command.localToWorld = localToWorld;
                         command.center = center;
@@ -172,13 +185,18 @@ void ForwardRenderer::destroy() {
                         command.material = meshRenderer->getMaterialForSubmesh(
                             submesh.materialName);
 
-                    if (command.material->transparent) {
+                        if (command.material->transparent)
+                        {
                             transparentCommands.push_back(command);
-                    } else {
+                        }
+                        else
+                        {
                             opaqueCommands.push_back(command);
                         }
                     }
-            } else {
+                }
+                else
+                {
                     // No submeshes, use default material
                     RenderCommand command;
                     command.localToWorld = localToWorld;
@@ -187,16 +205,20 @@ void ForwardRenderer::destroy() {
                     command.submeshIndex = -1;
                     command.material = meshRenderer->material;
 
-                if (command.material->transparent) {
+                    if (command.material->transparent)
+                    {
                         transparentCommands.push_back(command);
-                } else {
+                    }
+                    else
+                    {
                         opaqueCommands.push_back(command);
                     }
                 }
             }
         }
         // If there is no camera, we return (we cannot render without a camera)
-    if (camera == nullptr) return;
+        if (camera == nullptr)
+            return;
 
         auto M = camera->getOwner()->getLocalToWorldMatrix();
         glm::vec3 eye = M * glm::vec4(0, 0, 0, 1);
@@ -204,8 +226,9 @@ void ForwardRenderer::destroy() {
         glm::vec3 cameraForward = glm::normalize(center - eye);
 
         std::sort(transparentCommands.begin(), transparentCommands.end(),
-              [cameraForward](const RenderCommand& first,
-                              const RenderCommand& second) {
+                  [cameraForward](const RenderCommand &first,
+                                  const RenderCommand &second)
+                  {
                       return glm::dot(first.center, cameraForward) >
                              glm::dot(second.center, cameraForward);
                   });
@@ -230,9 +253,12 @@ void ForwardRenderer::destroy() {
         glDepthMask(GL_TRUE);
 
         // If there is a postprocess material, bind the framebuffer
-    if (postprocessMaterial) {
+        if (postprocessMaterial)
+        {
             glBindFramebuffer(GL_FRAMEBUFFER, postprocessFrameBuffer);
-    } else {
+        }
+        else
+        {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
 
@@ -242,7 +268,8 @@ void ForwardRenderer::destroy() {
         // Don't forget to set the "transform" uniform to be equal the
         // model-view-projection matrix for each render command
 
-    for (const auto& command : opaqueCommands) {
+        for (const auto &command : opaqueCommands)
+        {
             // Setup the material
             command.material->setup();
             // Compute the model-view-projection matrix
@@ -281,28 +308,35 @@ void ForwardRenderer::destroy() {
             }
 
             // Draw the mesh
-        if (command.submeshIndex >= 0) {
+            if (command.submeshIndex >= 0)
+            {
                 command.mesh->drawSubmesh(command.submeshIndex);
-        } else {
+            }
+            else
+            {
                 command.mesh->draw();
             }
         }
 
-    for (auto& instancedRenderer : instancedRenderers) {
+        for (auto &instancedRenderer : instancedRenderers)
+        {
             if (instancedRenderer->mesh && instancedRenderer->material &&
-            !instancedRenderer->InstanceMats.empty()) {
+                !instancedRenderer->InstanceMats.empty())
+            {
                 // Perform culling if enabled and positions are available
-            const std::vector<glm::mat4>* instanceMatrices =
+                const std::vector<glm::mat4> *instanceMatrices =
                     &instancedRenderer->InstanceMats;
                 size_t instanceCount = instancedRenderer->InstanceMats.size();
 
                 if (!instancedRenderer->instancePositions.empty() &&
                     (instancedRenderer->enableDistanceCulling ||
-                 instancedRenderer->enableFrustumCulling)) {
+                     instancedRenderer->enableFrustumCulling))
+                {
                     instancedRenderer->updateVisibleInstances(eye, frustum);
 
-                if (instancedRenderer->visibleInstanceMats.empty()) {
-                    continue;  // Skip if no visible instances
+                    if (instancedRenderer->visibleInstanceMats.empty())
+                    {
+                        continue; // Skip if no visible instances
                     }
 
                     instanceMatrices = &instancedRenderer->visibleInstanceMats;
@@ -311,19 +345,23 @@ void ForwardRenderer::destroy() {
                     // Update the instance buffer with culled instances
                     instancedRenderer->mesh->updateInstanceBuffer(
                         *instanceMatrices);
-            } else {
+                }
+                else
+                {
                     // No culling, use static buffer
                     instancedRenderer->mesh->setupInstancing(*instanceMatrices);
                 }
 
                 // Check if mesh has submeshes
-            if (instancedRenderer->mesh->getSubmeshCount() > 0) {
+                if (instancedRenderer->mesh->getSubmeshCount() > 0)
+                {
                     // Render each submesh with its specific material
                     for (size_t i = 0;
-                     i < instancedRenderer->mesh->getSubmeshCount(); i++) {
-                    const auto& submesh =
+                         i < instancedRenderer->mesh->getSubmeshCount(); i++)
+                    {
+                        const auto &submesh =
                             instancedRenderer->mesh->getSubmesh(i);
-                    Material* submeshMaterial =
+                        Material *submeshMaterial =
                             instancedRenderer->getMaterialForSubmesh(
                                 submesh.materialName);
 
@@ -352,10 +390,12 @@ void ForwardRenderer::destroy() {
                         glBindVertexArray(instancedRenderer->mesh->getVAO());
                         glDrawElementsInstanced(
                             GL_TRIANGLES, submesh.elementCount, GL_UNSIGNED_INT,
-                        (void*)(submesh.elementOffset * sizeof(GLuint)),
+                            (void *)(submesh.elementOffset * sizeof(GLuint)),
                             instanceCount);
                     }
-            } else {
+                }
+                else
+                {
                     // No submeshes, use default material
                     instancedRenderer->material->setup();
                     instancedRenderer->material->shader->set("VP", VP);
@@ -384,9 +424,14 @@ void ForwardRenderer::destroy() {
             }
         }
         // If there is a sky material, draw the sky
-    if (this->skyMaterial) {
+        if (this->skyMaterial)
+        {
             // Set up the sky material
             this->skyMaterial->setup();
+
+            // Set fog uniforms for sky
+            skyMaterial->shader->set("fog_color", glm::vec3(0.02f, 0.02f, 0.02f));
+            skyMaterial->shader->set("apply_fog", true);
 
             // Get the camera position
             glm::vec3 cameraPos = M * glm::vec4(0, 0, 0, 1);
@@ -408,7 +453,8 @@ void ForwardRenderer::destroy() {
             skySphere->draw();
         }
         // Draw all the transparent commands
-    for (const auto& command : transparentCommands) {
+        for (const auto &command : transparentCommands)
+        {
             // Setup the material
             command.material->setup();
             // Compute the model-view-projection matrix
@@ -447,15 +493,19 @@ void ForwardRenderer::destroy() {
             }
 
             // Draw the mesh
-        if (command.submeshIndex >= 0) {
+            if (command.submeshIndex >= 0)
+            {
                 command.mesh->drawSubmesh(command.submeshIndex);
-        } else {
+            }
+            else
+            {
                 command.mesh->draw();
             }
         }
 
         // If there is a postprocess material, apply postprocessing
-    if (postprocessMaterial) {
+        if (postprocessMaterial)
+        {
             // First, bind the default framebuffer for postprocessing output
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -477,11 +527,12 @@ void ForwardRenderer::destroy() {
         }
     }
 
-void ForwardRenderer::setStaticParams(const float maxHealth, const float health) {
+    void ForwardRenderer::setStaticParams(const float maxHealth, const float health)
+    {
         postprocessUniforms.maxHealth = maxHealth;
         postprocessUniforms.health = health;
         postprocessUniforms.time = (float)glfwGetTime();
     }
 
-const Frustum& ForwardRenderer::getFrustum() const { return frustum; }
-}  // namespace our
+    const Frustum &ForwardRenderer::getFrustum() const { return frustum; }
+} // namespace our

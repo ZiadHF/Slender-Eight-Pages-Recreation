@@ -39,9 +39,9 @@ uniform vec3 specular_color = vec3(0.5);
 uniform float shininess = 32.0;
 
 // Fog properties
-uniform vec3 fog_color = vec3(0.02, 0.02, 0.03);  // Dark bluish fog
-uniform float fog_density = 0.1;
-uniform float fog_start = 5.0;
+uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
+uniform float fog_density = 0.01;
+uniform float fog_start = 30.0;
 uniform float fog_end = 100.0;
 
 void main(){
@@ -51,11 +51,8 @@ void main(){
     if(texture_color.a < alphaThreshold) discard;
     // Viewing direction is a ray from object to camera
     vec3 view_dir = normalize(camera_position-fs_in.world_position);
-    // Lighting according to Blinn-Phong Consists of 3 main part
-    // Ambient, the innate light of the object or such:
-    // Since it is mostly material dependent and doesn't change for diff types
-    vec3 ambient = ambient_color * texture_color.rgb;
-    vec3 result = ambient;
+    // No ambient light - only flashlight illuminates
+    vec3 result = vec3(0.0);
     vec3 normal = normalize(fs_in.normal);
     //Loop over all lights to add their effects to our rendered pixel
     for (int i = 0;i< light_count && i<MAX_LIGHTS;i++){
@@ -76,9 +73,15 @@ void main(){
                              lights[i].attenuation.z * distance * distance);
         if(lights[i].type == LIGHT_SPOT){
             float theta = dot(light_direction,-normalize(lights[i].direction));
-            // float epsilon = lights[i].inner_cone_angle-lights[i].outer_cone_angle;
-            float intensity = smoothstep(lights[i].outer_cone_angle,lights[i].inner_cone_angle,theta);
-            attenuation*=intensity;
+            // Hard cutoff - anything outside outer cone is pitch black
+            if(theta < lights[i].outer_cone_angle) {
+                frag_color = vec4(0,0,0,1);
+                return;
+            } else {
+                // Smooth transition only between outer and inner cone
+                float intensity = smoothstep(lights[i].outer_cone_angle, lights[i].inner_cone_angle, theta);
+                attenuation *= intensity;
+            }
         }
         }
         // Diffuse:
@@ -91,13 +94,20 @@ void main(){
         vec3 specular = spec * specular_color * lights[i].color;
         result += attenuation * (diffuse + specular);
     }
-    // Calculate fog
-    float distance_to_camera = length(camera_position - fs_in.world_position);
     
-    // Exponential fog (more realistic)
-    float fog_factor = 1.0 - exp(-fog_density * distance_to_camera);
-    // Mix result with fog
-    result = mix(result, fog_color, fog_factor);
+    // Calculate fog only if there's any light (avoid applying fog to pitch black areas)
+    if (length(result) > 0.001) {
+        float distance_to_camera = length(camera_position - fs_in.world_position);
+        
+        // Linear fog that increases between fog_start and fog_end
+        float fog_factor = clamp((distance_to_camera - fog_start) / (fog_end - fog_start), 0.0, 1.0);
+        
+        // Scale fog to pitch black at far distances - matches light attenuation
+        vec3 distance_scaled_fog = fog_color * (1.0 - fog_factor);
+        
+        // Mix result with distance-scaled fog
+        result = mix(result, distance_scaled_fog, fog_factor);
+    }
     
     frag_color = vec4(result, texture_color.a);
 }

@@ -3,8 +3,8 @@
     "window": {
         "title": "Slender - The Eight Pages",
         "size": {
-            "width": 1280,
-            "height": 720
+            "width": 2560,
+            "height": 1440
         },
         "fullscreen": false
     },
@@ -1233,14 +1233,14 @@
                         ],
                         "attenuation": [
                             1.0,
-                            0.045,
-                            0.00075
+                            0.0045,
+                            0.025
                         ],
-                        "innerConeAngle": 10.0,
-                        "outerConeAngle": 50.0,
+                        "innerConeAngle": 15.0,
+                        "outerConeAngle": 35.0,
                         "flickerMode": "candle",
                         "flickerIntensity": 0.8,
-                        "flickerFrequency": 1.0
+                        "flickerFrequency": 0.2
                     }
                 ]
             },
@@ -1491,7 +1491,7 @@
                         "mesh": "tree",
                         "material": "TreeInstancedMaterial",
                         "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.00006,
+                        "Density": 0.0001,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
                         "scaleMultiplier": [
@@ -1523,9 +1523,9 @@
                             0.0,
                             3.0
                         ],
-                        "maxRenderDistance": 100.0,
-                        "cullingBoundingRadius": 20.0,
-                        "enableDistanceCulling": true,
+                        "maxRenderDistance": 400.0,
+                        "cullingBoundingRadius": 40.0,
+                        "enableDistanceCulling": false,
                         "enableFrustumCulling": true
                     }
                 ]
@@ -1556,7 +1556,7 @@
                             "BranchMat": "BranchMat"
                         },
                         "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.00002,
+                        "Density": 0.00005,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
                         "scaleMultiplier": [
@@ -1588,9 +1588,9 @@
                             0.0,
                             3.0
                         ],
-                        "maxRenderDistance": 100.0,
-                        "cullingBoundingRadius": 20.0,
-                        "enableDistanceCulling": true,
+                        "maxRenderDistance": 400.0,
+                        "cullingBoundingRadius": 40.0,
+                        "enableDistanceCulling": false,
                         "enableFrustumCulling": true
                     }
                 ]
