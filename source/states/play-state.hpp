@@ -55,7 +55,7 @@ class Playstate : public our::State {
         slendermanAISystem.initialize(&world);
         staticEffectSystem.initialize(&world);
         // Initialize page system with physics
-        pageSystem.initialize(&world, &physicsSystem);
+        pageSystem.initialize(&world, &physicsSystem,textRenderer,glm::vec2(size.x, size.y));
         // Initialize footstep system
         footstepSystem.initialize(&world);
         ambientTensionSystem.initialize(&world);
@@ -91,7 +91,7 @@ class Playstate : public our::State {
         }
 
         // Check for interact key (E key)
-        bool interactPressed = getApp()->getKeyboard().justPressed(GLFW_KEY_E);
+        bool interactPressed = getApp()->getKeyboard().justPressed(cameraController.getInteractKey());
         pageSystem.update(&world, (float)deltaTime, cameraPos, cameraForward,
                           interactPressed);
 

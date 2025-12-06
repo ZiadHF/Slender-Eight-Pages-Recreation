@@ -4,7 +4,7 @@
 #include <iostream>
 #include <unordered_map>
 #include <random>
-
+#include "../common/systems/text-renderer.hpp"
 #include "../common/components/page-spawner.hpp"
 #include "../common/components/page.hpp"
 #include "../common/components/player.hpp"
@@ -26,15 +26,19 @@ class PageSystem {
 
     // Physics reference
     PhysicsSystem* physics = nullptr;
-
+    // Text renderer reference
+    TextRenderer* textRenderer = nullptr;
+    glm::vec2 screenSize = glm::vec2(1280, 720);
     // Map Entity to its collision body for cleanup
     std::unordered_map<Entity*, btRigidBody*> pageColliders;
 
     // Raycast parameters
-    float interactionDistance = 3.0f;  // Max distance player can interact
+    float interactionDistance = 1.0f;  // Max distance player can interact
 
-    void initialize(World* world, PhysicsSystem* physicsSystem) {
-        physics = physicsSystem;
+    void initialize(World* world, PhysicsSystem* physicsSystem , TextRenderer* textRenderer, const glm::ivec2& screenSizeParam) {
+        this->physics = physicsSystem;
+        this->textRenderer = textRenderer;
+        this->screenSize = screenSizeParam;
         totalPages = 0;
 
         // Clear any existing data
@@ -270,6 +274,12 @@ class PageSystem {
         // Remove mesh component
         entity->deleteComponent<MeshRendererComponent>();
 
+        if (this->textRenderer) {
+            std::string pageCountText = "Pages " + std::to_string(playerComp->collectedPages) + "/" + std::to_string(totalPages);
+            glm::vec2 textSize = textRenderer->measureText(pageCountText, 0.5f);
+            glm::vec2 pageCountPos = glm::vec2(screenSize.x / 2.0f - textSize.x / 2.0f, screenSize.y / 2.0f);
+            textRenderer->startTimedText(pageCountText, 3.0f, pageCountPos, 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        }
         // Trigger effects
         onPageCollected();
     }

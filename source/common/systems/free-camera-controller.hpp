@@ -3,9 +3,11 @@
 #include "../ecs/world.hpp"
 #include "../components/free-camera-controller.hpp"
 #include "../components/camera.hpp"
+#include "../components/player.hpp"
 #include "../application.hpp"
 #include "physics-system.hpp"
 #include <GLFW/glfw3.h>
+#include <fstream>
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 
@@ -21,11 +23,46 @@ namespace our
         PhysicsSystem* physics = nullptr; // Pointer to the physics system
         float playerEyeHeight = 1.6f; // Height from capsule bottom to camera
 
+        std::map<std::string, int> controlKeys;
+
+        void loadControls() {
+            std::ifstream file("config/player.json");
+            if (file.is_open()) {
+                nlohmann::json config;
+                file >> config;
+                file.close();
+                
+                if (config.contains("controls")) {
+                    auto controls = config["controls"];
+                    controlKeys["forward"] = stringToGLFWKey(controls.value("forward", "W"));
+                    controlKeys["backward"] = stringToGLFWKey(controls.value("backward", "S"));
+                    controlKeys["left"] = stringToGLFWKey(controls.value("left", "A"));
+                    controlKeys["right"] = stringToGLFWKey(controls.value("right", "D"));
+                    controlKeys["sprint"] = stringToGLFWKey(controls.value("sprint", "LEFT_SHIFT"));
+                    controlKeys["interact"] = stringToGLFWKey(controls.value("interact", "E"));
+                    controlKeys["toggle_flashlight"] = stringToGLFWKey(controls.value("toggle_flashlight", "F"));
+                }
+            }
+        }
+
+        bool isKeyPressed(const std::string& action) {
+            if (controlKeys.find(action) == controlKeys.end()) return false;
+            int key = controlKeys[action];
+            
+            // Check if it's a mouse button
+            if (key == GLFW_MOUSE_BUTTON_LEFT || key == GLFW_MOUSE_BUTTON_RIGHT || key == GLFW_MOUSE_BUTTON_MIDDLE) {
+                return app->getMouse().isPressed(key);
+            }
+            return app->getKeyboard().isPressed(key);
+        }
+
     public:
         // When a state enters, it should call this function and give it the pointer to the application
         void enter(Application* app, PhysicsSystem* physicsSystem = nullptr) {
             this->app = app;
             this->physics = physicsSystem; 
+            loadControls();
+            mouse_locked = false;
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
@@ -51,6 +88,7 @@ namespace our
             // Initialize player collider on first update - spawn higher to avoid clipping
             if (physics && !physics->isPlayerInitialized()) {
                 glm::vec3 pos = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                //pos.y = glm::max(pos.y, 2.0f);
                 pos.y += 2.0f; // Spawn above ground to let gravity pull down
                 physics->initializePlayerCollider(pos, 0.4f, 1.8f);
                 std::cout << "Player collider initialized at: " << pos.x << ", " << pos.y << ", " << pos.z << std::endl;
@@ -84,10 +122,10 @@ namespace our
                 current_sensitivity *= controller->speedupFactor;
             
             glm::vec3 moveDir(0.0f);
-            if (app->getKeyboard().isPressed(GLFW_KEY_W)) moveDir += front;
-            if (app->getKeyboard().isPressed(GLFW_KEY_S)) moveDir -= front;
-            if (app->getKeyboard().isPressed(GLFW_KEY_D)) moveDir += right;
-            if (app->getKeyboard().isPressed(GLFW_KEY_A)) moveDir -= right;
+            if (isKeyPressed("forward")) moveDir += front;
+            if (isKeyPressed("backward")) moveDir -= front;
+            if (isKeyPressed("right")) moveDir += right;
+            if (isKeyPressed("left")) moveDir -= right;
             
             if (glm::length(moveDir) > 0.001f)
                 moveDir = glm::normalize(moveDir);
@@ -113,6 +151,11 @@ namespace our
         // When the state exits, it should call this function to ensure the mouse is unlocked
         void exit() {
             if (app) app->getMouse().unlockMouse(app->getWindow());
+        }
+
+         int getInteractKey() const {
+            auto it = controlKeys.find("interact");
+            return (it != controlKeys.end()) ? it->second : GLFW_KEY_E;
         }
 
     };

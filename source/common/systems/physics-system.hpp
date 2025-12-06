@@ -70,7 +70,7 @@ class PhysicsSystem {
                 glm::mat4 transform = entity->getLocalToWorldMatrix();
                 addMeshCollision(meshRenderer->mesh, transform, entity);
             }
-            
+
             auto instancedRenderer = entity->getComponent<InstancedRendererComponent>();
             if (collisionMesh && instancedRenderer && instancedRenderer->mesh)
             {
@@ -180,8 +180,7 @@ class PhysicsSystem {
 
         if (Vertices.empty() || indices.empty())
             return;
-        std::cout << "Adding mesh collision with " << indices.size() / 3 << " triangles" << std::endl;
-        
+         
         btTriangleMesh *triangleMesh = new btTriangleMesh();
         triangleMeshes.push_back(triangleMesh);
         // loop through all triangles
@@ -277,39 +276,64 @@ class PhysicsSystem {
 
     btDiscreteDynamicsWorld* getWorld() { return dynamicsWorld; }
 
-    void destroy() {
+  void destroy() {
+    // Clean up player controller first
+    if (characterController) {
         if (dynamicsWorld) {
-            // Remove all rigid bodies
-            for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0;
-                 i--) {
-                btCollisionObject* obj =
-                    dynamicsWorld->getCollisionObjectArray()[i];
-                btRigidBody* body = btRigidBody::upcast(obj);
-                if (body && body->getMotionState()) {
-                    delete body->getMotionState();
-                }
-                dynamicsWorld->removeCollisionObject(obj);
-                delete obj->getCollisionShape();
-                delete obj;
-            }
-            for (btTriangleMesh *mesh : triangleMeshes)
-            {
-                delete mesh;
-            }
-            triangleMeshes.clear();
-            delete dynamicsWorld;
-            delete solver;
-            delete broadphase;
-            delete dispatcher;
-            delete collisionConfig;
-
-            dynamicsWorld = nullptr;
-            solver = nullptr;
-            broadphase = nullptr;
-            dispatcher = nullptr;
-            collisionConfig = nullptr;
+            dynamicsWorld->removeAction(characterController);
         }
+        delete characterController;
+        characterController = nullptr;
     }
+
+    if (ghostObject) {
+        if (dynamicsWorld) {
+            dynamicsWorld->removeCollisionObject(ghostObject);
+        }
+        delete ghostObject;
+        ghostObject = nullptr;
+    }
+
+    if (playerShape) {
+        delete playerShape;
+        playerShape = nullptr;
+    }
+
+    // Reset player initialized flag
+    playerInitialized = false;
+
+    if (dynamicsWorld) {
+        // Remove all rigid bodies
+        for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0;
+             i--) {
+            btCollisionObject* obj =
+                dynamicsWorld->getCollisionObjectArray()[i];
+            btRigidBody* body = btRigidBody::upcast(obj);
+            if (body && body->getMotionState()) {
+                delete body->getMotionState();
+            }
+            dynamicsWorld->removeCollisionObject(obj);
+            delete obj->getCollisionShape();
+            delete obj;
+        }
+        for (btTriangleMesh *mesh : triangleMeshes)
+        {
+            delete mesh;
+        }
+        triangleMeshes.clear();
+        delete dynamicsWorld;
+        delete solver;
+        delete broadphase;
+        delete dispatcher;
+        delete collisionConfig;
+
+        dynamicsWorld = nullptr;
+        solver = nullptr;
+        broadphase = nullptr;
+        dispatcher = nullptr;
+        collisionConfig = nullptr;
+    }
+}
 
     ~PhysicsSystem() { destroy(); }
 };
