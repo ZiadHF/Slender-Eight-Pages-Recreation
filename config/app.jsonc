@@ -55,9 +55,18 @@
                 "Grass" : "assets/textures/Grass.png"
             },
             "meshes": {
-                "map": "assets/models/Map.obj",
-                "tree": "assets/models/tree.obj",
-                "tree2": "assets/models/tree2.obj",
+                "map": {
+                    "path": "assets/models/Map.obj",
+                    "keepCPUCopy": true
+                },
+                "tree": {
+                    "path": "assets/models/tree.obj",
+                    "keepCPUCopy": true
+                },
+                "tree2": {
+                    "path": "assets/models/tree2.obj",
+                    "keepCPUCopy": true
+                },
                 "grass" : "assets/models/testgrass.obj",
                 "slender": "assets/models/Slenderman.obj",
                 "page": "assets/models/page.obj"
@@ -863,6 +872,9 @@
                         "type": "Mesh Renderer",
                         "mesh": "map",
                         "material": "Terrain_Baked_-4838"
+                    },
+                    {
+                        "type": "Collider"
                     }
                 ]
             },
@@ -949,6 +961,9 @@
                         "cullingBoundingRadius": 20.0,
                         "enableDistanceCulling": true,
                         "enableFrustumCulling": true
+                    },
+                    {
+                        "type": "Collider"
                     }
                 ]
             },
@@ -992,6 +1007,9 @@
                         "cullingBoundingRadius": 20.0,
                         "enableDistanceCulling": true,
                         "enableFrustumCulling": true
+                    },
+                    {
+                        "type": "Collider"
                     }
                 ]
             },

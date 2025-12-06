@@ -67,9 +67,18 @@ namespace our {
     void AssetLoader<Mesh>::deserialize(const nlohmann::json& data) {
         if(data.is_object()){
             for(auto& [name, desc] : data.items()){
-                std::string path = desc.get<std::string>();
+                std::string path;
+                bool keepCPUCopy = false;
+                
+                if(desc.is_string()) {
+                    path = desc.get<std::string>();
+                } else if(desc.is_object()) {
+                    path = desc.value("path", "");
+                    keepCPUCopy = desc.value("keepCPUCopy", false);
+                }
                 // Use loadOBJWithMaterials for better material support
-                assets[name] = mesh_utils::loadOBJWithMaterials(path);
+                assets[name] = mesh_utils::loadOBJWithMaterials(path,keepCPUCopy);
+
             }
         }
     };

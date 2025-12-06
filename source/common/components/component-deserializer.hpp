@@ -11,6 +11,7 @@
 #include "../components/slenderman.hpp"
 #include "../components/page.hpp"
 #include "../components/page-spawner.hpp"
+#include "../components/collider.hpp"
 
 namespace our {
 
@@ -44,7 +45,10 @@ inline void deserializeComponent(const nlohmann::json& data, Entity* entity) {
     }
     else if (type == our::PageComponent::getID()) {
         component = entity->addComponent<our::PageComponent>();
+    }else if (type == our::ColliderComponent::getID()){
+        component = entity->addComponent<our::ColliderComponent>();
     }
+
     if (component) component->deserialize(data);
 }
 

@@ -13,7 +13,7 @@
 #include <fstream>
 #include <json/json.hpp>
 #include <map>
-#include "../common/text-renderer.hpp"
+#include "../common/systems/text-renderer.hpp"
 
 struct KeyboardIcon
 {

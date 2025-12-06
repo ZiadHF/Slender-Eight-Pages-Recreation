@@ -122,7 +122,7 @@ our::Mesh* our::mesh_utils::sphere(const glm::ivec2& segments){
     return new our::Mesh(vertices, elements);
 }
 
-our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename) {
+our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,bool keepCPUCopy = false) {
     std::vector<our::Vertex> vertices;
     std::vector<GLuint> elements;
     std::unordered_map<our::Vertex, GLuint> vertex_map;
@@ -211,7 +211,7 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename) {
         }
     }
 
-    auto mesh = new our::Mesh(vertices, elements);
+    auto mesh = new our::Mesh(vertices, elements,keepCPUCopy);
     mesh->setSubmeshes(submeshes);
     return mesh;
 }

@@ -14,7 +14,7 @@
 #include <systems/footstep-system.hpp>
 #include <systems/ambient-tension-system.hpp>
 #include <systems/static-sound-system.hpp>
-
+#include "../common/systems/text-renderer.hpp"
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
     our::World world;
@@ -28,7 +28,8 @@ class Playstate : public our::State {
     our::FootstepSystem footstepSystem;
     our::AmbientTensionSystem ambientTensionSystem;
     our::StaticSoundSystem staticSoundSystem;
-
+    our::TextRenderer* textRenderer;
+    
     void onInitialize() override {
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
@@ -43,12 +44,13 @@ class Playstate : public our::State {
         }
         // We initialize the camera controller system since it needs a pointer
         // to the app
-        cameraController.enter(getApp());
         // Then we initialize the renderer
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
+        textRenderer = new our::TextRenderer();
         // Initialize physics system
-        physicsSystem.initialize();
+        physicsSystem.initialize(&world);
+        cameraController.enter(getApp(),&physicsSystem);
         // Initialize Slenderman AI
         slendermanAISystem.initialize(&world);
         staticEffectSystem.initialize(&world);
@@ -58,6 +60,8 @@ class Playstate : public our::State {
         footstepSystem.initialize(&world);
         ambientTensionSystem.initialize(&world);
         staticSoundSystem.initialize(&world);
+        glm::vec2 centerPos = glm::vec2(size.x / 2.0f - 75, size.y / 2.0f);
+        textRenderer->startTimedText("Collect 8 Pages", 15.0f, centerPos, 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     }
 
     void onDraw(double deltaTime) override {
@@ -97,9 +101,14 @@ class Playstate : public our::State {
             std::cout << "Player Position: (" << playerPos.x << ", "
                       << playerPos.y << ", " << playerPos.z << ")\n";
         }
+
+        textRenderer->updateTimedTexts((float)deltaTime);
+
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-
+        auto size = getApp()->getFrameBufferSize();
+        glm::mat4 projection = glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f);
+        textRenderer->renderTimedTexts(projection);
         // Get a reference to the keyboard object
         auto& keyboard = getApp()->getKeyboard();
 
@@ -119,6 +128,11 @@ class Playstate : public our::State {
         cameraController.exit();
         // Destroy page system
         pageSystem.destroy();
+        if (textRenderer) {
+            textRenderer->clearTimedTexts();
+            delete textRenderer;
+            textRenderer = nullptr;
+        }
         // Clear the world
         world.clear();
         // and we delete all the loaded assets to free memory on the RAM and the

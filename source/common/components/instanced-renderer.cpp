@@ -115,7 +115,7 @@ void InstancedRendererComponent::deserialize(const nlohmann::json& data) {
             transform = glm::rotate(transform, finalRotation.z,
                                     glm::vec3(0.0f, 0.0f, 1.0f));
             transform = glm::scale(transform, finalScale);
-
+            
             InstanceMats.push_back(transform);
             instancePositions.push_back(
                 finalPos);  // Cache position for culling
