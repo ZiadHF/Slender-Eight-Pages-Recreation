@@ -112,7 +112,7 @@ class Playstate : public our::State {
         textRenderer->updateTimedTexts((float)deltaTime);
 
         // And finally we use the renderer system to draw the scene
-        renderer.render(&world);
+        renderer.render(&world, (float)deltaTime);
         auto size = getApp()->getFrameBufferSize();
         glm::mat4 projection =
             glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f);
