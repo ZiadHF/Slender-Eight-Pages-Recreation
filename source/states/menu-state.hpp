@@ -10,7 +10,12 @@
 #include <texture/texture-utils.hpp>
 #include <texture/texture2d.hpp>
 #include <vector>
+#include <fstream>
+#include <map>
+#include <json/json.hpp>
 #include "../common/components/audio-controller.hpp"
+#include "../common/systems/text-renderer.hpp"
+#include "settings-state.hpp"
 
 // This struct is used to store the location and size of a button and the code
 // it should execute when clicked
@@ -73,6 +78,7 @@ class Menustate : public our::State {
     // An array of the button that we can interact with
     std::array<Button, 3> buttons;
 
+    our::TextRenderer* TextRenderer;
     // New members for animated images
     // We will have a pool of images to choose from, and choose one at random to animate
     std::vector<AnimatedImage> imagePool;
@@ -83,7 +89,19 @@ class Menustate : public our::State {
     // Audio controller
     our::AudioController* audioController = nullptr;
 
+    // Add helper function to load config
+    nlohmann::json loadPlayerConfig() {
+        nlohmann::json config;
+        std::ifstream file("config/player.json");
+        if (file.is_open()) {
+            file >> config;
+            file.close();
+        }
+        return config;
+    }
+
     void onInitialize() override {
+        TextRenderer = new our::TextRenderer();
         // First, we create a material for the menu's background
         menuMaterial = new our::TexturedMaterial();
         // Here, we load the shader that will be used to draw the background
@@ -335,17 +353,132 @@ class Menustate : public our::State {
         currentImage->moveDuration = 6.0f;
         currentImage->fadeOutDuration = 1.5f;
         currentImage->totalDuration = currentImage->fadeInDuration +
-                                      currentImage->moveDuration +
-                                      currentImage->fadeOutDuration;
+        currentImage->moveDuration +
+        currentImage->fadeOutDuration;
     }
-
+    
     void onDraw(double deltaTime) override {
         // Get a reference to the keyboard object
         auto& keyboard = getApp()->getKeyboard();
+        // Get the framebuffer size to set the viewport and the create the
+        // projection matrix.
+        glm::ivec2 size = getApp()->getFrameBufferSize();
+        // Make sure the viewport covers the whole size of the framebuffer.
+        glViewport(0, 0, size.x, size.y);
+    
+        // The view matrix is an identity (there is no camera that moves
+        // around). The projection matrix applys an orthographic projection
+        // whose size is the framebuffer size in pixels so that the we can
+        // define our object locations and sizes in pixels. Note that the top is
+        // at 0.0 and the bottom is at the framebuffer height. This allows us to
+        // consider the top-left corner of the window to be the origin which
+        // makes dealing with the mouse input easier.
+        glm::mat4 VP =
+            glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f, 1.0f, -1.0f);
+        // The local to world (model) matrix of the background which is just a
+        // scaling matrix to make the menu cover the whole window. Note that we
+        // defind the scale in pixels.
+        glm::mat4 M =
+            glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
         if (keyboard.justPressed(GLFW_KEY_SPACE)) {
-            // If the space key is pressed in this frame, go to the play state
+          
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            
+          
+            our::Texture2D* scratchyTexture = our::texture_utils::loadImage("assets/textures/Keyboard/scratchy.png");
+            
+            our::Texture2D* originalTexture = menuMaterial->texture;
+            
+            menuMaterial->texture = scratchyTexture;
+            menuMaterial->tint = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+            menuMaterial->setup();
+           
+            menuMaterial->shader->set("transform", VP * M);
+            rectangle->draw();
+            nlohmann::json playerConfig = loadPlayerConfig();
+
+            std::vector<std::pair<std::string, std::string>> controls = {
+                {"Forward", "forward"},
+                {"Backward", "backward"},
+                {"Left", "left"},
+                {"Right", "right"},
+                {"Sprint", "sprint"},
+                {"Flashlight", "toggle_flashlight"},
+                {"Interact", "interact"}
+            };
+
+            float startY = size.y / 2.0f - (controls.size() * 60.0f) / 2.0f;
+            float centerX = size.x / 2.0f;
+
+            for (size_t i = 0; i < controls.size(); i++) {
+                const auto& [displayName, configKey] = controls[i];
+                float yPos = startY + i * 60.0f;
+
+                // Render control name
+                std::string controlText = displayName + ": ";
+                glm::vec2 textSize = TextRenderer->measureText(controlText, 0.6f);
+                glm::vec2 textPos = glm::vec2(centerX - 150.0f - textSize.x, yPos + 25.0f);
+                TextRenderer->renderText(controlText, textPos, 0.6f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), VP);
+
+                // Unbind sampler before rendering keyboard icons
+                glBindSampler(0, 0);
+
+                // Get and render keyboard icon
+                if (playerConfig.contains("controls") && playerConfig["controls"].contains(configKey)) {
+                    std::string keyBinding = playerConfig["controls"][configKey].get<std::string>();
+                    int keyCode = our::getKeyFromString(keyBinding);
+                    std::string texturePath = "";
+
+                    if (keyBinding == "LEFT_CLICK") {
+                        texturePath = "assets/textures/Keyboard/LeftClick.png";
+                    } else if (keyBinding == "RIGHT_CLICK") {
+                        texturePath = "assets/textures/Keyboard/RightClick.png";
+                    } else if (keyCode != -1000 && our::keyToTexture.find(keyCode) != our::keyToTexture.end()) {
+                        texturePath = "assets/textures/Keyboard/red/" + our::keyToTexture[keyCode];
+                    }
+
+                    if (!texturePath.empty()) {
+                        our::Texture2D* keyTexture = our::texture_utils::loadImage(texturePath, true);
+                        imageMaterial->texture = keyTexture;
+                        imageMaterial->tint = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+                        imageMaterial->setup();
+
+                        glm::mat4 iconM = glm::translate(glm::mat4(1.0f), glm::vec3(centerX - 100.0f, yPos, 0.0f)) *
+                                         glm::scale(glm::mat4(1.0f), glm::vec3(50.0f, 50.0f, 1.0f));
+                        imageMaterial->shader->set("transform", VP * iconM);
+                        rectangle->draw();
+
+                        delete keyTexture;
+                    }
+                }
+            }
+            
+             
+            std::string loadingText = "Loading map...";
+            float textScale = 1.0f;
+            glm::vec2 loadTextSize = TextRenderer->measureText(loadingText, textScale);
+            
+            float padding = 20.0f;
+            glm::vec2 textPosition = glm::vec2(
+                size.x - loadTextSize.x - padding,
+                size.y - padding
+            );
+            
+            TextRenderer->renderText(
+                loadingText,
+                textPosition,
+                textScale,
+                glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
+                VP
+            );
+            
+            menuMaterial->texture = originalTexture;
+
+            delete scratchyTexture;
             getApp()->changeState("play");
+            return;
+            
         } else if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
             // If the escape key is pressed in this frame, exit the game
             getApp()->close();
@@ -369,26 +502,6 @@ class Menustate : public our::State {
             }
         }
 
-        // Get the framebuffer size to set the viewport and the create the
-        // projection matrix.
-        glm::ivec2 size = getApp()->getFrameBufferSize();
-        // Make sure the viewport covers the whole size of the framebuffer.
-        glViewport(0, 0, size.x, size.y);
-
-        // The view matrix is an identity (there is no camera that moves
-        // around). The projection matrix applys an orthographic projection
-        // whose size is the framebuffer size in pixels so that the we can
-        // define our object locations and sizes in pixels. Note that the top is
-        // at 0.0 and the bottom is at the framebuffer height. This allows us to
-        // consider the top-left corner of the window to be the origin which
-        // makes dealing with the mouse input easier.
-        glm::mat4 VP =
-            glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f, 1.0f, -1.0f);
-        // The local to world (model) matrix of the background which is just a
-        // scaling matrix to make the menu cover the whole window. Note that we
-        // defind the scale in pixels.
-        glm::mat4 M =
-            glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
         // First, we apply the fading effect.
         time += (float)deltaTime;

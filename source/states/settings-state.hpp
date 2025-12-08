@@ -15,143 +15,9 @@
 #include <map>
 #include "../common/systems/text-renderer.hpp"
 
-struct KeyboardIcon
-{
-    glm::vec2 position, size;
-    std::string TextureFile;
-    bool highlighted;
-    glm::mat4 getLocalToWorld(float scaleX, float scaleY) const
-    {
-        return glm::translate(glm::mat4(1.0f),
-                              glm::vec3(position.x * scaleX, position.y * scaleY, 0.0f)) *
-               glm::scale(glm::mat4(1.0f), glm::vec3(size.x * scaleX, size.y * scaleY, 1.0f));
-    }
-};
-std::vector<KeyboardIcon> keyboardIcons = {
-    {glm::vec2(186.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/Escape.png", false},
-    {glm::vec2(252.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F1.png", false},
-    {glm::vec2(309.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F2.png", false},
-    {glm::vec2(366.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F3.png", false},
-    {glm::vec2(423.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F4.png", false},
-    {glm::vec2(480.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F5.png", false},
-    {glm::vec2(537.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F6.png", false},
-    {glm::vec2(594.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F7.png", false},
-    {glm::vec2(649.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F8.png", false},
-    {glm::vec2(706.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F9.png", false},
-    {glm::vec2(763.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F10.png", false},
-    {glm::vec2(818.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F11.png", false},
-    {glm::vec2(875.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F12.png", false},
-    {glm::vec2(875.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F12.png", false},
-    {glm::vec2(235.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/1.png", false},
-    {glm::vec2(283.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/2.png", false},
-    {glm::vec2(331.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/3.png", false},
-    {glm::vec2(379.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/4.png", false},
-    {glm::vec2(427.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/5.png", false},
-    {glm::vec2(475.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/6.png", false},
-    {glm::vec2(523.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/7.png", false},
-    {glm::vec2(571.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/8.png", false},
-    {glm::vec2(619.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/9.png", false},
-    {glm::vec2(667.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/0.png", false},
-    {glm::vec2(715.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Hypen_Underscore.png", false},
-    {glm::vec2(763.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Equal_Plus.png", false},
-    {glm::vec2(813.0f, 139.0f), glm::vec2(85.0f, 46.0f), "assets/textures/Keyboard/Backspace.png", false},
-    {glm::vec2(196.0f, 195.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/Tab.png", false},
-    {glm::vec2(270.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Q.png", false},
-    {glm::vec2(318.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/W.png", false},
-    {glm::vec2(366.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/E.png", false},
-    {glm::vec2(414.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/R.png", false},
-    {glm::vec2(462.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/T.png", false},
-    {glm::vec2(510.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Y.png", false},
-    {glm::vec2(558.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/U.png", false},
-    {glm::vec2(606.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/I.png", false},
-    {glm::vec2(654.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/O.png", false},
-    {glm::vec2(702.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/P.png", false},
-    {glm::vec2(196.0f, 246.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/CapsLock.png", false},
-    {glm::vec2(287.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/A.png", false},
-    {glm::vec2(335.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/S.png", false},
-    {glm::vec2(383.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/D.png", false},
-    {glm::vec2(431.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/F.png", false},
-    {glm::vec2(479.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/G.png", false},
-    {glm::vec2(527.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/H.png", false},
-    {glm::vec2(575.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/J.png", false},
-    {glm::vec2(623.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/K.png", false},
-    {glm::vec2(671.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/L.png", false},
-    {glm::vec2(809.0f, 246.0f), glm::vec2(89.0f, 49.0f), "assets/textures/Keyboard/Enter.png", false},
-    {glm::vec2(196.0f, 297.0f), glm::vec2(93.0f, 51.0f), "assets/textures/Keyboard/Shift.png", false},
-    {glm::vec2(324.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Z.png", false},
-    {glm::vec2(372.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/X.png", false},
-    {glm::vec2(420.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/C.png", false},
-    {glm::vec2(468.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/V.png", false},
-    {glm::vec2(516.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/B.png", false},
-    {glm::vec2(564.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/N.png", false},
-    {glm::vec2(612.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/M.png", false},
-    {glm::vec2(196.0f, 355.0f), glm::vec2(81.0f, 44.0f), "assets/textures/Keyboard/LeftControl.png", false},
-    {glm::vec2(325.0f, 353.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/Alt.png", false},
-    {glm::vec2(395.0f, 346.0f), glm::vec2(259.0f, 56.0f), "assets/textures/Keyboard/Spacebar.png", false},
-    {glm::vec2(658.0f, 354.0f), glm::vec2(81.0f, 45.0f), "assets/textures/Keyboard/RightAlt.png", false},
-    {glm::vec2(744.0f, 353.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/Control.png", false},
-    {glm::vec2(952.0f, 354.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/LeftArrow.png", false},
-    {glm::vec2(1048.0f, 354.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/RightArrow.png", false},
-    {glm::vec2(1000.0f, 353.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/DownArrow.png", false},
-    {glm::vec2(1000.0f, 300.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/UpArrow.png", false},
-    {glm::vec2(1144.0f, 286.0f), glm::vec2(109.0f, 134.0f), "assets/textures/Keyboard/MouseBG.png", false}, // Cannot be chosen just a bg
-    {glm::vec2(1149.0f, 340.0f), glm::vec2(99.0f, 74.4f), "assets/textures/Keyboard/BaseMouse.png", false}, // Cannot be chosen just a bg
-    {glm::vec2(1151.0f, 291.0f), glm::vec2(47.0f, 44.4f), "assets/textures/Keyboard/LeftClick.png", false},
-    {glm::vec2(1200.0f, 291.0f), glm::vec2(47.0f, 44.4f), "assets/textures/Keyboard/RightClick.png", false},
 
-};
 
-struct ControlLabel
-{
-    std::string displayName;
-    std::string configKey;
-    glm::vec2 position;
-    glm::vec2 size;
-
-    bool isInside(const glm::vec2 &v) const
-    {
-        return position.x <= v.x && position.y <= v.y &&
-               v.x <= position.x + size.x && v.y <= position.y + size.y;
-    }
-
-    glm::mat4 getLocalToWorld(float scaleX, float scaleY) const
-    {
-        return glm::translate(glm::mat4(1.0f),
-                              glm::vec3(position.x * scaleX, position.y * scaleY, 0.0f)) *
-               glm::scale(glm::mat4(1.0f), glm::vec3(size.x * scaleX, size.y * scaleY, 1.0f));
-    }
-};
-
-class SettingsState : public our::State
-{
-    our::TintedMaterial *keyboardRectMat;
-    our::TintedMaterial *keyboardRectBackdropMat;
-    our::TexturedMaterial *keyboardKeyMat;
-    our::TintedMaterial *controlLabelMat;
-    our::TintedMaterial *flashMat;
-    our::Mesh *rectangle;
-    our::Mesh *keyboardBackdrop;
-    std::vector<our::Texture2D *> keyboardTextures;
-    std::vector<our::Texture2D *> keyboardTexturesRed; // Red textures for non-highlighted keys
-    our::Texture2D *background;
-    // Text renderer
-    our::TextRenderer *textRenderer;
-
-    // Settings data
-    nlohmann::json playerConfig;
-    std::string configPath = "config/player.json";
-
-    // Current control being rebound
-    std::string rebindingControl = "";
-    bool isRebinding = false;
-    float flashTimer = 0.0f;
-
-    // Control labels for UI
-    std::vector<ControlLabel> controlLabels;
-
-    // Camera sensitivity
-    float cameraSensitivity = 1.2f;
-    bool adjustingSensitivity = false;
+namespace our{
 
     // Map GLFW keys to texture filenames for all visible keys
     std::map<int, std::string> keyToTexture = {
@@ -345,6 +211,146 @@ class SettingsState : public our::State
         return -1000; // Return distinct value for unknown
     }
 
+
+};
+struct KeyboardIcon
+{
+    glm::vec2 position, size;
+    std::string TextureFile;
+    bool highlighted;
+    glm::mat4 getLocalToWorld(float scaleX, float scaleY) const
+    {
+        return glm::translate(glm::mat4(1.0f),
+                              glm::vec3(position.x * scaleX, position.y * scaleY, 0.0f)) *
+               glm::scale(glm::mat4(1.0f), glm::vec3(size.x * scaleX, size.y * scaleY, 1.0f));
+    }
+};
+std::vector<KeyboardIcon> keyboardIcons = {
+    {glm::vec2(186.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/Escape.png", false},
+    {glm::vec2(252.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F1.png", false},
+    {glm::vec2(309.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F2.png", false},
+    {glm::vec2(366.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F3.png", false},
+    {glm::vec2(423.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F4.png", false},
+    {glm::vec2(480.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F5.png", false},
+    {glm::vec2(537.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F6.png", false},
+    {glm::vec2(594.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F7.png", false},
+    {glm::vec2(649.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F8.png", false},
+    {glm::vec2(706.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F9.png", false},
+    {glm::vec2(763.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F10.png", false},
+    {glm::vec2(818.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F11.png", false},
+    {glm::vec2(875.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F12.png", false},
+    {glm::vec2(875.0f, 90.0f), glm::vec2(57.0f, 40.0f), "assets/textures/Keyboard/F12.png", false},
+    {glm::vec2(235.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/1.png", false},
+    {glm::vec2(283.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/2.png", false},
+    {glm::vec2(331.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/3.png", false},
+    {glm::vec2(379.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/4.png", false},
+    {glm::vec2(427.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/5.png", false},
+    {glm::vec2(475.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/6.png", false},
+    {glm::vec2(523.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/7.png", false},
+    {glm::vec2(571.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/8.png", false},
+    {glm::vec2(619.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/9.png", false},
+    {glm::vec2(667.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/0.png", false},
+    {glm::vec2(715.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Hypen_Underscore.png", false},
+    {glm::vec2(763.0f, 140.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Equal_Plus.png", false},
+    {glm::vec2(813.0f, 139.0f), glm::vec2(85.0f, 46.0f), "assets/textures/Keyboard/Backspace.png", false},
+    {glm::vec2(196.0f, 195.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/Tab.png", false},
+    {glm::vec2(270.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Q.png", false},
+    {glm::vec2(318.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/W.png", false},
+    {glm::vec2(366.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/E.png", false},
+    {glm::vec2(414.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/R.png", false},
+    {glm::vec2(462.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/T.png", false},
+    {glm::vec2(510.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Y.png", false},
+    {glm::vec2(558.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/U.png", false},
+    {glm::vec2(606.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/I.png", false},
+    {glm::vec2(654.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/O.png", false},
+    {glm::vec2(702.0f, 195.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/P.png", false},
+    {glm::vec2(196.0f, 246.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/CapsLock.png", false},
+    {glm::vec2(287.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/A.png", false},
+    {glm::vec2(335.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/S.png", false},
+    {glm::vec2(383.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/D.png", false},
+    {glm::vec2(431.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/F.png", false},
+    {glm::vec2(479.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/G.png", false},
+    {glm::vec2(527.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/H.png", false},
+    {glm::vec2(575.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/J.png", false},
+    {glm::vec2(623.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/K.png", false},
+    {glm::vec2(671.0f, 246.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/L.png", false},
+    {glm::vec2(809.0f, 246.0f), glm::vec2(89.0f, 49.0f), "assets/textures/Keyboard/Enter.png", false},
+    {glm::vec2(196.0f, 297.0f), glm::vec2(93.0f, 51.0f), "assets/textures/Keyboard/Shift.png", false},
+    {glm::vec2(324.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/Z.png", false},
+    {glm::vec2(372.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/X.png", false},
+    {glm::vec2(420.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/C.png", false},
+    {glm::vec2(468.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/V.png", false},
+    {glm::vec2(516.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/B.png", false},
+    {glm::vec2(564.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/N.png", false},
+    {glm::vec2(612.0f, 297.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/M.png", false},
+    {glm::vec2(196.0f, 355.0f), glm::vec2(81.0f, 44.0f), "assets/textures/Keyboard/LeftControl.png", false},
+    {glm::vec2(325.0f, 353.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/Alt.png", false},
+    {glm::vec2(395.0f, 346.0f), glm::vec2(259.0f, 56.0f), "assets/textures/Keyboard/Spacebar.png", false},
+    {glm::vec2(658.0f, 354.0f), glm::vec2(81.0f, 45.0f), "assets/textures/Keyboard/RightAlt.png", false},
+    {glm::vec2(744.0f, 353.0f), glm::vec2(65.0f, 46.0f), "assets/textures/Keyboard/Control.png", false},
+    {glm::vec2(952.0f, 354.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/LeftArrow.png", false},
+    {glm::vec2(1048.0f, 354.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/RightArrow.png", false},
+    {glm::vec2(1000.0f, 353.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/DownArrow.png", false},
+    {glm::vec2(1000.0f, 300.0f), glm::vec2(45.0f, 45.0f), "assets/textures/Keyboard/UpArrow.png", false},
+    {glm::vec2(1144.0f, 286.0f), glm::vec2(109.0f, 134.0f), "assets/textures/Keyboard/MouseBG.png", false}, // Cannot be chosen just a bg
+    {glm::vec2(1149.0f, 340.0f), glm::vec2(99.0f, 74.4f), "assets/textures/Keyboard/BaseMouse.png", false}, // Cannot be chosen just a bg
+    {glm::vec2(1151.0f, 291.0f), glm::vec2(47.0f, 44.4f), "assets/textures/Keyboard/LeftClick.png", false},
+    {glm::vec2(1200.0f, 291.0f), glm::vec2(47.0f, 44.4f), "assets/textures/Keyboard/RightClick.png", false},
+
+};
+
+struct ControlLabel
+{
+    std::string displayName;
+    std::string configKey;
+    glm::vec2 position;
+    glm::vec2 size;
+
+    bool isInside(const glm::vec2 &v) const
+    {
+        return position.x <= v.x && position.y <= v.y &&
+               v.x <= position.x + size.x && v.y <= position.y + size.y;
+    }
+
+    glm::mat4 getLocalToWorld(float scaleX, float scaleY) const
+    {
+        return glm::translate(glm::mat4(1.0f),
+                              glm::vec3(position.x * scaleX, position.y * scaleY, 0.0f)) *
+               glm::scale(glm::mat4(1.0f), glm::vec3(size.x * scaleX, size.y * scaleY, 1.0f));
+    }
+};
+
+class SettingsState : public our::State
+{
+    our::TintedMaterial *keyboardRectMat;
+    our::TintedMaterial *keyboardRectBackdropMat;
+    our::TexturedMaterial *keyboardKeyMat;
+    our::TintedMaterial *controlLabelMat;
+    our::TintedMaterial *flashMat;
+    our::Mesh *rectangle;
+    our::Mesh *keyboardBackdrop;
+    std::vector<our::Texture2D *> keyboardTextures;
+    std::vector<our::Texture2D *> keyboardTexturesRed; // Red textures for non-highlighted keys
+    our::Texture2D *background;
+    // Text renderer
+    our::TextRenderer *textRenderer;
+
+    // Settings data
+    nlohmann::json playerConfig;
+    std::string configPath = "config/player.json";
+
+    // Current control being rebound
+    std::string rebindingControl = "";
+    bool isRebinding = false;
+    float flashTimer = 0.0f;
+
+    // Control labels for UI
+    std::vector<ControlLabel> controlLabels;
+
+    // Camera sensitivity
+    float cameraSensitivity = 1.2f;
+    bool adjustingSensitivity = false;
+
     // Load player config
     void loadConfig()
     {
@@ -403,11 +409,11 @@ class SettingsState : public our::State
                 }
 
                 // Handle keyboard keys
-                int glfwKey = getKeyFromString(keyBinding);
+                int glfwKey = our::getKeyFromString(keyBinding);
 
-                if (glfwKey != -1000 && keyToTexture.find(glfwKey) != keyToTexture.end())
+                if (glfwKey != -1000 && our::keyToTexture.find(glfwKey) != our::keyToTexture.end())
                 {
-                    std::string texName = keyToTexture[glfwKey];
+                    std::string texName = our::keyToTexture[glfwKey];
 
                     // Find and highlight the corresponding icon
                     for (size_t i = 0; i < keyboardIcons.size(); i++)
@@ -595,7 +601,7 @@ class SettingsState : public our::State
                 {
                     if (keyboard.justPressed(key))
                     {
-                        std::string keyName = getKeyName(key);
+                        std::string keyName = our::getKeyName(key);
                         if (keyName != "UNKNOWN")
                         {
                             playerConfig["controls"][rebindingControl] = keyName;
@@ -739,7 +745,7 @@ class SettingsState : public our::State
                 if (playerConfig.contains("controls") && playerConfig["controls"].contains(label.configKey))
                 {
                     std::string currentKey = playerConfig["controls"][label.configKey].get<std::string>();
-                    int keyCode = getKeyFromString(currentKey);
+                    int keyCode = our::getKeyFromString(currentKey);
                     std::string texturePath = "";
 
                     // Check if it's a mouse button
@@ -751,9 +757,9 @@ class SettingsState : public our::State
                     {
                         texturePath = "assets/textures/Keyboard/RightClick.png";
                     }
-                    else if (keyCode != -1000 && keyToTexture.find(keyCode) != keyToTexture.end())
+                    else if (keyCode != -1000 && our::keyToTexture.find(keyCode) != our::keyToTexture.end())
                     {
-                        texturePath = "assets/textures/Keyboard/" + keyToTexture[keyCode];
+                        texturePath = "assets/textures/Keyboard/" + our::keyToTexture[keyCode];
                     }
 
                     if (!texturePath.empty())
