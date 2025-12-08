@@ -11,7 +11,8 @@ namespace our {
 void InstancedRendererComponent::deserialize(const nlohmann::json& data) {
     if (!data.is_object()) return;
 
-    mesh = AssetLoader<Mesh>::get(data["mesh"].get<std::string>());
+    meshName = data["mesh"].get<std::string>();
+    mesh = AssetLoader<Mesh>::get(meshName);
     material = AssetLoader<Material>::get(data["material"].get<std::string>());
 
     // Load submesh materials if specified
@@ -120,7 +121,26 @@ void InstancedRendererComponent::deserialize(const nlohmann::json& data) {
             instancePositions.push_back(
                 finalPos);  // Cache position for culling
         }
+
+        
     }
+    
 }
 
+
+std::pair<glm::vec3, glm::vec3> InstancedRendererComponent::getBoundingBox() const {
+            if (instancePositions.empty()) {
+                return {glm::vec3(0), glm::vec3(0)};
+            }
+            
+            glm::vec3 min = instancePositions[0];
+            glm::vec3 max = instancePositions[0];
+            
+            for (const auto& pos : instancePositions) {
+                min = glm::min(min, pos);
+                max = glm::max(max, pos);
+            }
+            
+            return {min, max};
+        }
 }  // namespace our

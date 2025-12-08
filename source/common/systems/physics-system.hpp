@@ -79,9 +79,43 @@ class PhysicsSystem {
                     addMeshCollision(instancedRenderer->mesh, instanceMat, entity);
                 }
             }
+
+            if (instancedRenderer && instancedRenderer->material && 
+                instancedRenderer->meshName == "grass") {
+                
+                auto [minBounds, maxBounds] = instancedRenderer->getBoundingBox();
+                glm::vec3 center = (minBounds + maxBounds);
+                glm::vec3 size = maxBounds - minBounds;
+                
+                addWorldBoundaries(center, size + glm::vec3(10, 20, 10), 2.0f);
+            }
+
         }
         
     }
+
+    void addWorldBoundaries(const glm::vec3& center, const glm::vec3& size, float wallThickness = 1.0f) {
+        float halfWidth = size.x / 2.0f;
+        float halfDepth = size.z / 2.0f;
+        float halfHeight = size.y / 2.0f;
+
+        // North wall (+Z)
+        addStaticBox(glm::vec3(center.x, center.y, center.z + halfDepth), 
+                     glm::vec3(halfWidth, halfHeight, wallThickness));
+
+        // South wall (-Z)
+        addStaticBox(glm::vec3(center.x, center.y, center.z - halfDepth), 
+                     glm::vec3(halfWidth, halfHeight, wallThickness));
+
+        // East wall (+X)
+        addStaticBox(glm::vec3(center.x + halfWidth, center.y, center.z), 
+                     glm::vec3(wallThickness, halfHeight, halfDepth));
+
+        // West wall (-X)
+        addStaticBox(glm::vec3(center.x - halfWidth, center.y, center.z), 
+                     glm::vec3(wallThickness, halfHeight, halfDepth));
+    }
+
     void initializePlayerCollider(const glm::vec3 &position, float radius = 0.4f, float height = 1.8f)
     {
         if (playerInitialized)
@@ -238,6 +272,7 @@ class PhysicsSystem {
         btRigidBody* body = new btRigidBody(rbInfo);
 
         body->setUserPointer(userPointer);
+        
         dynamicsWorld->addRigidBody(body);
 
         return body;
@@ -258,6 +293,8 @@ class PhysicsSystem {
         btRigidBody* body = new btRigidBody(rbInfo);
 
         body->setUserPointer(userPointer);
+
+        body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
         dynamicsWorld->addRigidBody(body);
 
         return body;

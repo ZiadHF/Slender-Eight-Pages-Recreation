@@ -15,6 +15,204 @@
 #include <map>
 #include "../common/systems/text-renderer.hpp"
 
+
+
+namespace our{
+
+    // Map GLFW keys to texture filenames for all visible keys
+    std::map<int, std::string> keyToTexture = {
+        {GLFW_KEY_ESCAPE, "Escape.png"},
+        {GLFW_KEY_F1, "F1.png"},
+        {GLFW_KEY_F2, "F2.png"},
+        {GLFW_KEY_F3, "F3.png"},
+        {GLFW_KEY_F4, "F4.png"},
+        {GLFW_KEY_F5, "F5.png"},
+        {GLFW_KEY_F6, "F6.png"},
+        {GLFW_KEY_F7, "F7.png"},
+        {GLFW_KEY_F8, "F8.png"},
+        {GLFW_KEY_F9, "F9.png"},
+        {GLFW_KEY_F10, "F10.png"},
+        {GLFW_KEY_F11, "F11.png"},
+        {GLFW_KEY_F12, "F12.png"},
+        {GLFW_KEY_1, "1.png"},
+        {GLFW_KEY_2, "2.png"},
+        {GLFW_KEY_3, "3.png"},
+        {GLFW_KEY_4, "4.png"},
+        {GLFW_KEY_5, "5.png"},
+        {GLFW_KEY_6, "6.png"},
+        {GLFW_KEY_7, "7.png"},
+        {GLFW_KEY_8, "8.png"},
+        {GLFW_KEY_9, "9.png"},
+        {GLFW_KEY_0, "0.png"},
+        {GLFW_KEY_MINUS, "Hypen_Underscore.png"},
+        {GLFW_KEY_EQUAL, "Equal_Plus.png"},
+        {GLFW_KEY_BACKSPACE, "Backspace.png"},
+        {GLFW_KEY_TAB, "Tab.png"},
+        {GLFW_KEY_Q, "Q.png"},
+        {GLFW_KEY_W, "W.png"},
+        {GLFW_KEY_E, "E.png"},
+        {GLFW_KEY_R, "R.png"},
+        {GLFW_KEY_T, "T.png"},
+        {GLFW_KEY_Y, "Y.png"},
+        {GLFW_KEY_U, "U.png"},
+        {GLFW_KEY_I, "I.png"},
+        {GLFW_KEY_O, "O.png"},
+        {GLFW_KEY_P, "P.png"},
+        {GLFW_KEY_CAPS_LOCK, "CapsLock.png"},
+        {GLFW_KEY_A, "A.png"},
+        {GLFW_KEY_S, "S.png"},
+        {GLFW_KEY_D, "D.png"},
+        {GLFW_KEY_F, "F.png"},
+        {GLFW_KEY_G, "G.png"},
+        {GLFW_KEY_H, "H.png"},
+        {GLFW_KEY_J, "J.png"},
+        {GLFW_KEY_K, "K.png"},
+        {GLFW_KEY_L, "L.png"},
+        {GLFW_KEY_ENTER, "Enter.png"},
+        {GLFW_KEY_LEFT_SHIFT, "Shift.png"},
+        {GLFW_KEY_Z, "Z.png"},
+        {GLFW_KEY_X, "X.png"},
+        {GLFW_KEY_C, "C.png"},
+        {GLFW_KEY_V, "V.png"},
+        {GLFW_KEY_B, "B.png"},
+        {GLFW_KEY_N, "N.png"},
+        {GLFW_KEY_M, "M.png"},
+        {GLFW_KEY_LEFT_CONTROL, "LeftControl.png"},
+        {GLFW_KEY_LEFT_ALT, "Alt.png"},
+        {GLFW_KEY_SPACE, "Spacebar.png"},
+        {GLFW_KEY_RIGHT_ALT, "RightAlt.png"},
+        {GLFW_KEY_RIGHT_CONTROL, "Control.png"},
+        {GLFW_KEY_LEFT, "LeftArrow.png"},
+        {GLFW_KEY_RIGHT, "RightArrow.png"},
+        {GLFW_KEY_DOWN, "DownArrow.png"},
+        {GLFW_KEY_UP, "UpArrow.png"}};
+
+    // Helper function to get key name from GLFW key code
+    std::string getKeyName(int key)
+    {
+        if (key == GLFW_KEY_W)
+            return "W";
+        if (key == GLFW_KEY_A)
+            return "A";
+        if (key == GLFW_KEY_S)
+            return "S";
+        if (key == GLFW_KEY_D)
+            return "D";
+        if (key == GLFW_KEY_F)
+            return "F";
+        if (key == GLFW_KEY_LEFT_SHIFT)
+            return "LEFT_SHIFT";
+        if (key == GLFW_KEY_ESCAPE)
+            return "ESCAPE";
+        if (key == GLFW_KEY_SPACE)
+            return "SPACE";
+        if (key == GLFW_KEY_TAB)
+            return "TAB";
+        if (key == GLFW_KEY_CAPS_LOCK)
+            return "CAPS_LOCK";
+        if (key == GLFW_KEY_ENTER)
+            return "ENTER";
+        if (key == GLFW_KEY_BACKSPACE)
+            return "BACKSPACE";
+        if (key == GLFW_KEY_LEFT_CONTROL)
+            return "LEFT_CONTROL";
+        if (key == GLFW_KEY_RIGHT_CONTROL)
+            return "RIGHT_CONTROL";
+        if (key == GLFW_KEY_LEFT_ALT)
+            return "LEFT_ALT";
+        if (key == GLFW_KEY_RIGHT_ALT)
+            return "RIGHT_ALT";
+        if (key == GLFW_KEY_LEFT)
+            return "LEFT";
+        if (key == GLFW_KEY_RIGHT)
+            return "RIGHT";
+        if (key == GLFW_KEY_UP)
+            return "UP";
+        if (key == GLFW_KEY_DOWN)
+            return "DOWN";
+        if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9)
+            return std::string(1, '0' + (key - GLFW_KEY_0));
+        if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z)
+            return std::string(1, 'A' + (key - GLFW_KEY_A));
+        if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F12)
+            return "F" + std::to_string(key - GLFW_KEY_F1 + 1);
+        // Add more keys as needed
+        return "UNKNOWN";
+    }
+
+    // Helper function to get mouse button name
+    std::string getMouseButtonName(int button)
+    {
+        if (button == GLFW_MOUSE_BUTTON_LEFT)
+            return "LEFT_CLICK";
+        if (button == GLFW_MOUSE_BUTTON_RIGHT)
+            return "RIGHT_CLICK";
+        return "UNKNOWN";
+    }
+
+    // Helper function to get GLFW key from string
+    int getKeyFromString(const std::string &keyStr)
+    {
+        if (keyStr == "W")
+            return GLFW_KEY_W;
+        if (keyStr == "A")
+            return GLFW_KEY_A;
+        if (keyStr == "S")
+            return GLFW_KEY_S;
+        if (keyStr == "D")
+            return GLFW_KEY_D;
+        if (keyStr == "F")
+            return GLFW_KEY_F;
+        if (keyStr == "LEFT_SHIFT")
+            return GLFW_KEY_LEFT_SHIFT;
+        if (keyStr == "ESCAPE")
+            return GLFW_KEY_ESCAPE;
+        if (keyStr == "SPACE")
+            return GLFW_KEY_SPACE;
+        if (keyStr == "TAB")
+            return GLFW_KEY_TAB;
+        if (keyStr == "CAPS_LOCK")
+            return GLFW_KEY_CAPS_LOCK;
+        if (keyStr == "ENTER")
+            return GLFW_KEY_ENTER;
+        if (keyStr == "BACKSPACE")
+            return GLFW_KEY_BACKSPACE;
+        if (keyStr == "LEFT_CONTROL")
+            return GLFW_KEY_LEFT_CONTROL;
+        if (keyStr == "RIGHT_CONTROL")
+            return GLFW_KEY_RIGHT_CONTROL;
+        if (keyStr == "LEFT_ALT")
+            return GLFW_KEY_LEFT_ALT;
+        if (keyStr == "RIGHT_ALT")
+            return GLFW_KEY_RIGHT_ALT;
+        if (keyStr == "LEFT")
+            return GLFW_KEY_LEFT;
+        if (keyStr == "RIGHT")
+            return GLFW_KEY_RIGHT;
+        if (keyStr == "UP")
+            return GLFW_KEY_UP;
+        if (keyStr == "DOWN")
+            return GLFW_KEY_DOWN;
+        // Mouse buttons (return negative values to distinguish from keys)
+        if (keyStr == "LEFT_CLICK")
+            return -1;
+        if (keyStr == "RIGHT_CLICK")
+            return -2;
+        if (keyStr.length() == 1 && keyStr[0] >= '0' && keyStr[0] <= '9')
+            return GLFW_KEY_0 + (keyStr[0] - '0');
+        if (keyStr.length() == 1 && keyStr[0] >= 'A' && keyStr[0] <= 'Z')
+            return GLFW_KEY_A + (keyStr[0] - 'A');
+        if (keyStr[0] == 'F' && keyStr.length() > 1)
+        {
+            int num = std::stoi(keyStr.substr(1));
+            if (num >= 1 && num <= 12)
+                return GLFW_KEY_F1 + num - 1;
+        }
+        return -1000; // Return distinct value for unknown
+    }
+
+
+};
 struct KeyboardIcon
 {
     glm::vec2 position, size;
@@ -153,198 +351,6 @@ class SettingsState : public our::State
     float cameraSensitivity = 1.2f;
     bool adjustingSensitivity = false;
 
-    // Map GLFW keys to texture filenames for all visible keys
-    std::map<int, std::string> keyToTexture = {
-        {GLFW_KEY_ESCAPE, "Escape.png"},
-        {GLFW_KEY_F1, "F1.png"},
-        {GLFW_KEY_F2, "F2.png"},
-        {GLFW_KEY_F3, "F3.png"},
-        {GLFW_KEY_F4, "F4.png"},
-        {GLFW_KEY_F5, "F5.png"},
-        {GLFW_KEY_F6, "F6.png"},
-        {GLFW_KEY_F7, "F7.png"},
-        {GLFW_KEY_F8, "F8.png"},
-        {GLFW_KEY_F9, "F9.png"},
-        {GLFW_KEY_F10, "F10.png"},
-        {GLFW_KEY_F11, "F11.png"},
-        {GLFW_KEY_F12, "F12.png"},
-        {GLFW_KEY_1, "1.png"},
-        {GLFW_KEY_2, "2.png"},
-        {GLFW_KEY_3, "3.png"},
-        {GLFW_KEY_4, "4.png"},
-        {GLFW_KEY_5, "5.png"},
-        {GLFW_KEY_6, "6.png"},
-        {GLFW_KEY_7, "7.png"},
-        {GLFW_KEY_8, "8.png"},
-        {GLFW_KEY_9, "9.png"},
-        {GLFW_KEY_0, "0.png"},
-        {GLFW_KEY_MINUS, "Hypen_Underscore.png"},
-        {GLFW_KEY_EQUAL, "Equal_Plus.png"},
-        {GLFW_KEY_BACKSPACE, "Backspace.png"},
-        {GLFW_KEY_TAB, "Tab.png"},
-        {GLFW_KEY_Q, "Q.png"},
-        {GLFW_KEY_W, "W.png"},
-        {GLFW_KEY_E, "E.png"},
-        {GLFW_KEY_R, "R.png"},
-        {GLFW_KEY_T, "T.png"},
-        {GLFW_KEY_Y, "Y.png"},
-        {GLFW_KEY_U, "U.png"},
-        {GLFW_KEY_I, "I.png"},
-        {GLFW_KEY_O, "O.png"},
-        {GLFW_KEY_P, "P.png"},
-        {GLFW_KEY_CAPS_LOCK, "CapsLock.png"},
-        {GLFW_KEY_A, "A.png"},
-        {GLFW_KEY_S, "S.png"},
-        {GLFW_KEY_D, "D.png"},
-        {GLFW_KEY_F, "F.png"},
-        {GLFW_KEY_G, "G.png"},
-        {GLFW_KEY_H, "H.png"},
-        {GLFW_KEY_J, "J.png"},
-        {GLFW_KEY_K, "K.png"},
-        {GLFW_KEY_L, "L.png"},
-        {GLFW_KEY_ENTER, "Enter.png"},
-        {GLFW_KEY_LEFT_SHIFT, "Shift.png"},
-        {GLFW_KEY_Z, "Z.png"},
-        {GLFW_KEY_X, "X.png"},
-        {GLFW_KEY_C, "C.png"},
-        {GLFW_KEY_V, "V.png"},
-        {GLFW_KEY_B, "B.png"},
-        {GLFW_KEY_N, "N.png"},
-        {GLFW_KEY_M, "M.png"},
-        {GLFW_KEY_LEFT_CONTROL, "LeftControl.png"},
-        {GLFW_KEY_LEFT_ALT, "Alt.png"},
-        {GLFW_KEY_SPACE, "Spacebar.png"},
-        {GLFW_KEY_RIGHT_ALT, "RightAlt.png"},
-        {GLFW_KEY_RIGHT_CONTROL, "Control.png"},
-        {GLFW_KEY_LEFT, "LeftArrow.png"},
-        {GLFW_KEY_RIGHT, "RightArrow.png"},
-        {GLFW_KEY_DOWN, "DownArrow.png"},
-        {GLFW_KEY_UP, "UpArrow.png"}};
-
-    // Helper function to get key name from GLFW key code
-    std::string getKeyName(int key)
-    {
-        if (key == GLFW_KEY_W)
-            return "W";
-        if (key == GLFW_KEY_A)
-            return "A";
-        if (key == GLFW_KEY_S)
-            return "S";
-        if (key == GLFW_KEY_D)
-            return "D";
-        if (key == GLFW_KEY_F)
-            return "F";
-        if (key == GLFW_KEY_LEFT_SHIFT)
-            return "LEFT_SHIFT";
-        if (key == GLFW_KEY_ESCAPE)
-            return "ESCAPE";
-        if (key == GLFW_KEY_SPACE)
-            return "SPACE";
-        if (key == GLFW_KEY_TAB)
-            return "TAB";
-        if (key == GLFW_KEY_CAPS_LOCK)
-            return "CAPS_LOCK";
-        if (key == GLFW_KEY_ENTER)
-            return "ENTER";
-        if (key == GLFW_KEY_BACKSPACE)
-            return "BACKSPACE";
-        if (key == GLFW_KEY_LEFT_CONTROL)
-            return "LEFT_CONTROL";
-        if (key == GLFW_KEY_RIGHT_CONTROL)
-            return "RIGHT_CONTROL";
-        if (key == GLFW_KEY_LEFT_ALT)
-            return "LEFT_ALT";
-        if (key == GLFW_KEY_RIGHT_ALT)
-            return "RIGHT_ALT";
-        if (key == GLFW_KEY_LEFT)
-            return "LEFT_ARROW";
-        if (key == GLFW_KEY_RIGHT)
-            return "RIGHT_ARROW";
-        if (key == GLFW_KEY_UP)
-            return "UP_ARROW";
-        if (key == GLFW_KEY_DOWN)
-            return "DOWN_ARROW";
-        if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9)
-            return std::string(1, '0' + (key - GLFW_KEY_0));
-        if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z)
-            return std::string(1, 'A' + (key - GLFW_KEY_A));
-        if (key >= GLFW_KEY_F1 && key <= GLFW_KEY_F12)
-            return "F" + std::to_string(key - GLFW_KEY_F1 + 1);
-        // Add more keys as needed
-        return "UNKNOWN";
-    }
-
-    // Helper function to get mouse button name
-    std::string getMouseButtonName(int button)
-    {
-        if (button == GLFW_MOUSE_BUTTON_LEFT)
-            return "LEFT_CLICK";
-        if (button == GLFW_MOUSE_BUTTON_RIGHT)
-            return "RIGHT_CLICK";
-        return "UNKNOWN";
-    }
-
-    // Helper function to get GLFW key from string
-    int getKeyFromString(const std::string &keyStr)
-    {
-        if (keyStr == "W")
-            return GLFW_KEY_W;
-        if (keyStr == "A")
-            return GLFW_KEY_A;
-        if (keyStr == "S")
-            return GLFW_KEY_S;
-        if (keyStr == "D")
-            return GLFW_KEY_D;
-        if (keyStr == "F")
-            return GLFW_KEY_F;
-        if (keyStr == "LEFT_SHIFT")
-            return GLFW_KEY_LEFT_SHIFT;
-        if (keyStr == "ESCAPE")
-            return GLFW_KEY_ESCAPE;
-        if (keyStr == "SPACE")
-            return GLFW_KEY_SPACE;
-        if (keyStr == "TAB")
-            return GLFW_KEY_TAB;
-        if (keyStr == "CAPS_LOCK")
-            return GLFW_KEY_CAPS_LOCK;
-        if (keyStr == "ENTER")
-            return GLFW_KEY_ENTER;
-        if (keyStr == "BACKSPACE")
-            return GLFW_KEY_BACKSPACE;
-        if (keyStr == "LEFT_CONTROL")
-            return GLFW_KEY_LEFT_CONTROL;
-        if (keyStr == "RIGHT_CONTROL")
-            return GLFW_KEY_RIGHT_CONTROL;
-        if (keyStr == "LEFT_ALT")
-            return GLFW_KEY_LEFT_ALT;
-        if (keyStr == "RIGHT_ALT")
-            return GLFW_KEY_RIGHT_ALT;
-        if (keyStr == "LEFT_ARROW")
-            return GLFW_KEY_LEFT;
-        if (keyStr == "RIGHT_ARROW")
-            return GLFW_KEY_RIGHT;
-        if (keyStr == "UP_ARROW")
-            return GLFW_KEY_UP;
-        if (keyStr == "DOWN_ARROW")
-            return GLFW_KEY_DOWN;
-        // Mouse buttons (return negative values to distinguish from keys)
-        if (keyStr == "LEFT_CLICK")
-            return -1;
-        if (keyStr == "RIGHT_CLICK")
-            return -2;
-        if (keyStr.length() == 1 && keyStr[0] >= '0' && keyStr[0] <= '9')
-            return GLFW_KEY_0 + (keyStr[0] - '0');
-        if (keyStr.length() == 1 && keyStr[0] >= 'A' && keyStr[0] <= 'Z')
-            return GLFW_KEY_A + (keyStr[0] - 'A');
-        if (keyStr[0] == 'F' && keyStr.length() > 1)
-        {
-            int num = std::stoi(keyStr.substr(1));
-            if (num >= 1 && num <= 12)
-                return GLFW_KEY_F1 + num - 1;
-        }
-        return -1000; // Return distinct value for unknown
-    }
-
     // Load player config
     void loadConfig()
     {
@@ -403,11 +409,11 @@ class SettingsState : public our::State
                 }
 
                 // Handle keyboard keys
-                int glfwKey = getKeyFromString(keyBinding);
+                int glfwKey = our::getKeyFromString(keyBinding);
 
-                if (glfwKey != -1000 && keyToTexture.find(glfwKey) != keyToTexture.end())
+                if (glfwKey != -1000 && our::keyToTexture.find(glfwKey) != our::keyToTexture.end())
                 {
-                    std::string texName = keyToTexture[glfwKey];
+                    std::string texName = our::keyToTexture[glfwKey];
 
                     // Find and highlight the corresponding icon
                     for (size_t i = 0; i < keyboardIcons.size(); i++)
@@ -595,7 +601,7 @@ class SettingsState : public our::State
                 {
                     if (keyboard.justPressed(key))
                     {
-                        std::string keyName = getKeyName(key);
+                        std::string keyName = our::getKeyName(key);
                         if (keyName != "UNKNOWN")
                         {
                             playerConfig["controls"][rebindingControl] = keyName;
@@ -739,7 +745,7 @@ class SettingsState : public our::State
                 if (playerConfig.contains("controls") && playerConfig["controls"].contains(label.configKey))
                 {
                     std::string currentKey = playerConfig["controls"][label.configKey].get<std::string>();
-                    int keyCode = getKeyFromString(currentKey);
+                    int keyCode = our::getKeyFromString(currentKey);
                     std::string texturePath = "";
 
                     // Check if it's a mouse button
@@ -751,9 +757,9 @@ class SettingsState : public our::State
                     {
                         texturePath = "assets/textures/Keyboard/RightClick.png";
                     }
-                    else if (keyCode != -1000 && keyToTexture.find(keyCode) != keyToTexture.end())
+                    else if (keyCode != -1000 && our::keyToTexture.find(keyCode) != our::keyToTexture.end())
                     {
-                        texturePath = "assets/textures/Keyboard/" + keyToTexture[keyCode];
+                        texturePath = "assets/textures/Keyboard/" + our::keyToTexture[keyCode];
                     }
 
                     if (!texturePath.empty())
