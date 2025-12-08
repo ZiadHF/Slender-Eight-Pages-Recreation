@@ -45,7 +45,7 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
     // ✓ ADD: Register materials to global registry
     for (const auto &mat : materials)
     {
-        std::cout << "Registering MTL Material: " << mat.name << std::endl;
+        std::cout << "\n=== Registering MTL Material: " << mat.name << " ===" << std::endl;
         MTLMaterialProperties props;
         props.name = mat.name;
         props.ambient = glm::vec3(mat.ambient[0], mat.ambient[1], mat.ambient[2]);
@@ -57,7 +57,20 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
         props.normalTexture = mat.bump_texname;
+
+        std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
+        std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
+        std::cout << "  Specular: (" << props.specular.x << ", " << props.specular.y << ", " << props.specular.z << ")" << std::endl;
+        std::cout << "  Shininess: " << props.shininess << std::endl;
+        std::cout << "  Dissolve: " << props.dissolve << std::endl;
+        std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
+        std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
+        std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
+        std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
+
         MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
+        std::cout << "=== Registration Complete ===\n"
+                  << std::endl;
     }
 
     bool hasNormals = !attrib.normals.empty();
@@ -203,7 +216,7 @@ our::Mesh *our::mesh_utils::loadOBJWithMaterials(const std::string &filename)
     // Register materials to global registry
     for (const auto &mat : materials)
     {
-        std::cout << "Registering MTL Material: " << mat.name << std::endl;
+        std::cout << "\n=== Registering MTL Material (submesh): " << mat.name << " ===" << std::endl;
         MTLMaterialProperties props;
         props.name = mat.name;
         props.ambient = glm::vec3(mat.ambient[0], mat.ambient[1], mat.ambient[2]);
@@ -215,7 +228,20 @@ our::Mesh *our::mesh_utils::loadOBJWithMaterials(const std::string &filename)
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
         props.normalTexture = mat.bump_texname;
+
+        std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
+        std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
+        std::cout << "  Specular: (" << props.specular.x << ", " << props.specular.y << ", " << props.specular.z << ")" << std::endl;
+        std::cout << "  Shininess: " << props.shininess << std::endl;
+        std::cout << "  Dissolve: " << props.dissolve << std::endl;
+        std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
+        std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
+        std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
+        std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
+
         MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
+        std::cout << "=== Registration Complete ===\n"
+                  << std::endl;
     }
 
     std::vector<our::Submesh> submeshes;

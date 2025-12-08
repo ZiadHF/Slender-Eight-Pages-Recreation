@@ -1195,8 +1195,8 @@
                             0.0009,
                             0.006
                         ],
-                        "innerConeAngle": 15.0,
-                        "outerConeAngle": 35.0,
+                        "innerConeAngle": 100.0,
+                        "outerConeAngle": 120.0,
                         "flickerMode": "candle",
                         "flickerIntensity": 0.8,
                         "flickerFrequency": 0.2
