@@ -257,13 +257,13 @@ class SettingsState : public our::State
         if (key == GLFW_KEY_RIGHT_ALT)
             return "RIGHT_ALT";
         if (key == GLFW_KEY_LEFT)
-            return "LEFT_ARROW";
+            return "LEFT";
         if (key == GLFW_KEY_RIGHT)
-            return "RIGHT_ARROW";
+            return "RIGHT";
         if (key == GLFW_KEY_UP)
-            return "UP_ARROW";
+            return "UP";
         if (key == GLFW_KEY_DOWN)
-            return "DOWN_ARROW";
+            return "DOWN";
         if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9)
             return std::string(1, '0' + (key - GLFW_KEY_0));
         if (key >= GLFW_KEY_A && key <= GLFW_KEY_Z)
@@ -319,13 +319,13 @@ class SettingsState : public our::State
             return GLFW_KEY_LEFT_ALT;
         if (keyStr == "RIGHT_ALT")
             return GLFW_KEY_RIGHT_ALT;
-        if (keyStr == "LEFT_ARROW")
+        if (keyStr == "LEFT")
             return GLFW_KEY_LEFT;
-        if (keyStr == "RIGHT_ARROW")
+        if (keyStr == "RIGHT")
             return GLFW_KEY_RIGHT;
-        if (keyStr == "UP_ARROW")
+        if (keyStr == "UP")
             return GLFW_KEY_UP;
-        if (keyStr == "DOWN_ARROW")
+        if (keyStr == "DOWN")
             return GLFW_KEY_DOWN;
         // Mouse buttons (return negative values to distinguish from keys)
         if (keyStr == "LEFT_CLICK")
