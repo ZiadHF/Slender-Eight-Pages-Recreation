@@ -79,6 +79,7 @@ namespace our {
             shader->set("diffuse_color", diffuse);
             shader->set("specular_color", specular);
             shader->set("shininess", shininess);
+            shader->set("illuminationModel", illuminationModel);
         }
     }
 
@@ -112,6 +113,7 @@ namespace our {
             diffuse = mtlProps->diffuse;
             specular = mtlProps->specular;
             shininess = mtlProps->shininess;
+            illuminationModel = mtlProps->illuminationModel;
         }
 
         // JSON values only override if MTL wasn't found (fallback/defaults)

@@ -62,6 +62,7 @@ namespace our {
         glm::vec3 diffuse = glm::vec3(0.8f);
         glm::vec3 specular = glm::vec3(0.5f);
         float shininess = 32.0f;
+        int illuminationModel = 2;
 
         void setup() const override;
         void deserialize(const nlohmann::json &data) override;

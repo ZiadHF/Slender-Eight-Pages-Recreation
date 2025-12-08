@@ -37,6 +37,7 @@ uniform vec3 ambient_color = vec3(0.1);
 uniform vec3 diffuse_color = vec3(0.8);
 uniform vec3 specular_color = vec3(0.5);
 uniform float shininess = 32.0;
+uniform int illuminationModel = 2;
 
 // Fog properties
 uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
@@ -88,10 +89,13 @@ void main(){
         float  diff = max(0.0,dot(normal,light_direction));
         vec3 diffuse =diff * diffuse_color * texture_color.rgb * lights[i].color;
         
-        //specular
-        vec3 halfway = normalize(light_direction+view_dir);
-        float spec = pow(max(0,dot(halfway,normal)),shininess);
-        vec3 specular = spec * specular_color * lights[i].color;
+        // Specular - only if illuminationModel is 2 (full Blinn-Phong)
+        vec3 specular = vec3(0.0);
+        if (illuminationModel == 2) {
+            vec3 halfway = normalize(light_direction+view_dir);
+            float spec = pow(max(0,dot(halfway,normal)),shininess);
+            specular = spec * specular_color * lights[i].color;
+        }
         result += attenuation * (diffuse + specular);
     }
     
