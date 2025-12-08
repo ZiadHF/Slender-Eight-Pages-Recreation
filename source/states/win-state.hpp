@@ -23,7 +23,7 @@ class WinState : public our::State {
 
     void onInitialize() override {
         auto& config = getApp()->getConfig()["scene"];
-        totalPages = config["world"][1]["components"][1]["totalPages"].get<int>();
+        totalPages = config["world"][2]["components"][1]["totalPages"].get<int>();
         time = 0.0f;
         canExit = false;
 
