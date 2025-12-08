@@ -62,6 +62,7 @@ class InstancedRendererComponent : public Component {
     std::vector<glm::mat4>
         visibleInstanceMats;  // Visible instances after culling
     std::unordered_map<std::string, Material*> submeshMaterials;
+    std::string meshName;
 
     // Culling settings
     float maxRenderDistance = 100.0f;  // Maximum distance to render instances
@@ -119,6 +120,7 @@ class InstancedRendererComponent : public Component {
     }
 
     void deserialize(const nlohmann::json& data) override;
+    std::pair<glm::vec3, glm::vec3> getBoundingBox() const;
 };
 
 }  // namespace our
