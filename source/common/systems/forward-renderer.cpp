@@ -403,6 +403,7 @@ namespace our
                     // Set lighting uniforms for instanced lit materials
                     instancedRenderer->material->shader->set("camera_position", eye);
                     instancedRenderer->material->shader->set("light_count", (int)lightCommands.size());
+                    
                     for (size_t li = 0; li < lightCommands.size(); li++)
                     {
                         LightComponent *light = lightCommands[li];

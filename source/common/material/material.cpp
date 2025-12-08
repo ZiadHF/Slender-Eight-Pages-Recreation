@@ -3,22 +3,28 @@
 #include "../asset-loader.hpp"
 #include "deserialize-utils.hpp"
 #include "mtl-material-registry.hpp"
-
-namespace our {
+#include <iostream>
+namespace our
+{
 
     // This function should setup the pipeline state and set the shader to be used
-    void Material::setup() const {
+    void Material::setup() const
+    {
         pipelineState.setup();
-        if(shader) {
+        if (shader)
+        {
             shader->use();
         }
     }
 
     // This function read the material data from a json object
-    void Material::deserialize(const nlohmann::json& data){
-        if(!data.is_object()) return;
+    void Material::deserialize(const nlohmann::json &data)
+    {
+        if (!data.is_object())
+            return;
 
-        if(data.contains("pipelineState")){
+        if (data.contains("pipelineState"))
+        {
             pipelineState.deserialize(data["pipelineState"]);
         }
         shader = AssetLoader<ShaderProgram>::get(data["shader"].get<std::string>());
@@ -27,31 +33,39 @@ namespace our {
 
     // This function should call the setup of its parent and
     // set the "tint" uniform to the value in the member variable tint
-    void TintedMaterial::setup() const {
+    void TintedMaterial::setup() const
+    {
         Material::setup();
-        if(shader){
+        if (shader)
+        {
             shader->set("tint", tint);
         }
     }
 
     // This function read the material data from a json object
-    void TintedMaterial::deserialize(const nlohmann::json& data){
+    void TintedMaterial::deserialize(const nlohmann::json &data)
+    {
         Material::deserialize(data);
-        if(!data.is_object()) return;
+        if (!data.is_object())
+            return;
         tint = data.value("tint", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
     }
 
     // This function should call the setup of its parent and
     // set the "alphaThreshold" uniform to the value in the member variable alphaThreshold
     // Then it should bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex"
-    void TexturedMaterial::setup() const {
+    void TexturedMaterial::setup() const
+    {
         TintedMaterial::setup();
-        if(shader){
+        if (shader)
+        {
             shader->set("alphaThreshold", alphaThreshold);
-            if(texture){
+            if (texture)
+            {
                 texture->bind();
             }
-            if(sampler){
+            if (sampler)
+            {
                 sampler->bind(0);
             }
             // Bind to texture unit 0
@@ -60,9 +74,11 @@ namespace our {
     }
 
     // This function read the material data from a json object
-    void TexturedMaterial::deserialize(const nlohmann::json& data){
+    void TexturedMaterial::deserialize(const nlohmann::json &data)
+    {
         TintedMaterial::deserialize(data);
-        if(!data.is_object()) return;
+        if (!data.is_object())
+            return;
         alphaThreshold = data.value("alphaThreshold", 0.0f);
         texture = AssetLoader<Texture2D>::get(data.value("texture", ""));
         sampler = AssetLoader<Sampler>::get(data.value("sampler", ""));
@@ -87,28 +103,32 @@ namespace our {
     // Priority: 1. MTL file values (if found), 2. JSON values, 3. Class defaults
     void LitMaterial::deserialize(const nlohmann::json &data)
     {
+        std::cout << "Deserializing LitMaterial: " << materialName << std::endl;
         TexturedMaterial::deserialize(data);
         if (!data.is_object())
             return;
 
-        // Try to get material name for MTL registry lookup
-        // First check explicit "mtlMaterial" field, otherwise try to match by material key name
-        std::string materialName = "";
-        if (data.contains("mtlMaterial"))
-        {
-            materialName = data["mtlMaterial"].get<std::string>();
-        }
-
-        // Try to get values from MTL registry
+        // Try to get values from MTL registry using materialName (set by asset loader from JSON key)
         std::optional<MTLMaterialProperties> mtlProps;
         if (!materialName.empty())
         {
+            std::cout << "Looking up MTL Material: " << materialName << std::endl;
             mtlProps = MTLMaterialRegistry::getInstance().getMaterial(materialName);
+            if (mtlProps.has_value())
+            {
+                std::cout << "MTL Material found: " << materialName << std::endl;
+            }
+            else
+            {
+                std::cout << "MTL Material not found: " << materialName << std::endl;
+            }
         }
 
         // Apply MTL values first (highest priority if they exist)
         if (mtlProps.has_value())
         {
+            std::cout << "Applying MTL Material properties for: " << materialName << std::endl;
+            std::cout << "MTL NAME IS: " << mtlProps->name << std::endl;
             ambient = mtlProps->ambient;
             diffuse = mtlProps->diffuse;
             specular = mtlProps->specular;
@@ -119,6 +139,7 @@ namespace our {
         // JSON values only override if MTL wasn't found (fallback/defaults)
         if (!mtlProps.has_value())
         {
+            std::cout << "Applying JSON Material properties for: " << materialName << std::endl;
             // Parse ambient color from JSON
             if (data.contains("ambient"))
             {

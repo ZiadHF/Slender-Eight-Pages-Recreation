@@ -3,8 +3,8 @@
     "window": {
         "title": "Slender - The Eight Pages",
         "size": {
-            "width": 2560,
-            "height": 1440
+            "width": 1280,
+            "height": 720
         },
         "fullscreen": false
     },
@@ -128,23 +128,7 @@
                         1
                     ],
                     "texture": "slenderman_texture",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.2,
-                        0.2,
-                        0.2
-                    ],
-                    "shininess": 16.0
+                    "sampler": "default"
                 },
                 "BarkMat2": {
                     "type": "lit",

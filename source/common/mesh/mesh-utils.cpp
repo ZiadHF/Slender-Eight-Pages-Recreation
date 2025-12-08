@@ -4,7 +4,7 @@
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tinyobj/tiny_obj_loader.h>
 
-#include "../material/mtl-material-registry.hpp" 
+#include "../material/mtl-material-registry.hpp"
 
 #include <iostream>
 #include <vector>
@@ -12,7 +12,7 @@
 
 our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
 {
-
+    std::cout << "Loading OBJ file: " << filename << std::endl;
     // The data that we will use to initialize our mesh
     std::vector<our::Vertex> vertices;
     std::vector<GLuint> elements;
@@ -37,13 +37,15 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         std::cerr << "Failed to load obj file \"" << filename << "\" due to error: " << err << std::endl;
         return nullptr;
     }
-    if (!warn.empty()) {
+    if (!warn.empty())
+    {
         std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
     }
 
     // ✓ ADD: Register materials to global registry
     for (const auto &mat : materials)
     {
+        std::cout << "Registering MTL Material: " << mat.name << std::endl;
         MTLMaterialProperties props;
         props.name = mat.name;
         props.ambient = glm::vec3(mat.ambient[0], mat.ambient[1], mat.ambient[2]);
@@ -73,7 +75,6 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
                 attrib.vertices[3 * index.vertex_index + 0],
                 attrib.vertices[3 * index.vertex_index + 1],
                 attrib.vertices[3 * index.vertex_index + 2]};
-
 
             if (hasNormals && index.normal_index >= 0)
             {
@@ -108,18 +109,21 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
             }
             else
             {
-                vertex.color = {255, 255, 255, 255};  // Default white
+                vertex.color = {255, 255, 255, 255}; // Default white
             }
 
             // See if we already stored a similar vertex
             auto it = vertex_map.find(vertex);
-            if (it == vertex_map.end()) {
+            if (it == vertex_map.end())
+            {
                 // if no, add it to the vertices and record its index
                 auto new_vertex_index = static_cast<GLuint>(vertices.size());
                 vertex_map[vertex] = new_vertex_index;
                 elements.push_back(new_vertex_index);
                 vertices.push_back(vertex);
-            } else {
+            }
+            else
+            {
                 // if yes, just add its index in the elements vector
                 elements.push_back(it->second);
             }
@@ -131,17 +135,20 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
 
 // Create a sphere (the vertex order in the triangles are CCW from the outside)
 // Segments define the number of divisions on the both the latitude and the longitude
-our::Mesh* our::mesh_utils::sphere(const glm::ivec2& segments){
+our::Mesh *our::mesh_utils::sphere(const glm::ivec2 &segments)
+{
     std::vector<our::Vertex> vertices;
     std::vector<GLuint> elements;
 
     // We populate the sphere vertices by looping over its longitude and latitude
-    for(int lat = 0; lat <= segments.y; lat++){
+    for (int lat = 0; lat <= segments.y; lat++)
+    {
         float v = (float)lat / segments.y;
         float pitch = v * glm::pi<float>() - glm::half_pi<float>();
         float cos = glm::cos(pitch), sin = glm::sin(pitch);
-        for(int lng = 0; lng <= segments.x; lng++){
-            float u = (float)lng/segments.x;
+        for (int lng = 0; lng <= segments.x; lng++)
+        {
+            float u = (float)lng / segments.x;
             float yaw = u * glm::two_pi<float>();
             glm::vec3 normal = {cos * glm::cos(yaw), sin, cos * glm::sin(yaw)};
             glm::vec3 position = normal;
@@ -151,10 +158,12 @@ our::Mesh* our::mesh_utils::sphere(const glm::ivec2& segments){
         }
     }
 
-    for(int lat = 1; lat <= segments.y; lat++){
-        int start = lat*(segments.x+1);
-        for(int lng = 1; lng <= segments.x; lng++){
-            int prev_lng = lng-1;
+    for (int lat = 1; lat <= segments.y; lat++)
+    {
+        int start = lat * (segments.x + 1);
+        for (int lng = 1; lng <= segments.x; lng++)
+        {
+            int prev_lng = lng - 1;
             elements.push_back(lng + start);
             elements.push_back(lng + start - segments.x - 1);
             elements.push_back(prev_lng + start - segments.x - 1);
@@ -167,7 +176,8 @@ our::Mesh* our::mesh_utils::sphere(const glm::ivec2& segments){
     return new our::Mesh(vertices, elements);
 }
 
-our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename) {
+our::Mesh *our::mesh_utils::loadOBJWithMaterials(const std::string &filename)
+{
     std::vector<our::Vertex> vertices;
     std::vector<GLuint> elements;
     std::unordered_map<our::Vertex, GLuint> vertex_map;
@@ -180,43 +190,68 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename) {
     // Extract directory from filename for loading MTL files
     std::string mtl_basedir = filename.substr(0, filename.find_last_of("/\\") + 1);
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str(), mtl_basedir.c_str())) {
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, filename.c_str(), mtl_basedir.c_str()))
+    {
         std::cerr << "Failed to load obj file \"" << filename << "\" due to error: " << err << std::endl;
         return nullptr;
     }
-    if (!warn.empty()) {
+    if (!warn.empty())
+    {
         std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
+    }
+
+    // Register materials to global registry
+    for (const auto &mat : materials)
+    {
+        std::cout << "Registering MTL Material: " << mat.name << std::endl;
+        MTLMaterialProperties props;
+        props.name = mat.name;
+        props.ambient = glm::vec3(mat.ambient[0], mat.ambient[1], mat.ambient[2]);
+        props.diffuse = glm::vec3(mat.diffuse[0], mat.diffuse[1], mat.diffuse[2]);
+        props.specular = glm::vec3(mat.specular[0], mat.specular[1], mat.specular[2]);
+        props.shininess = mat.shininess;
+        props.dissolve = mat.dissolve;
+        props.illuminationModel = mat.illum;
+        props.diffuseTexture = mat.diffuse_texname;
+        props.specularTexture = mat.specular_texname;
+        props.normalTexture = mat.bump_texname;
+        MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
     }
 
     std::vector<our::Submesh> submeshes;
 
     // Process each shape
-    for (const auto &shape : shapes) {
+    for (const auto &shape : shapes)
+    {
         // Group faces by material
         std::map<int, std::vector<tinyobj::index_t>> material_faces;
 
-        for (size_t f = 0; f < shape.mesh.material_ids.size(); f++) {
+        for (size_t f = 0; f < shape.mesh.material_ids.size(); f++)
+        {
             int mat_id = shape.mesh.material_ids[f];
             // Get indices for this face (assuming triangles)
-            for (size_t v = 0; v < 3; v++) {
+            for (size_t v = 0; v < 3; v++)
+            {
                 material_faces[mat_id].push_back(shape.mesh.indices[3 * f + v]);
             }
         }
 
         // Create submesh for each material
-        for (const auto& [mat_id, indices] : material_faces) {
+        for (const auto &[mat_id, indices] : material_faces)
+        {
             GLsizei startElement = elements.size();
 
-            for (const auto &index : indices) {
+            for (const auto &index : indices)
+            {
                 Vertex vertex = {};
 
                 vertex.position = {
                     attrib.vertices[3 * index.vertex_index + 0],
                     attrib.vertices[3 * index.vertex_index + 1],
-                    attrib.vertices[3 * index.vertex_index + 2]
-                };
+                    attrib.vertices[3 * index.vertex_index + 2]};
 
-                if (index.normal_index >= 0) {
+                if (index.normal_index >= 0)
+                {
                     vertex.normal = {
                         attrib.normals[3 * index.normal_index + 0],
                         attrib.normals[3 * index.normal_index + 1],

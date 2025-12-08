@@ -37,7 +37,7 @@ uniform vec3 ambient_color = vec3(0.1);
 uniform vec3 diffuse_color = vec3(0.8);
 uniform vec3 specular_color = vec3(0.5);
 uniform float shininess = 32.0;
-uniform int illuminationModel = 2;
+uniform int illuminationModel = 1;
 
 // Fog properties
 uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
