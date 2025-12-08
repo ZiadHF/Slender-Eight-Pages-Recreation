@@ -272,6 +272,7 @@ class PhysicsSystem {
         btRigidBody* body = new btRigidBody(rbInfo);
 
         body->setUserPointer(userPointer);
+        
         dynamicsWorld->addRigidBody(body);
 
         return body;
@@ -292,6 +293,8 @@ class PhysicsSystem {
         btRigidBody* body = new btRigidBody(rbInfo);
 
         body->setUserPointer(userPointer);
+
+        body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
         dynamicsWorld->addRigidBody(body);
 
         return body;
