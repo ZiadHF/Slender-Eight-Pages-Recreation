@@ -1,11 +1,11 @@
 {
     "camera": {
-        "sensitivity": 0.8499994874000549
+        "sensitivity": 0.01
     },
     "controls": {
         "backward": "S",
         "forward": "W",
-        "interact": "F",
+        "interact": "LEFT_CLICK",
         "left": "A",
         "right": "D",
         "sprint": "LEFT_SHIFT",

@@ -2,15 +2,17 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
-#include <unordered_map>
 #include <random>
-#include "../common/systems/text-renderer.hpp"
+#include <unordered_map>
+
+#include "../common/components/audio-controller.hpp"
+#include "../common/components/mesh-renderer.hpp"
 #include "../common/components/page-spawner.hpp"
 #include "../common/components/page.hpp"
 #include "../common/components/player.hpp"
 #include "../common/components/slenderman.hpp"
-#include "../common/components/mesh-renderer.hpp"
 #include "../common/ecs/entity.hpp"
+#include "../common/systems/text-renderer.hpp"
 #include "physics-system.hpp"
 
 namespace our {
@@ -35,7 +37,9 @@ class PageSystem {
     // Raycast parameters
     float interactionDistance = 1.0f;  // Max distance player can interact
 
-    void initialize(World* world, PhysicsSystem* physicsSystem , TextRenderer* textRenderer, const glm::ivec2& screenSizeParam) {
+    void initialize(World* world, PhysicsSystem* physicsSystem,
+                    TextRenderer* textRenderer,
+                    const glm::ivec2& screenSizeParam) {
         this->physics = physicsSystem;
         this->textRenderer = textRenderer;
         this->screenSize = screenSizeParam;
@@ -73,12 +77,13 @@ class PageSystem {
         std::vector<std::string> pageTextures = spawnerComp->pageTextures;
 
         // Choose random spawn locations from the spawner's list
-        std::vector<std::pair<glm::vec3, glm::vec3>> spawnLocations = spawnerComp->spawnPoints;
+        std::vector<std::pair<glm::vec3, glm::vec3>> spawnLocations =
+            spawnerComp->spawnPoints;
         int size = spawnLocations.size();
         if (size < totalPages) {
             std::cerr
-            << "PageSystem: Not enough spawn locations for total pages!"
-            << std::endl;
+                << "PageSystem: Not enough spawn locations for total pages!"
+                << std::endl;
             totalPages = size;
         }
 
@@ -95,11 +100,12 @@ class PageSystem {
 
         // Select spawn locations ensuring minimum distance between pages
         std::vector<std::pair<glm::vec3, glm::vec3>> selectedSpawns;
-        float minDistanceBetweenPages = 20.0f;  // Minimum distance between pages
+        float minDistanceBetweenPages =
+            20.0f;  // Minimum distance between pages
 
         for (const auto& candidate : spawnLocations) {
             if (selectedSpawns.size() >= static_cast<size_t>(totalPages)) break;
-            
+
             bool tooClose = false;
             for (const auto& selected : selectedSpawns) {
                 float dist = glm::length(candidate.first - selected.first);
@@ -108,7 +114,7 @@ class PageSystem {
                     break;
                 }
             }
-            
+
             if (!tooClose) {
                 selectedSpawns.push_back(candidate);
             }
@@ -116,8 +122,9 @@ class PageSystem {
 
         // Warn if we couldn't find enough spread-out locations
         if (selectedSpawns.size() < static_cast<size_t>(totalPages)) {
-            std::cerr << "PageSystem: Could only find " << selectedSpawns.size() 
-                      << " spread-out locations (wanted " << totalPages << ")" << std::endl;
+            std::cerr << "PageSystem: Could only find " << selectedSpawns.size()
+                      << " spread-out locations (wanted " << totalPages << ")"
+                      << std::endl;
             totalPages = selectedSpawns.size();
         }
 
@@ -134,6 +141,10 @@ class PageSystem {
             pageEntity->localTransform.position = selectedSpawns[i].first;
             pageEntity->localTransform.rotation = selectedSpawns[i].second;
 
+            std::cout << "PageSystem: Spawning page " << i << " at ("
+                      << selectedSpawns[i].first.x << ", "
+                      << selectedSpawns[i].first.y << ", "
+                      << selectedSpawns[i].first.z << ")" << std::endl;
             // Add MeshComponent
             auto* meshComp = pageEntity->addComponent<MeshRendererComponent>();
             meshComp->mesh = AssetLoader<Mesh>::get("page");
@@ -148,8 +159,10 @@ class PageSystem {
 
             // Load a random texture for the page
             int rand = std::rand() % pageTextures.size();
-            pageMaterial->texture = our::texture_utils::loadImage(pageTextures[rand]);
-            pageTextures.erase(pageTextures.begin() + rand); // Ensure unique textures
+            pageMaterial->texture =
+                our::texture_utils::loadImage(pageTextures[rand]);
+            pageTextures.erase(pageTextures.begin() +
+                               rand);  // Ensure unique textures
 
             meshComp->material = pageMaterial;
 
@@ -160,9 +173,8 @@ class PageSystem {
             spawnedPages.push_back(pageEntity);
 
             // Register collider in physics system
-            registerPageCollider(pageEntity);
+            // registerPageCollider(pageEntity);
         }
-   
 
         std::cout << "PageSystem initialized with " << totalPages << " pages"
                   << std::endl;
@@ -176,7 +188,8 @@ class PageSystem {
                 // Delete the material and texture
                 auto* meshComp = page->getComponent<MeshRendererComponent>();
                 if (meshComp) {
-                    auto* material = dynamic_cast<TexturedMaterial*>(meshComp->material);
+                    auto* material =
+                        dynamic_cast<TexturedMaterial*>(meshComp->material);
                     if (material) {
                         if (material->texture) {
                             delete material->texture;
@@ -191,7 +204,7 @@ class PageSystem {
             }
         }
         spawnedPages.clear();
-        
+
         // Cleanup page colliders
         for (auto& pair : pageColliders) {
             physics->removeBody(pair.second);
@@ -257,11 +270,12 @@ class PageSystem {
             physics->removeBody(it->second);
             pageColliders.erase(it);
         }
-        
+
         // Delete the material and texture
         auto* meshComp = entity->getComponent<MeshRendererComponent>();
         if (meshComp) {
-            auto* material = dynamic_cast<TexturedMaterial*>(meshComp->material);
+            auto* material =
+                dynamic_cast<TexturedMaterial*>(meshComp->material);
             if (material) {
                 if (material->texture) {
                     delete material->texture;
@@ -274,14 +288,8 @@ class PageSystem {
         // Remove mesh component
         entity->deleteComponent<MeshRendererComponent>();
 
-        if (this->textRenderer) {
-            std::string pageCountText = "Pages " + std::to_string(playerComp->collectedPages) + "/" + std::to_string(totalPages);
-            glm::vec2 textSize = textRenderer->measureText(pageCountText, 0.5f);
-            glm::vec2 pageCountPos = glm::vec2(screenSize.x / 2.0f - textSize.x / 2.0f, screenSize.y / 2.0f);
-            textRenderer->startTimedText(pageCountText, 3.0f, pageCountPos, 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-        }
         // Trigger effects
-        onPageCollected();
+        onPageCollected(playerComp);
     }
 
     bool allPagesCollected() const {
@@ -290,7 +298,7 @@ class PageSystem {
     }
 
    private:
-    void onPageCollected() {
+    void onPageCollected(PlayerComponent* playerComp) {
         // Increase Slenderman aggression
         if (slenderman) {
             auto* slenderComp = slenderman->getComponent<SlendermanComponent>();
@@ -302,12 +310,25 @@ class PageSystem {
         // Play collection sound
         auto* audioComp = pageSpawner->getComponent<AudioController>();
         if (audioComp) {
-            audioComp->initializeMusic("assets/sounds/grab_page.wav", false);
-            audioComp->setVolume(0.8f);
+            // Must uninitialize before reinitializing to avoid miniaudio crash
+            audioComp->uninitializeMusic();
+            audioComp->initializeMusic("assets/sounds/page_grab.wav", false);
+            audioComp->setVolume(0.5f);
             audioComp->playMusic();
         }
 
-        // TODO: Update UI
+        // Display page count on screen
+        if (this->textRenderer) {
+            std::string pageCountText =
+                "Pages " + std::to_string(playerComp->collectedPages) + "/" +
+                std::to_string(totalPages);
+            glm::vec2 textSize = textRenderer->measureText(pageCountText, 0.5f);
+            glm::vec2 pageCountPos = glm::vec2(
+                screenSize.x / 2.0f - textSize.x / 2.0f, screenSize.y / 2.0f);
+            textRenderer->startTimedText(pageCountText, 3.0f, pageCountPos,
+                                         0.5f,
+                                         glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        }
     }
 };
 

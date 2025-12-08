@@ -764,7 +764,6 @@
                     {
                         "type": "Audio Controller",
                         "audioType": "PAGE_COLLECT",
-                        "audioFile": "assets/sounds/page_grab.wav",
                         "volume": 0.7,
                         "loop": false
                     },
@@ -915,14 +914,7 @@
                     },
                     {
                         "type": "Slenderman Component",
-                        "startingAIValue": 0,
-                        "spawnPoints": [
-                            [1,1,0],
-                            [6,1,0],
-                            [9,1,0],
-                            [-5,1,0],
-                            [5,1,-10]
-                        ]
+                        "startingAIValue": 0
                     }
                 ]
             },
@@ -948,7 +940,7 @@
                         "mesh": "tree",
                         "material": "TreeInstancedMaterial",
                         "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.00006,
+                        "Density": 0.00009,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
                         "scaleMultiplier": [2.0, 4.0, 2.0],
@@ -958,7 +950,7 @@
                         "positionOffset": [0.0, 0.0, 0.0],
                         "positionRandomRange": [3.0, 0.0, 3.0],
                         "maxRenderDistance": 100.0,
-                        "cullingBoundingRadius": 20.0,
+                        "cullingBoundingRadius": 50.0,
                         "enableDistanceCulling": true,
                         "enableFrustumCulling": true
                     },
@@ -994,17 +986,17 @@
                             "BranchMat": "BranchMat"
                         },
                         "Map": "assets/textures/greyscale_tree_map.png",
-                        "Density": 0.00002,
+                        "Density": 0.00003,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
                         "scaleMultiplier": [2.0, 4.0, 2.0],
-                        "scaleRandomRange": [0.0, 0.5],
+                        "scaleRandomRange": [1.0, 1.25],
                         "rotationMultiplier": [0.0, 0.0, 0.0],
                         "rotationRandomRange": [0.0, 6.28318530718, 0.0],
                         "positionOffset": [0.0, 0.0, 0.0],
                         "positionRandomRange": [3.0, 0.0, 3.0],
                         "maxRenderDistance": 100.0,
-                        "cullingBoundingRadius": 20.0,
+                        "cullingBoundingRadius": 50.0,
                         "enableDistanceCulling": true,
                         "enableFrustumCulling": true
                     },
@@ -1053,5 +1045,41 @@
                 ]
             }
         ]
+    },
+    "death": {
+        "assets": {
+            "shaders": {
+                "textured": {
+                    "vs": "assets/shaders/textured.vert",
+                    "fs": "assets/shaders/textured.frag"
+                }
+            },
+            "textures": {
+                "slenderman_texture": "assets/textures/slenderman_color.png"
+            },
+            "meshes": {
+                "slender": "assets/models/Slenderman.obj"
+            },
+            "samplers": {
+                "default": {}
+            },
+            "materials": {
+                "Slenderman": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "slenderman_texture",
+                    "sampler": "default"
+                }
+            }
+        }
     }
 }
