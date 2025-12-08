@@ -73,16 +73,22 @@ namespace our
     // This will load all the meshes defined in "data"
     // data must be in the form:
     //    { mesh_name : "path/to/3d-model-file", ... }
-    template <>
-    void AssetLoader<Mesh>::deserialize(const nlohmann::json &data)
-    {
-        if (data.is_object())
-        {
-            for (auto &[name, desc] : data.items())
-            {
-                std::string path = desc.get<std::string>();
+    template<>
+    void AssetLoader<Mesh>::deserialize(const nlohmann::json& data) {
+        if(data.is_object()){
+            for(auto& [name, desc] : data.items()){
+                std::string path;
+                bool keepCPUCopy = false;
+                
+                if(desc.is_string()) {
+                    path = desc.get<std::string>();
+                } else if(desc.is_object()) {
+                    path = desc.value("path", "");
+                    keepCPUCopy = desc.value("keepCPUCopy", false);
+                }
                 // Use loadOBJWithMaterials for better material support
-                assets[name] = mesh_utils::loadOBJWithMaterials(path);
+                assets[name] = mesh_utils::loadOBJWithMaterials(path,keepCPUCopy);
+
             }
         }
     };

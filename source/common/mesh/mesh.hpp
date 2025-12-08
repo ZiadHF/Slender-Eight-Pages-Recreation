@@ -24,6 +24,8 @@ struct Submesh {
 class Mesh {
     // Here, we store the object names of the 3 main components of a mesh:
     // A vertex array object, A vertex buffer and an element buffer
+    std::vector<Vertex> vertices;
+    std::vector<unsigned int> elements;
     unsigned int VBO, EBO;
     unsigned int VAO;
     unsigned int instanceVBO = 0;     // Buffer for the instances only.
@@ -49,7 +51,12 @@ class Mesh {
     // VRAM, a vertex array object to define how to read the vertex & element
     // buffer during rendering
     Mesh(const std::vector<Vertex>& vertices,
-         const std::vector<unsigned int>& elements) {
+         const std::vector<unsigned int>& elements, bool keepCPUCopy = false) {
+        if (keepCPUCopy)
+        {
+            this->vertices = vertices;
+            this->elements = elements;
+        }
         elementCount = elements.size();
         // Getting the min and max bounds of the vert vector
         if (!vertices.empty()) {
@@ -231,6 +238,10 @@ class Mesh {
     // Get all submeshes
     const std::vector<Submesh>& getSubmeshes() const { return submeshes; }
 
+    // Get verts and indices of this mesh
+    const std::vector<Vertex> getVertices() const{ return vertices;}
+    const std::vector<unsigned int> getIndices() const{ return elements;}
+    
     // Set submeshes (used when loading multi-material meshes)
     void setSubmeshes(const std::vector<Submesh>& subs) { submeshes = subs; }
 

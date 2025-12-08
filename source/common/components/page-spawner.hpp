@@ -26,6 +26,14 @@ namespace our {
                         spawnPoint.x = point[0];
                         spawnPoint.y = point[1];
                         spawnPoint.z = point[2];
+                        // ---------------------
+                        // Position Conversion
+                        // ---------------------
+                        // engine.x = blender.x
+                        // engine.y = blender.z
+                        // engine.z = -blender.y
+                        
+                        spawnPoint = glm::vec3(spawnPoint.x, spawnPoint.z, -spawnPoint.y);
                         spawnPoints.push_back({spawnPoint, glm::vec3(0.0f)});
                     }
 
@@ -35,6 +43,18 @@ namespace our {
                         rot.x = rotation[0];
                         rot.y = rotation[1];
                         rot.z = rotation[2];
+                        // ---------------------
+                        // Rotation Conversion
+                        // ---------------------
+                        // Blender rotation (X, Y, Z) in degrees, Z-up coordinate system
+                        // Engine rotation (X, Y, Z) in radians, Y-up coordinate system
+                        // Set blender to YXZ Euler
+                        //
+                        // Convert coordinate systems:
+                        // Blender X (pitch) -> Engine X (pitch)
+                        // Blender Z (yaw around Z-up) -> Engine Y (yaw around Y-up)
+                        // Blender Y (roll) -> Engine -Z (roll, negated)
+                        rot = glm::radians(glm::vec3(rot.x, rot.z, -rot.y));
                         spawnPoints.back().second = rot;
                     }
                 }

@@ -63,9 +63,7 @@ set(COMMON_SOURCES
         source/common/texture/screenshot.cpp
         source/common/texture/tree-utils.hpp
         source/common/texture/tree-utils.cpp
-        source/common/text-renderer.cpp
-        source/common/text-renderer.hpp
-
+        
         source/common/material/pipeline-state.hpp
         source/common/material/pipeline-state.cpp
         source/common/material/material.hpp
@@ -79,7 +77,7 @@ set(COMMON_SOURCES
         source/common/ecs/entity.cpp
         source/common/ecs/world.hpp
         source/common/ecs/world.cpp
-
+        
         source/common/components/camera.hpp
         source/common/components/camera.cpp
         source/common/components/mesh-renderer.hpp
@@ -107,7 +105,12 @@ set(COMMON_SOURCES
         source/common/systems/slenderman-ai.hpp
         source/common/systems/page-system.hpp
         source/common/systems/physics-system.hpp
-)
+        source/common/systems/footstep-system.hpp
+        source/common/systems/ambient-tension-system.hpp
+        source/common/systems/static-sound-system.hpp
+        source/common/systems/text-renderer.cpp
+        source/common/systems/text-renderer.hpp
+        )
 
 # Define the directories in which to search for the included headers
 include_directories(

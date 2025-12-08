@@ -16,12 +16,36 @@
 
 namespace our {
 
+enum class AudioType {
+    MUSIC,
+    AMBIENCE,
+    JUMP_SCARE,
+    WALKING,
+    FLASHLIGHT,
+    PAGE_COLLECT,
+    STATIC
+};
+
 class AudioController : public Component {
    private:
     ma_engine audioEngine;
-    ma_sound audioSound;
+
+    // Dual sounds for crossfading
+    ma_sound soundA;
+    ma_sound soundB;
+    bool soundAActive = true;  // Which sound is currently primary
+    bool soundAInitialized = false;
+    bool soundBInitialized = false;
+
+    std::string audioFile;
     bool isInitialized = false;
     bool musicStarted = false;
+    AudioType audioType = AudioType::MUSIC;
+
+    // Crossfade state
+    bool isCrossfading = false;
+    float fadeTimeRemaining = 0.0f;
+    float fadeDuration = 1.0f;  // seconds
 
    public:
     bool isLooping = false;
@@ -29,12 +53,21 @@ class AudioController : public Component {
 
     static std::string getID() { return "Audio Controller"; }
 
+    AudioType getAudioType() const { return audioType; }
+
     AudioController();
     ~AudioController();
     bool initializeMusic(const char* filename, bool loop);
+    void uninitializeMusic();
+    std::string getAudioFile() const;
     void playMusic();
     void setVolume(float vol);
     void stopMusic();
+
+    // Crossfade methods
+    bool crossfadeTo(const char* filename, bool loop, float duration = 1.0f);
+    void updateCrossfade(float deltaTime);
+
     void deserialize(const nlohmann::json& data) override;
 };
 

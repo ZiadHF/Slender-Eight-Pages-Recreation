@@ -5,10 +5,12 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>  // For debugging
+#include <random>
 
 #include "../components/player.hpp"
 #include "../components/slenderman.hpp"
 #include "../ecs/world.hpp"
+#include "physics-system.hpp"
 
 namespace our {
 class SlendermanAISystem {
@@ -16,6 +18,90 @@ class SlendermanAISystem {
     Entity* player = nullptr;
     Entity* slenderman = nullptr;
     float gameTime = 0.0f;  // Track total game time for AI difficulty scaling
+
+    // Random number generator
+    std::mt19937 rng{std::random_device{}()};
+
+    // Helper function to generate random spawn position
+    glm::vec3 generateRandomSpawnPosition(SlendermanComponent* slenderComp) {
+        std::uniform_real_distribution<float> distX(
+            slenderComp->spawnAreaMin.x, slenderComp->spawnAreaMax.x);
+        std::uniform_real_distribution<float> distZ(
+            slenderComp->spawnAreaMin.z, slenderComp->spawnAreaMax.z);
+        return glm::vec3(distX(rng), slenderComp->spawnHeight, distZ(rng));
+    }
+
+    // Check if a spawn position is valid (not inside geometry)
+    bool isSpawnPositionValid(const glm::vec3& position, PhysicsSystem* physics,
+                              float checkRadius = 1.0f) {
+        if (!physics || !physics->getWorld()) return true;
+
+        // Cast a ray downward to check if there's ground beneath
+        glm::vec3 rayFrom = position + glm::vec3(0, 5.0f, 0);
+        glm::vec3 rayTo = position - glm::vec3(0, 1.0f, 0);
+
+        btVector3 btFrom(rayFrom.x, rayFrom.y, rayFrom.z);
+        btVector3 btTo(rayTo.x, rayTo.y, rayTo.z);
+
+        btCollisionWorld::ClosestRayResultCallback rayCallback(btFrom, btTo);
+        physics->getWorld()->rayTest(btFrom, btTo, rayCallback);
+
+        // If we don't hit anything, position might be outside the map
+        if (!rayCallback.hasHit()) return false;
+
+        // Check if spawn point is inside a wall using a sphere check
+        // Cast rays in multiple directions to detect if enclosed
+        const glm::vec3 directions[] = {glm::vec3(1, 0, 0), glm::vec3(-1, 0, 0),
+                                        glm::vec3(0, 0, 1),
+                                        glm::vec3(0, 0, -1)};
+
+        int blockedCount = 0;
+        for (const auto& dir : directions) {
+            glm::vec3 checkFrom = position + glm::vec3(0, 1.0f, 0);
+            glm::vec3 checkTo = checkFrom + dir * checkRadius;
+
+            btVector3 btCheckFrom(checkFrom.x, checkFrom.y, checkFrom.z);
+            btVector3 btCheckTo(checkTo.x, checkTo.y, checkTo.z);
+
+            btCollisionWorld::ClosestRayResultCallback checkCallback(
+                btCheckFrom, btCheckTo);
+            physics->getWorld()->rayTest(btCheckFrom, btCheckTo, checkCallback);
+
+            if (checkCallback.hasHit() &&
+                checkCallback.m_closestHitFraction < 0.5f) {
+                blockedCount++;
+            }
+        }
+
+        // If too many directions are blocked, we're probably inside something
+        return blockedCount < 3;
+    }
+
+    // Check if player has line of sight to a position (no obstacles blocking)
+    bool hasLineOfSight(const glm::vec3& fromPos, const glm::vec3& toPos,
+                        PhysicsSystem* physics,
+                        Entity* ignoreEntity = nullptr) {
+        if (!physics || !physics->getWorld()) return true;
+
+        btVector3 btFrom(fromPos.x, fromPos.y, fromPos.z);
+        btVector3 btTo(toPos.x, toPos.y, toPos.z);
+
+        btCollisionWorld::ClosestRayResultCallback rayCallback(btFrom, btTo);
+        physics->getWorld()->rayTest(btFrom, btTo, rayCallback);
+
+        if (rayCallback.hasHit()) {
+            // Check if we hit something other than the ignored entity
+            const btCollisionObject* hitObject = rayCallback.m_collisionObject;
+            if (hitObject) {
+                Entity* hitEntity =
+                    static_cast<Entity*>(hitObject->getUserPointer());
+                if (hitEntity != ignoreEntity) {
+                    return false;  // Line of sight blocked by something else
+                }
+            }
+        }
+        return true;  // No obstacles or only hit the target entity
+    }
 
     void initialize(World* world) {
         gameTime = 0.0f;  // Reset game time on initialization
@@ -32,7 +118,8 @@ class SlendermanAISystem {
         }
     }
 
-    void update(World* world, float deltaTime, ForwardRenderer* renderer) {
+    void update(World* world, float deltaTime, ForwardRenderer* renderer,
+                PhysicsSystem* physics) {
         if (!player || !slenderman) return;  // Safety check
 
         gameTime += deltaTime;  // Track total game time
@@ -60,6 +147,20 @@ class SlendermanAISystem {
         // Get frustum from renderer and check if Slenderman is inside it
         const Frustum& frustum = renderer->getFrustum();
         bool isInFrustum = frustum.isSphereInside(slenderPos, 1.0f);
+
+        // Frustum check alone is not enough. So we also verify line of sight
+        // using raycasting
+        if (isInFrustum && physics) {
+            glm::vec3 rayFrom =
+                playerPos + glm::vec3(0, 1.2f, 0);  // Eye height
+            glm::vec3 rayTo =
+                slenderPos + glm::vec3(0, 1.0f, 0);  // Slenderman center
+
+            // Use helper function to check line of sight
+            if (!hasLineOfSight(rayFrom, rayTo, physics, slenderman)) {
+                isInFrustum = false;  // Line of sight blocked by wall/obstacle
+            }
+        }
 
         // Check for isPlayerLooking, isPlayerInProximity
         if (distance < slenderComp->detectionDistance) {
@@ -98,10 +199,10 @@ class SlendermanAISystem {
         }
 
         if (canTeleport) {
-            // Get random value
-            int randomValue = rand() % (slenderComp->maxAIValue -
-                                        slenderComp->minAIValue + 1) +
-                              slenderComp->minAIValue;
+            // Get random value using modern C++ random
+            std::uniform_int_distribution<int> dist(slenderComp->minAIValue,
+                                                    slenderComp->maxAIValue);
+            int randomValue = dist(rng);
 
             // Check if teleportation should occur
             // AI value increases with pages collected and time played
@@ -110,103 +211,75 @@ class SlendermanAISystem {
                     static_cast<int>(gameTime / 90.0f),
                 slenderComp->maxAIValue);
 
-            // Teleport if randomValue is less than or equal to
-            // slenderManAIValue
+            // Teleport if randomValue is less than or equal to currentAIValue
             if (randomValue <= slenderComp->currentAIValue) {
-                // Get distances of spawn points
-                std::vector<glm::vec3> sortedSpawnPoints =
-                    slenderComp->spawnPoints;
-                std::vector<std::pair<glm::vec3, float>> spawnPointDistances;
-                for (const auto& spawnPoint : sortedSpawnPoints) {
-                    float dist = glm::length(spawnPoint - playerPos);
-                    spawnPointDistances.push_back({spawnPoint, dist});
-                }
-
-                // Sort spawn points by distance (closest first)
-                std::sort(spawnPointDistances.begin(),
-                          spawnPointDistances.end(),
-                          [](const auto& a, const auto& b) {
-                              return a.second < b.second;
-                          });
-
-                // Get valid spawns
-                std::vector<std::pair<glm::vec3, float>> validSpawns;
-                for (const auto& spawnPair : spawnPointDistances) {
-                    glm::vec3 spawnPoint = spawnPair.first;
-                    float distToPlayer = spawnPair.second;
-                    bool inFrustum = frustum.isSphereInside(spawnPoint, 1.0f);
-
-                    if (distToPlayer > slenderComp->detectionDistance ||
-                        (distToPlayer > slenderComp->closeDistance &&
-                         !inFrustum)) {
-                        // Valid spawn point
-                        validSpawns.push_back(spawnPair);
-                    }
-                }
-
                 // Calculate aggressiveness ratio (higher = more aggressive)
                 float aggressivenessRatio =
                     static_cast<float>(slenderComp->currentAIValue) /
                     static_cast<float>(slenderComp->maxAIValue);
 
-                int index = -1;
-                // Based on aggressiveness, pick spawn point
-                if (!validSpawns.empty()) {
-                    // aggressiveness 1.0 = index 0 (closest)
-                    // aggressiveness 0.0 = last index (farthest)
-                    // Add some randomness
-                    float randomOffset = (rand() % 100) / 100.0f * 0.3f - 0.15f;
-                    float indexFloat =
-                        (1.0f - aggressivenessRatio + randomOffset) *
-                        (validSpawns.size() - 1);
-                    index = std::clamp((int)indexFloat, 0,
-                                       (int)validSpawns.size() - 1);
+                // Determine spawn distance based on aggressiveness
+                // More aggressive = spawn closer to player
+                float minSpawnDist =
+                    slenderComp->closeDistance + 2.0f;  // Never spawn too close
+                float maxSpawnDist = slenderComp->detectionDistance * 2.0f;
+                float targetDist =
+                    glm::mix(maxSpawnDist, minSpawnDist, aggressivenessRatio);
 
-                    slenderman->localTransform.position =
-                        validSpawns[index].first;
+                // Add some randomness to target distance
+                std::uniform_real_distribution<float> distVariation(0.7f, 1.3f);
+                targetDist *= distVariation(rng);
+
+                glm::vec3 newSpawnPos;
+                bool foundValidSpawn = false;
+
+                // Try to find a valid random spawn position
+                for (int attempt = 0; attempt < slenderComp->maxSpawnAttempts;
+                     attempt++) {
+                    // Generate random angle around the player
+                    std::uniform_real_distribution<float> angleDist(
+                        0.0f, glm::two_pi<float>());
+                    float angle = angleDist(rng);
+
+                    // Calculate spawn position at target distance from player
+                    glm::vec3 candidatePos =
+                        playerPos + glm::vec3(cos(angle) * targetDist, 0.0f,
+                                              sin(angle) * targetDist);
+                    candidatePos.y = slenderComp->spawnHeight;
+
+                    // Clamp to spawn area bounds
+                    candidatePos.x =
+                        glm::clamp(candidatePos.x, slenderComp->spawnAreaMin.x,
+                                   slenderComp->spawnAreaMax.x);
+                    candidatePos.z =
+                        glm::clamp(candidatePos.z, slenderComp->spawnAreaMin.z,
+                                   slenderComp->spawnAreaMax.z);
+
+                    // Check if position is valid (not inside geometry)
+                    if (!isSpawnPositionValid(candidatePos, physics)) {
+                        continue;
+                    }
+
+                    // Check if spawn would be visible to player (don't spawn in
+                    // view)
+                    bool inFrustum = frustum.isSphereInside(candidatePos, 1.0f);
+                    glm::vec3 eyePos = playerPos + glm::vec3(0, 1.2f, 0);
+                    bool hasLOS = hasLineOfSight(
+                        eyePos, candidatePos + glm::vec3(0, 1.0f, 0), physics,
+                        nullptr);
+
+                    // Valid if either outside frustum or no line of sight
+                    if (!inFrustum || !hasLOS) {
+                        newSpawnPos = candidatePos;
+                        foundValidSpawn = true;
+                        break;
+                    }
                 }
 
-                // // DEBUG: Print teleportation info
-                // std::cout << "=== TELEPORTATION DEBUG ===" << std::endl;
-                // std::cout << "[SlenderAI] canTeleport: " << canTeleport
-                //           << std::endl;
-                // std::cout << "[SlenderAI] timeSinceLastTeleport: "
-                //           << slenderComp->timeSinceLastTeleport << std::endl;
-                // std::cout << "[SlenderAI] teleportCooldown: "
-                //           << slenderComp->teleportCooldown << std::endl;
-                // std::cout << "[SlenderAI] isPlayerLooking: " << isPlayerLooking
-                //           << std::endl;
-                // std::cout << "[SlenderAI] isPlayerInProximity: "
-                //           << isPlayerInProximity << std::endl;
-                // std::cout << "[SlenderAI] randomValue: " << randomValue
-                //           << std::endl;
-                // std::cout << "[SlenderAI] currentAIValue: "
-                //           << slenderComp->currentAIValue << std::endl;
-                // std::cout << "[SlenderAI] aggressivenessRatio: "
-                //           << aggressivenessRatio << std::endl;
-                // std::cout << "[SlenderAI] Total spawn points: "
-                //           << spawnPointDistances.size() << std::endl;
-                // std::cout << "[SlenderAI] Valid spawn points: "
-                //           << validSpawns.size() << std::endl;
-
-                // for (size_t i = 0; i < validSpawns.size(); i++) {
-                //     std::cout << "[SlenderAI] Valid Spawn #" << i << ": ("
-                //               << validSpawns[i].first.x << ", "
-                //               << validSpawns[i].first.y << ", "
-                //               << validSpawns[i].first.z
-                //               << ") Dist: " << validSpawns[i].second
-                //               << std::endl;
-                // }
-
-                // if (!validSpawns.empty()) {
-                //     std::cout << "[SlenderAI] Selected index: " << index
-                //               << std::endl;
-                //     std::cout << "[SlenderAI] Teleporting to: ("
-                //               << validSpawns[index].first.x << ", "
-                //               << validSpawns[index].first.y << ", "
-                //               << validSpawns[index].first.z << ")" << std::endl;
-                // }
-                // std::cout << "===========================" << std::endl;
+                // If found a valid spawn, teleport
+                if (foundValidSpawn) {
+                    slenderman->localTransform.position = newSpawnPos;
+                }
             }
         }
 
@@ -216,6 +289,12 @@ class SlendermanAISystem {
                 playerComp->maxHealth,
                 playerComp->health + playerComp->healthRegenRate * deltaTime);
         }
+    }
+
+    bool playerIsDead() const {
+        if (!player) return false;
+        auto* playerComp = player->getComponent<PlayerComponent>();
+        return playerComp && playerComp->health <= 0.0f;
     }
 };
 }  // namespace our

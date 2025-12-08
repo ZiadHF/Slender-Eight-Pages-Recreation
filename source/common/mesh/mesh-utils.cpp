@@ -189,8 +189,7 @@ our::Mesh *our::mesh_utils::sphere(const glm::ivec2 &segments)
     return new our::Mesh(vertices, elements);
 }
 
-our::Mesh *our::mesh_utils::loadOBJWithMaterials(const std::string &filename)
-{
+our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,bool keepCPUCopy = false) {
     std::vector<our::Vertex> vertices;
     std::vector<GLuint> elements;
     std::unordered_map<our::Vertex, GLuint> vertex_map;
@@ -312,16 +311,13 @@ our::Mesh *our::mesh_utils::loadOBJWithMaterials(const std::string &filename)
             our::Submesh submesh;
             submesh.elementOffset = startElement;
             submesh.elementCount = elements.size() - startElement;
-            submesh.materialName = (mat_id >= 0 && mat_id < materials.size())
-                                       ? materials[mat_id].name
-                                       : "default";
-            std::cout << "Created submesh with material: " << submesh.materialName
-                      << " (elements: " << submesh.elementCount << ")" << std::endl;
+            submesh.materialName = (mat_id >= 0 && mat_id < materials.size()) 
+                                   ? materials[mat_id].name : "default";
             submeshes.push_back(submesh);
         }
     }
 
-    auto mesh = new our::Mesh(vertices, elements);
+    auto mesh = new our::Mesh(vertices, elements,keepCPUCopy);
     mesh->setSubmeshes(submeshes);
     return mesh;
 }

@@ -116,7 +116,7 @@ bool TextRenderer::loadFont(const std::string& fontPath, unsigned int fontSize) 
 
 void TextRenderer::renderText(const std::string& text, glm::vec2 position, float scale, glm::vec4 color, const glm::mat4& projection) {
     if (!textShader) return;
-    
+    glBindSampler(0, 0);
     // Activate corresponding render state
     textShader->use();
     textShader->set("projection", projection);
@@ -187,6 +187,49 @@ glm::vec2 TextRenderer::measureText(const std::string& text, float scale) {
     }
     
     return glm::vec2(width, height);
+}
+
+void TextRenderer::startTimedText(const std::string& text, float duration, glm::vec2 position, float scale, glm::vec4 color) {
+    TimedText timedText;
+    timedText.text = text;
+    timedText.duration = duration;
+    timedText.elapsed = 0.0f;
+    timedText.position = position;
+    timedText.scale = scale;
+    timedText.color = color;
+    
+    timedTexts.push_back(timedText);
+}
+
+void TextRenderer::updateTimedTexts(float deltaTime) {
+    // Update all timed texts and remove expired ones
+    for (auto it = timedTexts.begin(); it != timedTexts.end(); ) {
+        it->elapsed += deltaTime;
+        if (it->elapsed >= it->duration) {
+            it = timedTexts.erase(it);
+        } else {
+            ++it;
+        }
+    }
+}
+
+void TextRenderer::renderTimedTexts(const glm::mat4& projection) {
+    for (auto& timedText : timedTexts) {
+        glm::vec4 color = timedText.color;
+        
+        // Optional: Add fade out effect in the last second
+        float fadeTime = 1.0f;
+        if (timedText.duration - timedText.elapsed < fadeTime) {
+            float alpha = (timedText.duration - timedText.elapsed) / fadeTime;
+            color.a *= alpha;
+        }
+        
+        renderText(timedText.text, timedText.position, timedText.scale, color, projection);
+    }
+}
+
+void TextRenderer::clearTimedTexts() {
+    timedTexts.clear();
 }
 
 }
