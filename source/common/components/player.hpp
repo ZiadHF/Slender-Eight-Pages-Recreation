@@ -63,9 +63,9 @@ inline int stringToGLFWKey(const std::string& keyName) {
         {"LEFT_ALT", GLFW_KEY_LEFT_ALT},
         {"RIGHT_ALT", GLFW_KEY_RIGHT_ALT},
         // Mouse buttons
-        {"MOUSE_LEFT", GLFW_MOUSE_BUTTON_LEFT},
-        {"MOUSE_RIGHT", GLFW_MOUSE_BUTTON_RIGHT},
-        {"MOUSE_MIDDLE", GLFW_MOUSE_BUTTON_MIDDLE},
+        {"LEFT_CLICK", GLFW_MOUSE_BUTTON_LEFT},
+        {"RIGHT_CLICK", GLFW_MOUSE_BUTTON_RIGHT},
+        {"MIDDLE_CLICK", GLFW_MOUSE_BUTTON_MIDDLE},
     };
 
     auto it = keyMap.find(keyName);
@@ -87,11 +87,11 @@ class PlayerComponent : public Component {
     float distanceToSlenderman = 0.0f;  // Distance to Slenderman
 
     // Movement speeds
-    float walkSpeed = 3.0f;    // Walking speed in units per second
-    float sprintSpeed = 6.5f;  // Sprinting speed in units per second
+    glm::vec3 walkSpeed = glm::vec3(3.0f);    // Walking speed in units per second
+    glm::vec3 sprintSpeedup = glm::vec3(2.0f);  // Sprinting speed in units per second
 
     // Player states
-    bool isMoving = true;
+    bool isMoving = false;
     bool isSprinting = false;
 
     // Movement controls
@@ -107,7 +107,7 @@ class PlayerComponent : public Component {
     bool flashlightOn = true;
 
     // Mouse sensitivity
-    float mouseSensitivity = 1.2f;
+    float mouseSensitivity = 0.01f;
 
     static std::string getID() { return "Player Component"; }
 
@@ -118,8 +118,8 @@ class PlayerComponent : public Component {
         healthRegenRate = data.value("healthRegenRate", 5.0f);
 
         // Movement parameters
-        walkSpeed = data.value("walkSpeed", 3.0f);
-        sprintSpeed = data.value("sprintSpeed", 6.5f);
+        walkSpeed = glm::vec3(data.value("walkSpeed", 3.0f));
+        sprintSpeedup = glm::vec3(data.value("sprintSpeedup", 5.0f));
 
         // Mouse sensitivity
         mouseSensitivity = data.value("mouseSensitivity", 1.2f);
