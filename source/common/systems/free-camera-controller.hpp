@@ -178,12 +178,6 @@ class FreeCameraControllerSystem {
             // Direct movement fallback
             position += moveDir * current_sensitivity * deltaTime;
         }
-
-        // FOV control
-        float fov = camera->fovY + app->getMouse().getScrollOffset().y *
-                                       controller->fovSensitivity;
-        camera->fovY =
-            glm::clamp(fov, glm::pi<float>() * 0.01f, glm::pi<float>() * 0.99f);
     }
 
     // When the state exits, it should call this function to ensure the mouse is
