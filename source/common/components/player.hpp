@@ -119,7 +119,7 @@ class PlayerComponent : public Component {
 
         // Movement parameters
         walkSpeed = glm::vec3(data.value("walkSpeed", 3.0f));
-        sprintSpeedup = glm::vec3(data.value("sprintSpeedup", 5.0f));
+        sprintSpeedup = glm::vec3(data.value("sprintSpeedup", 2.0f));
 
         // Mouse sensitivity
         mouseSensitivity = data.value("mouseSensitivity", 1.2f);
