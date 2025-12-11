@@ -13,7 +13,7 @@ uniform sampler2D tex;
 
 // Fog properties
 uniform vec3 fog_color = vec3(0.0, 0.0, 0.0);  // Pitch black
-uniform float horizon_threshold = 0.1;  // Y threshold for steep upward viewing
+uniform float horizon_threshold = 0.3;  // Y threshold for steep upward viewing
 
 void main(){
     vec4 result = tint * fs_in.color * texture(tex, fs_in.tex_coord);

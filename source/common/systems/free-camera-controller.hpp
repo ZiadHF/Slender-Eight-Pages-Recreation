@@ -26,8 +26,8 @@ class FreeCameraControllerSystem {
     PlayerComponent* playerComp = nullptr;
     float bobbingTime = 0.0f;          // Time accumulator for bobbing
     float bobbingFrequency = 10.0f;    // Cycles per second while walking
-    float bobbingAmplitude = 0.05f;    // Vertical bob amount
-    float bobbingSway = 0.03f;
+    float bobbingAmplitude = 0.14f;    // Vertical bob amount
+    float bobbingSway = 0.09f;
     std::map<std::string, int> controlKeys;
 
     void loadControls() {

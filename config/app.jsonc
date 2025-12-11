@@ -1409,7 +1409,7 @@
                     {
                         "type": "Slenderman Component",
                         "startingAIValue": 0,
-                        "debugMode" : false,
+                        "debugMode" : true,
                         "damageRate" : 15.0
                     }
                 ]
@@ -1450,7 +1450,7 @@
                         "positionOffset": [0.0, 0.0, 0.0],
                         "positionRandomRange": [3.0, 0.0, 3.0],
                         "maxRenderDistance": 100.0,
-                        "cullingBoundingRadius": 50.0,
+                        "cullingBoundingRadius": 100.0,
                         "enableDistanceCulling": true,
                         "enableFrustumCulling": true
                     },
@@ -1495,7 +1495,7 @@
                         "positionOffset": [0.0, 0.0, 0.0],
                         "positionRandomRange": [3.0, 0.0, 3.0],
                         "maxRenderDistance": 100.0,
-                        "cullingBoundingRadius": 50.0,
+                        "cullingBoundingRadius": 100.0,
                         "enableDistanceCulling": true,
                         "enableFrustumCulling": true
                     },
