@@ -120,12 +120,14 @@ class SlendermanAISystem {
 
     void update(World* world, float deltaTime, ForwardRenderer* renderer,
                 PhysicsSystem* physics) {
+        
         if (!player || !slenderman) return;  // Safety check
-
+        
         gameTime += deltaTime;  // Track total game time
 
         auto* slenderComp = slenderman->getComponent<SlendermanComponent>();
         auto* playerComp = player->getComponent<PlayerComponent>();
+        if(slenderComp->debugMode){return;}
         bool isPlayerLooking = false;
         bool isPlayerInProximity = false;
         bool canTeleport = false;
