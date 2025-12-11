@@ -78,6 +78,17 @@ class FreeCameraControllerSystem {
         loadControls();
         mouse_locked = true;
         app->getMouse().lockMouse(app->getWindow());
+        
+        // Manually sync mouse position to where lockMouse centered it
+        int width, height;
+        glfwGetWindowSize(app->getWindow(), &width, &height);
+        double centerX = width / 2.0;
+        double centerY = height / 2.0;
+        
+        // Update the mouse's internal position tracking
+        app->getMouse().CursorMoveEvent(centerX, centerY);
+        app->getMouse().update();
+        
         playerComp = nullptr;
     }
 

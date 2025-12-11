@@ -1409,7 +1409,8 @@
                     {
                         "type": "Slenderman Component",
                         "startingAIValue": 0,
-                        "debugMode" : true
+                        "debugMode" : false,
+                        "damageRate" : 15.0
                     }
                 ]
             },
