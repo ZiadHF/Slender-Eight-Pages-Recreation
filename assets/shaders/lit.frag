@@ -76,8 +76,7 @@ void main(){
             float theta = dot(light_direction,-normalize(lights[i].direction));
             // Hard cutoff - anything outside outer cone is pitch black
             if(theta < lights[i].outer_cone_angle) {
-                frag_color = vec4(0,0,0,1);
-                return;
+                continue;
             } else {
                 // Smooth transition only between outer and inner cone
                 float intensity = smoothstep(lights[i].outer_cone_angle, lights[i].inner_cone_angle, theta);
