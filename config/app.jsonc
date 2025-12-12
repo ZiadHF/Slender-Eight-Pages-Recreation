@@ -738,7 +738,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": false
+                            "enabled": true
                         },
                         "blending": {
                             "enabled": true,
@@ -765,7 +765,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": false
+                            "enabled": true
                         },
                         "blending": {
                             "enabled": true,
@@ -792,7 +792,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": false
+                            "enabled": true
                         },
                         "blending": {
                             "enabled": true,
@@ -819,7 +819,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": false
+                            "enabled": true
                         },
                         "blending": {
                             "enabled": true,
@@ -914,7 +914,9 @@
                         "audioType": "STATIC"
                     },
                     {
-                        "type": "Player Component"
+                        "type": "Player Component",
+                        "walkSpeed": 4.0,
+                        "sprintSpeedup": 2.0
                     }
                 ],
                 "children": [

@@ -89,26 +89,14 @@ class PlayerComponent : public Component {
 
     // Movement speeds
     glm::vec3 walkSpeed = glm::vec3(3.0f);    // Walking speed in units per second
-    glm::vec3 sprintSpeedup = glm::vec3(5.0f);  // Sprinting speed in units per second
+    glm::vec3 sprintSpeedup = glm::vec3(2.0f);  // Sprinting speed in units per second
 
     // Player states
     bool isMoving = false;
     bool isSprinting = false;
 
-    // Movement controls
-    int moveForward = GLFW_KEY_W;
-    int moveBackward = GLFW_KEY_S;
-    int moveLeft = GLFW_KEY_A;
-    int moveRight = GLFW_KEY_D;
-    int toggleFlashlight = GLFW_KEY_F;
-    int sprintKey = GLFW_KEY_LEFT_SHIFT;
-    int interactKey = GLFW_MOUSE_BUTTON_LEFT;
-
     // Flashlight state
     bool flashlightOn = true;
-
-    // Mouse sensitivity
-    float mouseSensitivity = 0.01f;
 
     static std::string getID() { return "Player Component"; }
 
@@ -127,22 +115,6 @@ class PlayerComponent : public Component {
             float speedup = data["sprintSpeedup"];
             sprintSpeedup = glm::vec3(speedup);
         }
-     
-        if (data.contains("moveForward") && data["moveForward"].is_string())
-            moveForward = stringToGLFWKey(data["moveForward"]);
-        if (data.contains("moveBackward") && data["moveBackward"].is_string())
-            moveBackward = stringToGLFWKey(data["moveBackward"]);
-        if (data.contains("moveLeft") && data["moveLeft"].is_string())
-            moveLeft = stringToGLFWKey(data["moveLeft"]);
-        if (data.contains("moveRight") && data["moveRight"].is_string())
-            moveRight = stringToGLFWKey(data["moveRight"]);
-        if (data.contains("toggleFlashlight") &&
-            data["toggleFlashlight"].is_string())
-            toggleFlashlight = stringToGLFWKey(data["toggleFlashlight"]);
-        if (data.contains("sprintKey") && data["sprintKey"].is_string())
-            sprintKey = stringToGLFWKey(data["sprintKey"]);
-        if (data.contains("interactKey") && data["interactKey"].is_string())
-            interactKey = stringToGLFWKey(data["interactKey"]);
     }
 };
 
