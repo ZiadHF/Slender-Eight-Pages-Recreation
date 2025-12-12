@@ -279,9 +279,9 @@ illum 1
 map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Terrain_Baked.png
 
 newmtl Tiles_30344
-Ns 0.000000
+Ns 14
 Ka 1.000000 1.000000 1.000000
-Ks 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
@@ -290,9 +290,9 @@ map_Kd -s 20 20 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/t
 map_Bump -s 20 20 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/TilesBroken0013_2_S_NRM.png
 
 newmtl genericconcrete_30302
-Ns 0.000000
+Ns 200
 Ka 1.000000 1.000000 1.000000
-Ks 0.000000 0.000000 0.000000
+Ks 0.200000 0.200000 0.200000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
