@@ -31,7 +31,12 @@ class Playstate : public our::State {
     our::StaticSoundSystem staticSoundSystem;
     our::TextRenderer* textRenderer;
 
+    bool paused = false;
+
     void onInitialize() override {
+        // Reset pause state
+        paused = false;
+        
         // First of all, we get the scene configuration from the app config
         auto& config = getApp()->getConfig()["scene"];
         // If we have assets in the scene config, we deserialize them
@@ -68,6 +73,48 @@ class Playstate : public our::State {
     }
 
     void onDraw(double deltaTime) override {
+        // Get keyboard reference at the start
+        auto& keyboard = getApp()->getKeyboard();
+
+        if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
+            paused = !paused;
+        }
+
+        if (paused) {
+            // Remove navigation logic - just check for ENTER to end game
+            if (keyboard.justPressed(GLFW_KEY_ENTER)) {
+                paused = false;
+                getApp()->changeState("menu"); // End Game
+            }
+
+            // Render game state frozen
+            renderer.render(&world, 0.0f);
+
+            // Render pause menu
+            auto size = getApp()->getFrameBufferSize();
+            glm::mat4 projection = glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f);
+            
+            // Title
+            std::string pauseTitle = "PAUSED";
+            glm::vec2 titleSize = textRenderer->measureText(pauseTitle, 1.0f);
+            glm::vec2 titlePos = glm::vec2(size.x / 2.0f - titleSize.x / 2.0f, size.y / 2.0f - 100);
+            textRenderer->renderText(pauseTitle, titlePos, 1.0f, glm::vec4(1.0f), projection);
+
+            // End Game option
+            std::string endText = "Press ENTER to End Game";
+            glm::vec2 endSize = textRenderer->measureText(endText, 0.7f);
+            glm::vec2 endPos = glm::vec2(size.x / 2.0f - endSize.x / 2.0f, size.y / 2.0f);
+            textRenderer->renderText(endText, endPos, 0.7f, glm::vec4(1.0f, 1.0f, 0.0f, 1.0f), projection);
+
+            // ESC hint
+            std::string escText = "Press ESC to unpause";
+            glm::vec2 escSize = textRenderer->measureText(escText, 0.5f);
+            glm::vec2 escPos = glm::vec2(size.x / 2.0f - escSize.x / 2.0f, size.y / 2.0f + 70);
+            textRenderer->renderText(escText, escPos, 0.5f, glm::vec4(0.7f, 0.7f, 0.7f, 1.0f), projection);
+
+            return; // Skip game updates
+        }
+
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
@@ -117,13 +164,6 @@ class Playstate : public our::State {
         glm::mat4 projection =
             glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f);
         textRenderer->renderTimedTexts(projection);
-        // Get a reference to the keyboard object
-        auto& keyboard = getApp()->getKeyboard();
-
-        if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
-            // If the escape  key is pressed in this frame, go to the play state
-            getApp()->changeState("menu");
-        }
 
         // Check if player has collected all pages
         if (pageSystem.allPagesCollected()) {
