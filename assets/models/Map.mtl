@@ -158,8 +158,9 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd ../textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
-map_d ../textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
+map_Kd -s 5 5 1../textures/RockJagged0021Diffuse.png
+map_d -s 5 5 1 ../textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
+map_Bump -s 5 5 1 -bm 1.000000../textures/RockJagged0021Bump.png
 
 newmtl Roof_30222
 Ns 0.000000
