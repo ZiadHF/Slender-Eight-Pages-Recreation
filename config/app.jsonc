@@ -1,261 +1,1514 @@
 {
     "start-scene": "menu",
-    "window":
-    {
-        "title":"Default Game Window",
-        "size":{
-            "width":1280,
-            "height":720
+    "window": {
+        "title": "Slender - The Eight Pages",
+        "size": {
+            "width": 1280,
+            "height": 720
         },
         "fullscreen": false
     },
     "scene": {
-        "renderer":{
-            "sky": "assets/textures/sky.jpg",
-            "postprocess": "assets/shaders/postprocess/vignette.frag"
+        "renderer": {
+            "sky": "assets/textures/sky.png",
+            "postprocess": "assets/shaders/postprocess/static.frag",
+            "fog_enabled": true
         },
-        "assets":{
-            "shaders":{
-                "tinted":{
-                    "vs":"assets/shaders/tinted.vert",
-                    "fs":"assets/shaders/tinted.frag"
+        "assets": {
+            "shaders": {
+                "textured": {
+                    "vs": "assets/shaders/textured.vert",
+                    "fs": "assets/shaders/textured.frag"
                 },
-                "textured":{
-                    "vs":"assets/shaders/textured.vert",
-                    "fs":"assets/shaders/textured.frag"
+                "lit": {
+                    "vs": "assets/shaders/lit.vert",
+                    "fs": "assets/shaders/lit.frag"
+                },
+                "instanced": {
+                    "vs": "assets/shaders/instanced.vert",
+                    "fs": "assets/shaders/instanced.frag"
+                },
+                "lit-instanced": {
+                    "vs": "assets/shaders/lit-instanced.vert",
+                    "fs": "assets/shaders/lit-instanced.frag"
                 }
             },
-            "textures":{
-                "moon": "assets/textures/moon.jpg",
-                "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png"
+            "textures": {
+                "Terrain_Baked": "assets/textures/Terrain_Baked.png",
+                "diffuse_3": "assets/textures/diffuse_3.png",
+                "Brick_Small_Brown": "assets/textures/Brick_Small_Brown.png",
+                "BuildingShed": "assets/textures/BuildingShed.png",
+                "wood": "assets/textures/wood.png",
+                "Concrete2_Brick_Small_Brown_Baked": "assets/textures/Brick_Small_Brown.png",
+                "Concrete_2_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse.png",
+                "Concrete_ConcreteBare0280_39_S_Baked": "assets/textures/ConcreteBare0280_39_S.png",
+                "DecalsDamageFloor0001_1_S": "assets/textures/DecalsDamageFloor0001_1_S.png",
+                "DecalsDamageFloor0004_1_S": "assets/textures/DecalsDamageFloor0004_1_S.png",
+                "DecalsLeaking0165_1_S": "assets/textures/DecalsLeaking0165_1_S.png",
+                "DecalsLeaking0197_1_S": "assets/textures/DecalsLeaking0197_1_S.png",
+                "DecalsLeaking0223_1_S": "assets/textures/DecalsLeaking0223_1_S.png",
+                "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked": "assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png",
+                "diffuse_1": "assets/textures/diffuse_1.png",
+                "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse.png",
+                "Roof_Roof_ao_Baked": "assets/textures/Roof_ao.png",
+                "SiloRust_05_Baked": "assets/textures/05.png",
+                "Tiles_TilesBroken0013_2_S_Baked": "assets/textures/TilesBroken0013_2_S.png",
+                "genericconcrete_genericConcrete_Baked": "assets/textures/genericConcrete.png",
+                "transporter_01-truck_01_truck_01g_Baked": "assets/textures/transporter_01-truck_01_truck_01g_Baked.png",
+                "transporter_02-truck_02_truck_02b_Baked": "assets/textures/transporter_02-truck_02_truck_02b_Baked.png",
+                "slenderman_texture": "assets/textures/slenderman_color.png",
+                "BarkMat_diffuse": "assets/textures/BarkMat_diffuse.png",
+                "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
+                "Grass": "assets/textures/Grass.png",
+                "fence11_271": "assets/textures/fence11_271.png"
+                 
             },
-            "meshes":{
-                "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
-                "plane": "assets/models/plane.obj",
-                "sphere": "assets/models/Slenderman.obj"
+            "meshes": {
+                "map": {
+                    "path": "assets/models/Map.obj",
+                    "keepCPUCopy": true
+                },
+                "tree": {
+                    "path": "assets/models/tree.obj",
+                    "keepCPUCopy": true
+                },
+                "tree2": {
+                    "path": "assets/models/tree2.obj",
+                    "keepCPUCopy": true
+                },
+                "grass": "assets/models/testgrass.obj",
+                "slender": "assets/models/Slenderman.obj",
+                "page": "assets/models/page.obj"
             },
-            "samplers":{
-                "default":{},
-                "pixelated":{
-                    "MAG_FILTER": "GL_NEAREST"
-                }
+            "samplers": {
+                "default": {}
             },
-            "materials":{
-                "metal":{
-                    "type": "tinted",
-                    "shader": "tinted",
+            "materials": {
+                "Material":{
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
+                        "faceCulling": {
+                            "enabled": true
                         },
-                        "depthTesting":{
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [0.45, 0.4, 0.5, 1]
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
                 },
-                "glass":{
-                    "type": "textured",
-                    "shader": "textured",
+                  "Material.002":{
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
+                        "faceCulling": {
                             "enabled": true
                         },
-                        "blending":{
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                  "Material.003":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                  "Material.004":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                "Grass.002": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Grass",
+                    "sampler": "default"
+                },
+                "Slenderman": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "slenderman_texture",
+                    "sampler": "default"
+                },
+                "BarkMat2": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "BarkMat_diffuse",
+                    "sampler": "default"
+                },
+                "BarkMat": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_3",
+                    "sampler": "default"
+                },
+                "BranchMat": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        },
+                        "blending": {
                             "enabled": true,
                             "sourceFactor": "GL_SRC_ALPHA",
                             "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "BranchMat_diffuse",
+                    "sampler": "default",
+                    "transparent": true,
+                    "alphaThreshold": 0.5
+                },
+                "LeafMat": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
                         },
-                        "depthMask": false
+                        "depthTesting": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_3",
+                    "sampler": "default",
+                    "transparent": true,
+                    "alphaThreshold": 0.5
+                },
+                "Terrain_Baked_-4838": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Terrain_Baked",
+                    "sampler": "default"
+                },
+                "Brick_29994": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Brick_Small_Brown",
+                    "sampler": "default"
+                },
+                "BuildingShed_29974": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "BuildingShed",
+                    "sampler": "default"
+                },
+                "wood_30310": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "wood",
+                    "sampler": "default"
+                },
+                "Concrete2_30092": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.552,
+                        0.517,
+                        0.439,
+                        1
+                    ],
+                    "texture": "Concrete2_Brick_Small_Brown_Baked",
+                    "sampler": "default"
+                },
+                "Concrete_2_30340": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.417,
+                        0.359,
+                        0.227,
+                        1
+                    ],
+                    "texture": "Concrete_2_RockJagged0021Diffuse_Baked",
+                    "sampler": "default"
+                },
+                "Concrete_30314": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Concrete_ConcreteBare0280_39_S_Baked",
+                    "sampler": "default"
+                },
+                "Oil_Tank-Material__Untitled.tga_30316": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked",
+                    "sampler": "default"
+                },
+                "Optimized_Bark_Material_9_29992": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_1",
+                    "sampler": "default"
+                },
+                "RockJagged0021Diffuse_30360": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked",
+                    "sampler": "default"
+                },
+                "Roof_30222": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.408,
+                        0.745,
+                        0.647,
+                        1
+                    ],
+                    "texture": "Roof_Roof_ao_Baked",
+                    "sampler": "default"
+                },
+                "SiloRust_30198": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                "Tiles_30344": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "Tiles_TilesBroken0013_2_S_Baked",
+                    "sampler": "default"
+                },
+                "genericconcrete_30302": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.8024,
+                        0.8024,
+                        0.8024,
+                        1
+                    ],
+                    "texture": "genericconcrete_genericConcrete_Baked",
+                    "sampler": "default"
+                },
+                "Floor_1_30178": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
                     },
                     "transparent": true,
-                    "tint": [1, 1, 1, 1],
-                    "texture": "glass",
-                    "sampler": "pixelated"
-                },
-                "grass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
-                    },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "grass",
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsDamageFloor0001_1_S",
                     "sampler": "default"
                 },
-                "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
+                "Floor_2_30374": {
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
+                        "faceCulling": {
+                            "enabled": true
                         },
-                        "depthTesting":{
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
+                    "transparent": true,
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsDamageFloor0004_1_S",
                     "sampler": "default"
                 },
-                "moon":{
-                    "type": "textured",
-                    "shader": "textured",
+                "Leaking_1_30382": {
+                    "type": "lit",
+                    "shader": "lit",
                     "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
+                        "faceCulling": {
+                            "enabled": true
                         },
-                        "depthTesting":{
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "moon",
+                    "transparent": true,
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsLeaking0165_1_S",
+                    "sampler": "default"
+                },
+                "Leaking_2_30336": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "transparent": true,
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsLeaking0197_1_S",
+                    "sampler": "default"
+                },
+                "Leaking_3_30252": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "transparent": true,
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "DecalsLeaking0223_1_S",
+                    "sampler": "default"
+                },
+                "transporter_01-truck_01_30288": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.784,
+                        0.784,
+                        0.784,
+                        1
+                    ],
+                    "texture": "transporter_01-truck_01_truck_01g_Baked",
+                    "sampler": "default"
+                },
+                "Fence": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "transparent": true,
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.001": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "transparent": true,
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.002": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "transparent": true,
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.003": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "transparent": true,
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "transporter_02-truck_02_30312": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.784,
+                        0.784,
+                        0.784,
+                        1
+                    ],
+                    "texture": "transporter_02-truck_02_truck_02b_Baked",
+                    "sampler": "default"
+                },
+                "TreeInstancedMaterial": {
+                    "type": "lit",
+                    "shader": "lit-instanced",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "diffuse_3",
                     "sampler": "default"
                 }
             }
         },
-        "world":[
+        "world": [
             {
-                "position": [0, 0, 10],
+                "position": [
+                    -3,
+                    1.2,
+                    158
+                ],
                 "components": [
                     {
                         "type": "Camera"
                     },
                     {
                         "type": "Free Camera Controller"
+                    },
+                    {
+                        "type": "Audio Controller",
+                        "audioType": "FLASHLIGHT",
+                        "loop": false,
+                        "volume": 0.5
+                    },
+                    {
+                        "type": "Audio Controller",
+                        "audioType": "WALKING",
+                        "loop": false,
+                        "volume": 0.5
+                    },
+                    {
+                        "type": "Audio Controller",
+                        "audioType": "STATIC"
+                    },
+                    {
+                        "type": "Player Component"
                     }
                 ],
                 "children": [
                     {
-                        "position": [1, -1, -1],
-                        "rotation": [45, 45, 0],
-                        "scale": [0.1, 0.1, 1.0],
+                        "position": [
+                            0.6,
+                            -0.4,
+                            0.2
+                        ],
                         "components": [
                             {
-                                "type": "Mesh Renderer",
-                                "mesh": "cube",
-                                "material": "metal"
+                                "type": "Light",
+                                "lightType": "spot",
+                                "isFlashlight": true,
+                                "color": [
+                                    1.0,
+                                    1.0,
+                                    1.0
+                                ],
+                                "direction": [
+                                    -0.06,
+                                    -0.04,
+                                    -1
+                                ],
+                                "attenuation": [
+                                    0.5,
+                                    0.00045,
+                                    0.004
+                                ],
+                                "innerConeAngle": 25.0,
+                                "outerConeAngle": 40.0,
+                                "flickerMode": "none",
+                                "flickerIntensity": 1.1,
+                                "flickerFrequency": 0.5
                             }
                         ]
                     }
                 ]
             },
             {
-                "rotation": [-45, 0, 0],
+                "position": [
+                    0,
+                    100,
+                    0
+                ],
                 "components": [
                     {
-                        "type": "Mesh Renderer",
-                        "mesh": "monkey",
-                        "material": "monkey"
+                        "type": "Light",
+                        "lightType": "directional",
+                        "color": [
+                            0.1,
+                            0.1,
+                            0.1
+                        ],
+                        "direction": [
+                            0.3,
+                            -1.0,
+                            0.2
+                        ]
+                    }
+                ]
+            },
+            {
+                "position": [
+                    100,
+                    100,
+                    100
+                ],
+                "components": [
+                    {
+                        "type": "Audio Controller",
+                        "audioType": "PAGE_COLLECT",
+                        "volume": 0.7,
+                        "loop": false
                     },
                     {
-                        "type": "Movement",
-                        "linearVelocity": [0, 0.1, 0],
-                        "angularVelocity": [0, 45, 0]
+                        "type": "Page Spawner Component",
+                        "totalPages": 8,
+                        "spawnPoints": [
+                            {
+                                "spawnPoint": [
+                                    -15,
+                                    -0.376,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    90
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -32.5,
+                                    -1.08,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    90
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -73,
+                                    -110.67,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    90,
+                                    -90
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    80.26,
+                                    -105.73,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    84.493,
+                                    -76.223
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    80.329,
+                                    -102.35,
+                                    3
+                                ],
+                                "rotation": [
+                                    4,
+                                    75.889,
+                                    81.044
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    107.46,
+                                    -37.231,
+                                    2.42
+                                ],
+                                "rotation": [
+                                    2.1291,
+                                    82.148,
+                                    110.42
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    130.4,
+                                    64.142,
+                                    2.192
+                                ],
+                                "rotation": [
+                                    -7.6018,
+                                    90.129,
+                                    160.49
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    40.532,
+                                    83.864,
+                                    1
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    -45
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -39.642,
+                                    88.467,
+                                    1
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    -45
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -42.726,
+                                    86.539,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    90,
+                                    -45
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -122.6,
+                                    106.63,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    0
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -122.6,
+                                    114.48,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    0
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -107.78,
+                                    -24.374,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    0
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    -112.211,
+                                    -22.744,
+                                    1
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    19.56,
+                                    -7.0513,
+                                    1.73
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
+                            },
+                            {
+                                "spawnPoint": [
+                                    23.846,
+                                    -11.072,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -91.558,
+                                    -5.5376
+                                ]
+                            }
+                        ],
+                        "pageTextures": [
+                            "assets/textures/pages/page1.png",
+                            "assets/textures/pages/page2.png",
+                            "assets/textures/pages/smpage1.png",
+                            "assets/textures/pages/smpage2.png",
+                            "assets/textures/pages/smpage3.png",
+                            "assets/textures/pages/smpage5.png",
+                            "assets/textures/pages/smpage6.png",
+                            "assets/textures/pages/smpage7.png",
+                            "assets/textures/pages/smpage8.png"
+                        ]
                     }
                 ]
             },
             {
-                "position": [0, -1, 0],
-                "rotation": [-90, 0, 0],
-                "scale": [10, 10, 1],
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
                 "components": [
                     {
                         "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "grass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 1, 2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 1, -2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [-2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 3, 0],
-                "rotation": [90, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 10, 0],
-                "rotation": [45, 45, 0],
-                "scale": [5, 5, 5],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "sphere",
-                        "material": "moon"
+                        "mesh": "map",
+                        "material": "Terrain_Baked_-4838"
                     },
                     {
-                        "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
+                        "type": "Collider"
+                    }
+                ]
+            },
+            {
+                "position": [
+                    500,
+                    1,
+                    500
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "slender",
+                        "material": "Slenderman"
+                    },
+                    {
+                        "type": "Audio Controller",
+                        "audioType": "JUMPSCARE",
+                        "audioFile": "assets/sounds/slender-jumpscare.wav",
+                        "loop": false,
+                        "volume": 0.7
+                    },
+                    {
+                        "type": "Audio Controller",
+                        "audioType": "AMBIENCE",
+                        "loop": true,
+                        "volume": 0.5
+                    },
+                    {
+                        "type": "Slenderman Component",
+                        "startingAIValue": 0,
+                        "debugMode": false,
+                        "damageRate": 8.0
+                    }
+                ]
+            },
+            {
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "components": [
+                    {
+                        "type": "Instanced Renderer",
+                        "mesh": "tree",
+                        "material": "BarkMat",
+                        "submeshMaterials": {
+                            "BarkMat": "BarkMat",
+                            "LeafMat": "LeafMat"
+                        },
+                        "Map": "assets/textures/greyscale_tree_map.png",
+                        "Density": 0.00009,
+                        "worldWidth": 400.0,
+                        "worldHeight": 400.0,
+                        "scaleMultiplier": [
+                            2.0,
+                            4.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            0.0,
+                            0.5
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
+                        "maxRenderDistance": 100.0,
+                        "cullingBoundingRadius": 100.0,
+                        "enableDistanceCulling": true,
+                        "enableFrustumCulling": true
+                    },
+                    {
+                        "type": "Collider"
+                    }
+                ]
+            },
+            {
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "components": [
+                    {
+                        "type": "Instanced Renderer",
+                        "mesh": "tree2",
+                        "material": "BarkMat2",
+                        "submeshMaterials": {
+                            "BarkMat2": "BarkMat2",
+                            "BranchMat": "BranchMat"
+                        },
+                        "Map": "assets/textures/greyscale_tree_map.png",
+                        "Density": 0.00003,
+                        "worldWidth": 400.0,
+                        "worldHeight": 400.0,
+                        "scaleMultiplier": [
+                            2.0,
+                            4.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            1.0,
+                            1.25
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
+                        "maxRenderDistance": 100.0,
+                        "cullingBoundingRadius": 100.0,
+                        "enableDistanceCulling": true,
+                        "enableFrustumCulling": true
+                    },
+                    {
+                        "type": "Collider"
+                    }
+                ]
+            },
+            {
+                "position": [
+                    0,
+                    0,
+                    0
+                ],
+                "rotation": [
+                    0,
+                    0,
+                    0
+                ],
+                "scale": [
+                    1,
+                    1,
+                    1
+                ],
+                "components": [
+                    {
+                        "type": "Instanced Renderer",
+                        "mesh": "grass",
+                        "material": "Grass.002",
+                        "Map": "assets/textures/greyscale_grass_map.png",
+                        "Density": 0.025,
+                        "worldWidth": 400.0,
+                        "worldHeight": 400.0,
+                        "scaleMultiplier": [
+                            1.0,
+                            1.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            0.0,
+                            0.0
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            1.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
+                        "maxRenderDistance": 60.0,
+                        "cullingBoundingRadius": 5.0,
+                        "enableDistanceCulling": true,
+                        "enableFrustumCulling": true
                     }
                 ]
             }
         ]
+    },
+    "death": {
+        "assets": {
+            "shaders": {
+                "textured": {
+                    "vs": "assets/shaders/textured.vert",
+                    "fs": "assets/shaders/textured.frag"
+                }
+            },
+            "textures": {
+                "slenderman_texture": "assets/textures/slenderman_color.png"
+            },
+            "meshes": {
+                "slender": "assets/models/Slenderman.obj"
+            },
+            "samplers": {
+                "default": {}
+            },
+            "materials": {
+                "Slenderman": {
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": false
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "slenderman_texture",
+                    "sampler": "default"
+                }
+            }
+        }
     }
 }

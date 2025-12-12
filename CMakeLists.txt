@@ -11,7 +11,7 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
-
+set(CMAKE_AUTORCC ON)
 # These are the options we select for building GLFW as a library
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)        # Don't build Documentation
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)       # Don't build Tests
@@ -61,11 +61,14 @@ set(COMMON_SOURCES
         source/common/texture/texture-utils.cpp
         source/common/texture/screenshot.hpp
         source/common/texture/screenshot.cpp
-
+        source/common/texture/tree-utils.hpp
+        source/common/texture/tree-utils.cpp
+        
         source/common/material/pipeline-state.hpp
         source/common/material/pipeline-state.cpp
         source/common/material/material.hpp
         source/common/material/material.cpp
+        source/common/material/mtl-material-registry.hpp
 
         source/common/ecs/component.hpp
         source/common/ecs/transform.hpp
@@ -74,7 +77,7 @@ set(COMMON_SOURCES
         source/common/ecs/entity.cpp
         source/common/ecs/world.hpp
         source/common/ecs/world.cpp
-
+        
         source/common/components/camera.hpp
         source/common/components/camera.cpp
         source/common/components/mesh-renderer.hpp
@@ -84,12 +87,30 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/instanced-renderer.hpp
+        source/common/components/instanced-renderer.cpp
+        source/common/components/audio-controller.hpp
+        source/common/components/audio-controller.cpp
+        source/common/components/player.hpp
+        source/common/components/slenderman.hpp
+        source/common/components/page.hpp
+        source/common/components/page-spawner.hpp
+        source/common/components/light.hpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
-)
+        source/common/systems/static-effect.hpp
+        source/common/systems/slenderman-ai.hpp
+        source/common/systems/page-system.hpp
+        source/common/systems/physics-system.hpp
+        source/common/systems/footstep-system.hpp
+        source/common/systems/ambient-tension-system.hpp
+        source/common/systems/static-sound-system.hpp
+        source/common/systems/text-renderer.cpp
+        source/common/systems/text-renderer.hpp
+        )
 
 # Define the directories in which to search for the included headers
 include_directories(
@@ -98,10 +119,13 @@ include_directories(
         vendor/glad/include
         vendor/glm
         vendor/imgui
+        vendor/Bullet
+        vendor/Miniaudio
         vendor/utils
+        vendor/freetype-2.10.0/include
 )
 
-
+link_directories(${PROJECT_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
@@ -109,22 +133,44 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin)
 set(STATES_SOURCES
         source/states/play-state.hpp
         source/states/menu-state.hpp
-        source/states/shader-test-state.hpp
-        source/states/mesh-test-state.hpp
-        source/states/transform-test-state.hpp
-        source/states/pipeline-test-state.hpp
-        source/states/texture-test-state.hpp
-        source/states/sampler-test-state.hpp
-        source/states/material-test-state.hpp
-        source/states/entity-test-state.hpp
-        source/states/renderer-test-state.hpp
+        source/states/settings-state.hpp
 )
 
 # For each example, we add an executable target
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
-add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_link_libraries(GAME_APPLICATION glfw)
+
+# Add icon resource file for Windows
+if(WIN32)
+    set(APP_ICON_RESOURCE_WINDOWS "${CMAKE_CURRENT_SOURCE_DIR}/app.rc")
+#     add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
+   add_executable(GAME_APPLICATION WIN32 source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES} ${APP_ICON_RESOURCE_WINDOWS})
+else()
+    add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
+endif()
+
+# Disable optional freetype dependencies and packaging
+set(FT_WITH_HARFBUZZ OFF CACHE BOOL "" FORCE)
+set(FT_WITH_PNG OFF CACHE BOOL "" FORCE)
+set(FT_WITH_BZIP2 OFF CACHE BOOL "" FORCE)
+set(FT_WITH_ZLIB OFF CACHE BOOL "" FORCE)
+set(SKIP_INSTALL_ALL ON CACHE BOOL "" FORCE)
+set(CMAKE_DISABLE_FIND_PACKAGE_HarfBuzz TRUE)
+set(CMAKE_DISABLE_FIND_PACKAGE_PNG TRUE)
+set(CMAKE_DISABLE_FIND_PACKAGE_BZip2 TRUE)
+set(CMAKE_DISABLE_FIND_PACKAGE_ZLIB TRUE)
+add_subdirectory(vendor/freetype-2.10.0)
+
+
+set_target_properties(GAME_APPLICATION PROPERTIES OUTPUT_NAME Slender)
+target_link_libraries(GAME_APPLICATION glfw freetype)
+target_link_directories(GAME_APPLICATION PRIVATE ${CMAKE_SOURCE_DIR}/libs)
+target_link_libraries(GAME_APPLICATION 
+    BulletDynamics
+    BulletCollision
+    LinearMath
+    BulletSoftBody
+)
 
 if(UNIX AND NOT APPLE)
         target_link_libraries(GAME_APPLICATION OpenGL::GL)

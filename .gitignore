@@ -22,10 +22,11 @@ CMakeSettings.json
 .vscode/
 
 # Screenshots
-screenshots/
+/screenshots
 
 # Instructions
 instructions.*
+docs/
 
 # imgcmp tool
 scripts/imgcmp.exe

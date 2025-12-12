@@ -1,0 +1,340 @@
+#pragma once
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
+#include <random>
+#include <unordered_map>
+
+#include "../common/components/audio-controller.hpp"
+#include "../common/components/mesh-renderer.hpp"
+#include "../common/components/page-spawner.hpp"
+#include "../common/components/page.hpp"
+#include "../common/components/player.hpp"
+#include "../common/components/slenderman.hpp"
+#include "../common/ecs/entity.hpp"
+#include "../common/systems/text-renderer.hpp"
+#include "physics-system.hpp"
+
+namespace our {
+
+class PageSystem {
+    public:
+    Entity* player = nullptr;
+    Entity* slenderman = nullptr;
+    Entity* pageSpawner = nullptr;
+        int totalPages = 0;
+    std::vector<Entity*> spawnedPages;
+    our::ShaderProgram* pageShader = nullptr;
+
+        // Physics reference
+    PhysicsSystem* physics = nullptr;
+    // Text renderer reference
+    TextRenderer* textRenderer = nullptr;
+    glm::vec2 screenSize = glm::vec2(1280, 720);
+    // Map Entity to its collision body for cleanup
+    std::unordered_map<Entity*, btRigidBody*> pageColliders;
+
+    // Raycast parameters
+    float interactionDistance = 1.5f;  // Max distance player can interact
+
+    void initialize(World* world, PhysicsSystem* physicsSystem,
+                    TextRenderer* textRenderer,
+                    const glm::ivec2& screenSizeParam) {
+        this->physics = physicsSystem;
+        this->textRenderer = textRenderer;
+        this->screenSize = screenSizeParam;
+        totalPages = 0;
+
+        // Clear any existing data
+        spawnedPages.clear();
+        pageColliders.clear();
+        if (pageShader) {
+            delete pageShader;
+            pageShader = nullptr;
+        }
+
+        for (auto entity : world->getEntities()) {
+            if (entity->getComponent<PlayerComponent>()) {
+                    player = entity;
+                }
+            if (entity->getComponent<SlendermanComponent>()) {
+                    slenderman = entity;
+                }
+            if (entity->getComponent<PageSpawnerComponent>()) {
+                    pageSpawner = entity;
+                }
+            }
+
+        if (!player || !slenderman || !pageSpawner) {
+                std::cerr << "PageSystem: Player, Slenderman, or PageSpawner "
+                             "entity not found!"
+                          << std::endl;
+            }
+
+            // Get total pages and page textures from spawner component
+        auto* spawnerComp = pageSpawner->getComponent<PageSpawnerComponent>();
+            totalPages = spawnerComp->totalPages;
+            std::vector<std::string> pageTextures = spawnerComp->pageTextures;
+
+        // Choose random spawn locations from the spawner's list
+        std::vector<std::pair<glm::vec3, glm::vec3>> spawnLocations =
+            spawnerComp->spawnPoints;
+        int size = spawnLocations.size();
+        if (size < totalPages) {
+            std::cerr
+                << "PageSystem: Not enough spawn locations for total pages!"
+                << std::endl;
+            totalPages = size;
+        }
+
+        // Randomly shuffle spawn locations
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::shuffle(spawnLocations.begin(), spawnLocations.end(), gen);
+
+        std::cout << "Spawning " << totalPages << " pages." << std::endl;
+        pageShader = new our::ShaderProgram();
+        pageShader->attach("assets/shaders/lit.vert", GL_VERTEX_SHADER);
+        pageShader->attach("assets/shaders/lit.frag", GL_FRAGMENT_SHADER);
+        pageShader->link();
+
+        // Select spawn locations ensuring minimum distance between pages
+        std::vector<std::pair<glm::vec3, glm::vec3>> selectedSpawns;
+        float minDistanceBetweenPages =
+            20.0f;  // Minimum distance between pages
+
+        for (const auto& candidate : spawnLocations) {
+            if (selectedSpawns.size() >= static_cast<size_t>(totalPages)) break;
+
+            bool tooClose = false;
+            for (const auto& selected : selectedSpawns) {
+                float dist = glm::length(candidate.first - selected.first);
+                if (dist < minDistanceBetweenPages) {
+                    tooClose = true;
+                    break;
+                }
+            }
+
+            if (!tooClose) {
+                selectedSpawns.push_back(candidate);
+            }
+        }
+
+        // Warn if we couldn't find enough spread-out locations
+        if (selectedSpawns.size() < static_cast<size_t>(totalPages)) {
+            std::cerr << "PageSystem: Could only find " << selectedSpawns.size()
+                      << " spread-out locations (wanted " << totalPages << ")"
+                      << std::endl;
+            totalPages = selectedSpawns.size();
+        }
+
+        // Check we have enough textures
+        if (pageTextures.size() < static_cast<size_t>(totalPages)) {
+            std::cerr << "PageSystem: Not enough page textures for total pages!"
+                      << std::endl;
+            totalPages = pageTextures.size();
+        }
+
+        for (int i = 0; i < totalPages; i++) {
+            Entity* pageEntity = world->add();
+            pageEntity->name = "Page_" + std::to_string(i);
+            pageEntity->localTransform.position = selectedSpawns[i].first;
+            pageEntity->localTransform.rotation = selectedSpawns[i].second;
+
+            std::cout << "PageSystem: Spawning page " << i << " at ("
+                      << selectedSpawns[i].first.x << ", "
+                      << selectedSpawns[i].first.y << ", "
+                      << selectedSpawns[i].first.z << ")" << std::endl;
+            // Add MeshComponent
+            auto* meshComp = pageEntity->addComponent<MeshRendererComponent>();
+            meshComp->mesh = AssetLoader<Mesh>::get("page");
+            // Create a material
+            LitMaterial *pageMaterial = new LitMaterial();
+            pageMaterial->shader = pageShader;
+            pageMaterial->tint = glm::vec4(1.0f);
+            pageMaterial->sampler = AssetLoader<Sampler>::get("default");
+            pageMaterial->pipelineState.faceCulling.enabled = false;
+            pageMaterial->pipelineState.depthTesting.enabled = true;
+            pageMaterial->pipelineState.depthTesting.function = GL_LEQUAL;
+            pageMaterial->ambient = glm::vec3(0.1f, 0.1f, 0.1f);
+            pageMaterial->diffuse = glm::vec3(0.9f, 0.9f, 0.85f); // Slightly warm white for paper
+            pageMaterial->specular = glm::vec3(0.1f, 0.1f, 0.1f); // Low specular for paper
+            pageMaterial->shininess = 8.0f;
+
+            // Load a random texture for the page
+            int rand = std::rand() % pageTextures.size();
+            pageMaterial->texture =
+                our::texture_utils::loadImage(pageTextures[rand]);
+            pageTextures.erase(pageTextures.begin() +
+                               rand);  // Ensure unique textures
+
+            meshComp->material = pageMaterial;
+
+            // Add PageComponent
+            auto* pageComp = pageEntity->addComponent<PageComponent>();
+                pageComp->isCollected = false;
+
+                spawnedPages.push_back(pageEntity);
+
+                // Register collider in physics system
+                registerPageCollider(pageEntity);
+            }
+   
+
+            std::cout << "PageSystem initialized with " << totalPages << " pages"
+                      << std::endl;
+        }
+
+    void destroy() {
+        // Destroy all uncollected pages
+        for (Entity* page : spawnedPages) {
+            auto* pageComp = page->getComponent<PageComponent>();
+            if (pageComp && !pageComp->isCollected) {
+                // Delete the material and texture
+                auto* meshComp = page->getComponent<MeshRendererComponent>();
+                if (meshComp) {
+                    auto* material =
+                        dynamic_cast<TexturedMaterial*>(meshComp->material);
+                    if (material) {
+                        if (material->texture) {
+                            delete material->texture;
+                            material->texture = nullptr;
+                        }
+                        delete material;
+                    }
+                }
+
+                // Remove mesh component
+                page->deleteComponent<MeshRendererComponent>();
+            }
+        }
+        spawnedPages.clear();
+
+        // Cleanup page colliders
+        for (auto& pair : pageColliders) {
+            physics->removeBody(pair.second);
+        }
+        pageColliders.clear();
+
+        // Cleanup shader
+        if (pageShader) {
+            delete pageShader;
+            pageShader = nullptr;
+        }
+    }
+
+    void registerPageCollider(Entity* entity) {
+        if (!physics) return;
+
+            glm::vec3 pagePos = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+        auto* pageComp = entity->getComponent<PageComponent>();
+
+            // Add a sphere collider for the page
+        btRigidBody* body = physics->addStaticSphere(
+                pagePos, interactionDistance,
+            entity  // Store entity pointer for identification
+            );
+
+            pageColliders[entity] = body;
+        }
+
+        // Call this when player looks at center of screen and clicks interact
+    void update(World* world, float deltaTime, const glm::vec3& cameraPos,
+                const glm::vec3& cameraForward, bool interactPressed) {
+        if (!player || !physics) return;
+
+        auto* playerComp = player->getComponent<PlayerComponent>();
+        if (!playerComp) return;
+
+            // Only check for interaction when player presses interact key
+        if (!interactPressed) return;
+
+            // Raycast from camera position in camera forward direction
+            RaycastResult hit =
+                physics->raycast(cameraPos, cameraForward, interactionDistance);
+
+        if (hit.hit && hit.userData) {
+                // Check if we hit a page entity
+            Entity* hitEntity = static_cast<Entity*>(hit.userData);
+            auto* pageComp = hitEntity->getComponent<PageComponent>();
+
+            if (pageComp && !pageComp->isCollected) {
+                    collectPage(hitEntity, pageComp, playerComp);
+                }
+            }
+        }
+
+    void collectPage(Entity* entity, PageComponent* pageComp,
+                     PlayerComponent* playerComp) {
+            pageComp->isCollected = true;
+            playerComp->collectedPages++;
+
+            // Remove collider from physics world
+            auto it = pageColliders.find(entity);
+        if (it != pageColliders.end()) {
+                physics->removeBody(it->second);
+                pageColliders.erase(it);
+            }
+
+        // Delete the material and texture
+        auto* meshComp = entity->getComponent<MeshRendererComponent>();
+        if (meshComp) {
+            auto* material =
+                dynamic_cast<LitMaterial*>(meshComp->material);
+            if (material) {
+                if (material->texture) {
+                    delete material->texture;
+                    material->texture = nullptr;
+                }
+                delete material;
+            }
+        }
+
+        // Remove mesh component
+        entity->deleteComponent<MeshRendererComponent>();
+
+        // Trigger effects
+        onPageCollected(playerComp);
+    }
+
+    bool allPagesCollected() const {
+            return player->getComponent<PlayerComponent>()->collectedPages >=
+                   totalPages;
+        }
+
+   private:
+    void onPageCollected(PlayerComponent* playerComp) {
+        // Increase Slenderman aggression
+        if (slenderman) {
+            auto* slenderComp = slenderman->getComponent<SlendermanComponent>();
+            if (slenderComp) {
+                slenderComp->teleportCooldown *= 0.9f;  // Teleports more often
+                }
+            }
+
+            // Play collection sound
+        auto* audioComp = pageSpawner->getComponent<AudioController>();
+        if (audioComp) {
+            // Must uninitialize before reinitializing to avoid miniaudio crash
+            audioComp->uninitializeMusic();
+            audioComp->initializeMusic("assets/sounds/page_grab.wav", false);
+            audioComp->setVolume(0.5f);
+            audioComp->playMusic();
+        }
+
+        // Display page count on screen
+        if (this->textRenderer) {
+            std::string pageCountText =
+                "Pages " + std::to_string(playerComp->collectedPages) + "/" +
+                std::to_string(totalPages);
+            glm::vec2 textSize = textRenderer->measureText(pageCountText, 0.5f);
+            glm::vec2 pageCountPos = glm::vec2(
+                screenSize.x / 2.0f - textSize.x / 2.0f, screenSize.y / 2.0f);
+            textRenderer->startTimedText(pageCountText, 3.0f, pageCountPos,
+                                         0.5f,
+                                         glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+        }
+    }
+};
+
+}  // namespace our
