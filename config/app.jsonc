@@ -1378,7 +1378,7 @@
                         "mesh": "grass",
                         "material": "Grass.002",
                         "Map": "assets/textures/greyscale_grass_map.png",
-                        "Density": 0.005,
+                        "Density": 0.1,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
                         "scaleMultiplier": [
