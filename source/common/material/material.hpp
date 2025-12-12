@@ -78,6 +78,17 @@ namespace our
         // Normal mapping
         Texture2D* normalMap = nullptr;
         bool hasNormalMap = false;
+        
+        // PBR-style texture maps
+        Texture2D* specularMap = nullptr;
+        Texture2D* roughnessMap = nullptr;
+        Texture2D* aoMap = nullptr;
+        Texture2D* emissiveMap = nullptr;
+        
+        bool hasSpecularMap = false;
+        bool hasRoughnessMap = false;
+        bool hasAoMap = false;
+        bool hasEmissiveMap = false;
 
         void setup() const override;
         void deserialize(const nlohmann::json &data) override;

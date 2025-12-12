@@ -3,8 +3,8 @@
     "window": {
         "title": "Slender - The Eight Pages",
         "size": {
-            "width": 1280,
-            "height": 720
+            "width": 2560,
+            "height": 1440
         },
         "fullscreen": false
     },
@@ -101,23 +101,7 @@
                         1
                     ],
                     "texture": "Grass",
-                    "sampler": "default",
-                    "ambient": [
-                        0.1,
-                        0.12,
-                        0.08
-                    ],
-                    "diffuse": [
-                        0.6,
-                        0.7,
-                        0.5
-                    ],
-                    "specular": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "shininess": 4.0
+                    "sampler": "default"
                 },
                 "Slenderman": {
                     "type": "lit",
@@ -157,23 +141,7 @@
                         1
                     ],
                     "texture": "BarkMat_diffuse",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.04,
-                        0.03
-                    ],
-                    "diffuse": [
-                        0.6,
-                        0.5,
-                        0.4
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "BarkMat": {
                     "type": "lit",
@@ -220,23 +188,7 @@
                     "texture": "BranchMat_diffuse",
                     "sampler": "default",
                     "transparent": true,
-                    "alphaThreshold": 0.5,
-                    "ambient": [
-                        0.08,
-                        0.1,
-                        0.06
-                    ],
-                    "diffuse": [
-                        0.5,
-                        0.6,
-                        0.4
-                    ],
-                    "specular": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "shininess": 4.0
+                    "alphaThreshold": 0.5
                 },
                 "LeafMat": {
                     "type": "lit",
@@ -283,23 +235,7 @@
                         1
                     ],
                     "texture": "Terrain_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "BaldBoska_1_30176": {
                     "type": "lit",
@@ -319,23 +255,7 @@
                         1
                     ],
                     "texture": "baldestboy",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.2,
-                        0.2,
-                        0.2
-                    ],
-                    "shininess": 16.0
+                    "sampler": "default"
                 },
                 "BaldBoska_30036": {
                     "type": "lit",
@@ -355,23 +275,7 @@
                         1
                     ],
                     "texture": "baldest",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.2,
-                        0.2,
-                        0.2
-                    ],
-                    "shininess": 16.0
+                    "sampler": "default"
                 },
                 "Brick_29994": {
                     "type": "lit",
@@ -391,23 +295,7 @@
                         1
                     ],
                     "texture": "Brick_Small_Brown",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "BuildingShed_29974": {
                     "type": "lit",
@@ -427,23 +315,7 @@
                         1
                     ],
                     "texture": "BuildingShed",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "wood_30310": {
                     "type": "lit",
@@ -463,23 +335,7 @@
                         1
                     ],
                     "texture": "wood",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Concrete2_30092": {
                     "type": "lit",
@@ -499,23 +355,7 @@
                         1
                     ],
                     "texture": "Concrete2_Brick_Small_Brown_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Concrete_2_30340": {
                     "type": "lit",
@@ -535,23 +375,7 @@
                         1
                     ],
                     "texture": "Concrete_2_RockJagged0021Diffuse_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Concrete_30314": {
                     "type": "lit",
@@ -571,23 +395,7 @@
                         1
                     ],
                     "texture": "Concrete_ConcreteBare0280_39_S_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Oil_Tank-Material__Untitled.tga_30316": {
                     "type": "lit",
@@ -607,23 +415,7 @@
                         1
                     ],
                     "texture": "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shininess": 32.0
+                    "sampler": "default"
                 },
                 "Optimized_Bark_Material_9_29992": {
                     "type": "lit",
@@ -643,23 +435,7 @@
                         1
                     ],
                     "texture": "diffuse_1",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.7,
-                        0.7,
-                        0.7
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "RockJagged0021Diffuse_30360": {
                     "type": "lit",
@@ -679,23 +455,7 @@
                         1
                     ],
                     "texture": "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Roof_30222": {
                     "type": "lit",
@@ -715,23 +475,7 @@
                         1
                     ],
                     "texture": "Roof_Roof_ao_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "SiloRust_30198": {
                     "type": "lit",
@@ -751,23 +495,7 @@
                         1
                     ],
                     "texture": "SiloRust_05_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.2,
-                        0.2,
-                        0.2
-                    ],
-                    "shininess": 16.0
+                    "sampler": "default"
                 },
                 "Tiles_30344": {
                     "type": "lit",
@@ -787,23 +515,7 @@
                         1
                     ],
                     "texture": "Tiles_TilesBroken0013_2_S_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.2,
-                        0.2,
-                        0.2
-                    ],
-                    "shininess": 16.0
+                    "sampler": "default"
                 },
                 "genericconcrete_30302": {
                     "type": "lit",
@@ -823,23 +535,7 @@
                         1
                     ],
                     "texture": "genericconcrete_genericConcrete_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Floor_1_30178": {
                     "type": "lit",
@@ -866,23 +562,7 @@
                         1
                     ],
                     "texture": "DecalsDamageFloor0001_1_S",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Floor_2_30374": {
                     "type": "lit",
@@ -909,23 +589,7 @@
                         1
                     ],
                     "texture": "DecalsDamageFloor0004_1_S",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 },
                 "Leaking_1_30382": {
                     "type": "lit",
@@ -952,23 +616,7 @@
                         1
                     ],
                     "texture": "DecalsLeaking0165_1_S",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shininess": 32.0
+                    "sampler": "default"
                 },
                 "Leaking_2_30336": {
                     "type": "lit",
@@ -995,23 +643,7 @@
                         1
                     ],
                     "texture": "DecalsLeaking0197_1_S",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shininess": 32.0
+                    "sampler": "default"
                 },
                 "Leaking_3_30252": {
                     "type": "lit",
@@ -1038,23 +670,7 @@
                         1
                     ],
                     "texture": "DecalsLeaking0223_1_S",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shininess": 32.0
+                    "sampler": "default"
                 },
                 "transporter_01-truck_01_30288": {
                     "type": "lit",
@@ -1074,23 +690,7 @@
                         1
                     ],
                     "texture": "transporter_01-truck_01_truck_01g_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shininess": 32.0
+                    "sampler": "default"
                 },
                 "transporter_02-truck_02_30312": {
                     "type": "lit",
@@ -1110,23 +710,7 @@
                         1
                     ],
                     "texture": "transporter_02-truck_02_truck_02b_Baked",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.8,
-                        0.8,
-                        0.8
-                    ],
-                    "specular": [
-                        0.3,
-                        0.3,
-                        0.3
-                    ],
-                    "shininess": 32.0
+                    "sampler": "default"
                 },
                 "TreeInstancedMaterial": {
                     "type": "lit",
@@ -1146,23 +730,7 @@
                         1
                     ],
                     "texture": "diffuse_3",
-                    "sampler": "default",
-                    "ambient": [
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
-                    "diffuse": [
-                        0.7,
-                        0.7,
-                        0.7
-                    ],
-                    "specular": [
-                        0.1,
-                        0.1,
-                        0.1
-                    ],
-                    "shininess": 8.0
+                    "sampler": "default"
                 }
             }
         },
@@ -1198,30 +766,41 @@
                     },
                     {
                         "type": "Player Component"
-                    },
+                    }
+                ],
+                "children": [
                     {
-                        "type": "Light",
-                        "lightType": "spot",
-                        "color": [
-                            1.0,
-                            0.95,
-                            0.85
+                        "position": [
+                            0.6,
+                            -0.4,
+                            0.2
                         ],
-                        "direction": [
-                            0,
-                            0,
-                            -1
-                        ],
-                        "attenuation": [
-                            0.8,
-                            0.0009,
-                            0.006
-                        ],
-                        "innerConeAngle": 40.0,
-                        "outerConeAngle": 55.0,
-                        "flickerMode": "candle",
-                        "flickerIntensity": 1.1,
-                        "flickerFrequency": 0.2
+                        "components": [
+                            {
+                                "type": "Light",
+                                "lightType": "spot",
+                                "color": [
+                                    1.0,
+                                    0.95,
+                                    0.85
+                                ],
+                                "direction": [
+                                    -0.06,
+                                    -0.04,
+                                    -1
+                                ],
+                                "attenuation": [
+                                    0.8,
+                                    0.0009,
+                                    0.006
+                                ],
+                                "innerConeAngle": 25.0,
+                                "outerConeAngle": 40.0,
+                                "flickerMode": "none",
+                                "flickerIntensity": 1.1,
+                                "flickerFrequency": 0.2
+                            }
+                        ]
                     }
                 ]
             },
@@ -1700,7 +1279,7 @@
                         "mesh": "grass",
                         "material": "Grass.002",
                         "Map": "assets/textures/greyscale_grass_map.png",
-                        "Density": 0.05,
+                        "Density": 0.005,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
                         "scaleMultiplier": [

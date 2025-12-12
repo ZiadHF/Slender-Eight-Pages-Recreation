@@ -132,14 +132,17 @@ map_d ../textures/DecalsLeaking0223_1_S.png
 map_Bump -bm 1.000000 ../textures/DecalsLeaking0223_1_S_NRM.png
 
 newmtl Oil_Tank-Material__Untitled.tga_30316
-Ns 0.000000
+Ns 200
 Ka 1.000000 1.000000 1.000000
-Ks 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
-illum 1
+illum 2
 map_Kd ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png
+map_Bump -bm 1.000000 ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_NRM.png
+map_Ks ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_Spec.png
+map_Ka ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_Ao.png
 
 newmtl Optimized_Bark_Material_9_29992
 Ns 0.000000

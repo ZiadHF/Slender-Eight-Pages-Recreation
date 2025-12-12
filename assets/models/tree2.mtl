@@ -9,8 +9,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1000.000000
 d 1.000000
 illum 1
-map_Kd BarkMat_diffuse.png
-map_Bump -bm 1.000000 BarkMat_normal.png
+map_Kd ../textures/BarkMat_diffuse.png
+map_Bump -bm 1.000000 ../textures/BarkMat_normal.png
 
 newmtl BranchMat
 Ns 105.624992
@@ -19,6 +19,6 @@ Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1000.000000
 illum 1
-map_Kd BranchMat_diffuse.png
-map_d BranchMat_diffuse.png
-map_Bump -bm 1.000000 BranchMat_normal.png
+map_Kd ../textures/BranchMat_diffuse.png
+map_d ../textures/BranchMat_diffuse.png
+map_Bump -bm 1.000000 ../textures/BranchMat_normal.png

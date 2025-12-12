@@ -47,6 +47,17 @@ uniform bool hasNormalMap = false;
 uniform vec2 normalTextureScale = vec2(1.0);
 uniform float bumpMultiplier = 1.0;
 
+// PBR-style texture maps
+uniform sampler2D specularMap;
+uniform sampler2D roughnessMap;
+uniform sampler2D aoMap;
+uniform sampler2D emissiveMap;
+
+uniform bool hasSpecularMap = false;
+uniform bool hasRoughnessMap = false;
+uniform bool hasAoMap = false;
+uniform bool hasEmissiveMap = false;
+
 // Fog properties
 uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
 uniform float fog_density = 0.01;
@@ -83,13 +94,42 @@ void main(){
         tangentNormal.xy *= bumpMultiplier;
         tangentNormal = normalize(tangentNormal);
         // Transform to world space
-        normal = normalize(TBN * tangentNormal);
+        normal = TBN * tangentNormal;
+        
+        // Ensure normal has minimum length to prevent zero normals from bad normal maps
+        float normalLength = length(normal);
+        if (normalLength < 0.001) {
+            normal = N; // Fall back to vertex normal
+        } else {
+            normal = normal / normalLength; // normalize
+        }
     }
+    
+    // Sample material texture maps (fallback to uniforms if no map)
+    vec3 material_specular = hasSpecularMap 
+        ? texture(specularMap, scaled_tex_coord).rgb 
+        : specular_color;
+    
+    // Roughness to shininess conversion: shininess = 2 / roughness^4 - 2
+    // Inverse: roughness = pow(2 / (shininess + 2), 0.25)
+    float material_shininess = hasRoughnessMap 
+        ? (2.0 / pow(clamp(texture(roughnessMap, scaled_tex_coord).r, 0.001, 0.999), 4.0) - 2.0)
+        : shininess;
+    
+    float material_ao = hasAoMap 
+        ? texture(aoMap, scaled_tex_coord).r 
+        : 1.0;
+    
+    vec3 material_emissive = hasEmissiveMap 
+        ? texture(emissiveMap, scaled_tex_coord).rgb 
+        : vec3(0.0);
     
     // Viewing direction is a ray from object to camera
     vec3 view_dir = normalize(camera_position-fs_in.world_position);
-    // No ambient light - only flashlight illuminates
-    vec3 result = vec3(0.0);
+    
+    // No ambient light - only flashlight illuminates (horror game atmosphere)
+    // Start with emissive only (if present)
+    vec3 result = material_emissive;
     //Loop over all lights to add their effects to our rendered pixel
     for (int i = 0;i< light_count && i<MAX_LIGHTS;i++){
         vec3 light_direction;
@@ -127,8 +167,8 @@ void main(){
         vec3 specular = vec3(0.0);
         if (illuminationModel == 2) {
             vec3 halfway = normalize(light_direction+view_dir);
-            float spec = pow(max(0,dot(halfway,normal)),shininess);
-            specular = spec * specular_color * lights[i].color;
+            float spec = pow(max(0,dot(halfway,normal)), material_shininess);
+            specular = spec * material_specular * lights[i].color;
         }
         result += attenuation * (diffuse + specular);
     }

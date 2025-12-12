@@ -102,7 +102,7 @@ namespace our
             // Send texture scale to shader (use xy for 2D textures)
             shader->set("textureScale", glm::vec2(diffuseTextureScale.x, diffuseTextureScale.y));
             
-            // Normal mapping
+            // Normal mapping (texture unit 1)
             shader->set("hasNormalMap", hasNormalMap);
             if (hasNormalMap && normalMap) {
                 glActiveTexture(GL_TEXTURE1);
@@ -110,14 +110,48 @@ namespace our
                 shader->set("normalMap", 1);
                 shader->set("normalTextureScale", glm::vec2(normalTextureScale.x, normalTextureScale.y));
                 shader->set("bumpMultiplier", bumpMultiplier);
-                // Restore active texture unit to 0 for other operations
-                glActiveTexture(GL_TEXTURE0);
             }
+            
+            // Specular map (texture unit 2)
+            shader->set("hasSpecularMap", hasSpecularMap);
+            if (hasSpecularMap && specularMap) {
+                glActiveTexture(GL_TEXTURE2);
+                specularMap->bind();
+                shader->set("specularMap", 2);
+            }
+            
+            // Roughness map (texture unit 3)
+            shader->set("hasRoughnessMap", hasRoughnessMap);
+            if (hasRoughnessMap && roughnessMap) {
+                glActiveTexture(GL_TEXTURE3);
+                roughnessMap->bind();
+                shader->set("roughnessMap", 3);
+            }
+            
+            // Ambient occlusion map (texture unit 4)
+            shader->set("hasAoMap", hasAoMap);
+            if (hasAoMap && aoMap) {
+                glActiveTexture(GL_TEXTURE4);
+                aoMap->bind();
+                shader->set("aoMap", 4);
+            }
+            
+            // Emissive map (texture unit 5)
+            shader->set("hasEmissiveMap", hasEmissiveMap);
+            if (hasEmissiveMap && emissiveMap) {
+                glActiveTexture(GL_TEXTURE5);
+                emissiveMap->bind();
+                shader->set("emissiveMap", 5);
+            }
+            
+            // Restore active texture unit to 0 for other operations
+            glActiveTexture(GL_TEXTURE0);
         }
     }
 
     // This function reads the lit material data from a json object
-    // Priority: 1. MTL file values (if found), 2. JSON values, 3. Class defaults
+    // Priority for texture maps: 1. JSON values (highest), 2. MTL file values, 3. No texture (use uniforms)
+    // Priority for color values: 1. MTL file values (highest), 2. JSON values, 3. Class defaults
     void LitMaterial::deserialize(const nlohmann::json &data)
     {
         std::cout << "Deserializing LitMaterial: " << materialName << std::endl;
@@ -141,7 +175,7 @@ namespace our
             }
         }
 
-        // Apply MTL values first (highest priority if they exist)
+        // Apply MTL values first for color properties (highest priority if they exist)
         if (mtlProps.has_value())
         {
             std::cout << "Applying MTL Material properties for: " << materialName << std::endl;
@@ -157,17 +191,9 @@ namespace our
             normalTextureScale = mtlProps->normalTextureScale;
             bumpMultiplier = mtlProps->bumpMultiplier;
             std::cout << "Applied texture scale: (" << diffuseTextureScale.x << ", " << diffuseTextureScale.y << ", " << diffuseTextureScale.z << ")" << std::endl;
-            
-            // Load normal map texture if specified
-            if (!mtlProps->normalTexture.empty()) {
-                std::cout << "Loading normal map: " << mtlProps->normalTexture << std::endl;
-                normalMap = texture_utils::loadImage(mtlProps->normalTexture, true);
-                hasNormalMap = (normalMap != nullptr);
-                std::cout << "Normal map loaded: " << (hasNormalMap ? "yes" : "no") << std::endl;
-            }
         }
 
-        // JSON values only override if MTL wasn't found (fallback/defaults)
+        // JSON values only override color properties if MTL wasn't found (fallback/defaults)
         if (!mtlProps.has_value())
         {
             std::cout << "Applying JSON Material properties for: " << materialName << std::endl;
@@ -197,6 +223,67 @@ namespace our
             {
                 shininess = data["shininess"].get<float>();
             }
+        }
+        
+        // ========== TEXTURE MAPS: JSON > MTL priority ==========
+        // Normal map: JSON takes priority over MTL
+        std::string normalMapPath = data.value("normalMap", "");
+        if (normalMapPath.empty() && mtlProps.has_value() && !mtlProps->normalTexture.empty()) {
+            normalMapPath = mtlProps->normalTexture;
+        }
+        if (!normalMapPath.empty()) {
+            std::cout << "Loading normal map: " << normalMapPath << std::endl;
+            normalMap = texture_utils::loadImage(normalMapPath, true);
+            hasNormalMap = (normalMap != nullptr);
+            std::cout << "Normal map loaded: " << (hasNormalMap ? "yes" : "no") << std::endl;
+        }
+        
+        // Specular map: JSON takes priority over MTL
+        std::string specularMapPath = data.value("specularMap", "");
+        if (specularMapPath.empty() && mtlProps.has_value() && !mtlProps->specularTexture.empty()) {
+            specularMapPath = mtlProps->specularTexture;
+        }
+        if (!specularMapPath.empty()) {
+            std::cout << "Loading specular map: " << specularMapPath << std::endl;
+            specularMap = texture_utils::loadImage(specularMapPath, true);
+            hasSpecularMap = (specularMap != nullptr);
+            std::cout << "Specular map loaded: " << (hasSpecularMap ? "yes" : "no") << std::endl;
+        }
+        
+        // Roughness map: JSON takes priority over MTL
+        std::string roughnessMapPath = data.value("roughnessMap", "");
+        if (roughnessMapPath.empty() && mtlProps.has_value() && !mtlProps->roughnessTexture.empty()) {
+            roughnessMapPath = mtlProps->roughnessTexture;
+        }
+        if (!roughnessMapPath.empty()) {
+            std::cout << "Loading roughness map: " << roughnessMapPath << std::endl;
+            roughnessMap = texture_utils::loadImage(roughnessMapPath, true);
+            hasRoughnessMap = (roughnessMap != nullptr);
+            std::cout << "Roughness map loaded: " << (hasRoughnessMap ? "yes" : "no") << std::endl;
+        }
+        
+        // Ambient occlusion map: JSON takes priority over MTL
+        std::string aoMapPath = data.value("aoMap", "");
+        if (aoMapPath.empty() && mtlProps.has_value() && !mtlProps->aoTexture.empty()) {
+            aoMapPath = mtlProps->aoTexture;
+        }
+        if (!aoMapPath.empty()) {
+            std::cout << "Loading AO map: " << aoMapPath << std::endl;
+            aoMap = texture_utils::loadImage(aoMapPath, true);
+            hasAoMap = (aoMap != nullptr);
+            std::cout << "AO map loaded: " << (hasAoMap ? "yes" : "no") << std::endl;
+        }
+        
+        // Emissive map: JSON takes priority over MTL
+        std::string emissiveMapPath = data.value("emissiveMap", "");
+        if (emissiveMapPath.empty() && mtlProps.has_value() && !mtlProps->emissiveTexture.empty()) {
+            emissiveMapPath = mtlProps->emissiveTexture;
+        }
+        if (!emissiveMapPath.empty()) {
+            std::cout << "Loading emissive map: " << emissiveMapPath << std::endl;
+            emissiveMap = texture_utils::loadImage(emissiveMapPath, true);
+            hasEmissiveMap = (emissiveMap != nullptr);
+            std::cout << "Emissive map loaded: " << (hasEmissiveMap ? "yes" : "no") << std::endl;
         }
     }
 

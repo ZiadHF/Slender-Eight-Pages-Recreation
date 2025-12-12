@@ -10,6 +10,7 @@ Ni 1.500000
 d 1.000000
 illum 1
 map_Kd diffuse_3.png
+map_Bump -bm 1.000000 ../textures/diffuse_3_NRM.png
 
 newmtl LeafMat
 Ns 0.000000
@@ -20,3 +21,5 @@ Ni 1.500000
 d 1.000000
 illum 1
 map_Kd diffuse_3.png
+map_Bump -bm 1.000000 ../textures/diffuse_3_NRM.png
+

@@ -164,6 +164,22 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         props.illuminationModel = mat.illum;
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
+        
+        // Resolve AO texture path (map_Ka)
+        if (!mat.ambient_texname.empty()) {
+            std::string aoPath = mat.ambient_texname;
+            if (aoPath.substr(0, 3) == "../") {
+                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
+                if (lastSlash != std::string::npos) {
+                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
+                    aoPath = parentDir + aoPath.substr(3);
+                }
+            } else if (aoPath[0] != '/' && aoPath.find(':') == std::string::npos) {
+                aoPath = mtl_basedir + aoPath;
+            }
+            props.aoTexture = aoPath;
+        }
+        
         // Resolve normal texture path relative to MTL directory
         if (!mat.bump_texname.empty()) {
             // Convert relative path (e.g., "../textures/foo.png") to proper path
@@ -368,6 +384,22 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
         props.illuminationModel = mat.illum;
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
+        
+        // Resolve AO texture path (map_Ka)
+        if (!mat.ambient_texname.empty()) {
+            std::string aoPath = mat.ambient_texname;
+            if (aoPath.substr(0, 3) == "../") {
+                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
+                if (lastSlash != std::string::npos) {
+                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
+                    aoPath = parentDir + aoPath.substr(3);
+                }
+            } else if (aoPath[0] != '/' && aoPath.find(':') == std::string::npos) {
+                aoPath = mtl_basedir + aoPath;
+            }
+            props.aoTexture = aoPath;
+        }
+        
         // Resolve normal texture path relative to MTL directory
         if (!mat.bump_texname.empty()) {
             // Convert relative path (e.g., "../textures/foo.png") to proper path

@@ -21,6 +21,9 @@ namespace our
         std::string diffuseTexture;           // map_Kd
         std::string specularTexture;          // map_Ks
         std::string normalTexture;            // map_Bump or bump
+        std::string roughnessTexture;         // map_Pr (PBR roughness)
+        std::string aoTexture;                // map_Ka (ambient occlusion)
+        std::string emissiveTexture;          // map_Ke (emissive)
         
         // Texture scaling from MTL -s option (default 1,1,1 = no scaling)
         glm::vec3 diffuseTextureScale = glm::vec3(1.0f);   // map_Kd -s
