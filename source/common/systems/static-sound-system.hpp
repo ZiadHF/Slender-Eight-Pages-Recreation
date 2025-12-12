@@ -81,7 +81,7 @@ class StaticSoundSystem {
             stopAudio();
         } else if (healthPercent >= 0.75f) {
             setAudio("assets/sounds/static_light.wav");
-        } else if (healthPercent >= 0.10f) {
+        } else if (healthPercent >= 0.25f) {
             setAudio("assets/sounds/static_medium.wav");
         } else {
             setAudio("assets/sounds/static_heavy.wav");
