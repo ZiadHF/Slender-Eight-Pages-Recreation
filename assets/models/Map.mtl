@@ -1,4 +1,4 @@
-# Blender 4.5.3 LTS MTL File: 'None'
+# Blender 5.0.0 MTL File: 'None'
 # www.blender.org
 
 newmtl BaldBoska_1_30176
@@ -77,56 +77,48 @@ map_Kd -s 20 20 1 ../textures/ConcreteBare0280_39_S.png
 map_Bump -s 20 20 1 -bm 1.000000 ../textures/ConcreteBare0280_39_S_NRM.png
 
 newmtl Fence
-Ns 64.000000
+Ns 64.000023
 Ka 1.000000 1.000000 1.000000
-Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
 map_Kd -s 20 600 1 ../textures/fence11_271.png
+map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
 map_d -s 20 600 1 ../textures/fence11_271.png
 map_Bump -s 20 600 1 -bm 1.000000 ../textures/fence11_271_NRM.png
-map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
-map_Ka -s 20 600 1 ../textures/fence11_271_Ao.png
 
 newmtl Fence.001
-Ns 64.000000
+Ns 64.000023
 Ka 1.000000 1.000000 1.000000
-Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
 map_Kd -s 20 600 1 ../textures/fence11_271.png
+map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
 map_d -s 20 600 1 ../textures/fence11_271.png
 map_Bump -s 20 600 1 -bm 1.000000 ../textures/fence11_271_NRM.png
-map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
-map_Ka -s 20 600 1 ../textures/fence11_271_Ao.png
 
 newmtl Fence.002
-Ns 64.000000
+Ns 64.000023
 Ka 1.000000 1.000000 1.000000
-Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
 map_Kd -s 20 600 1 ../textures/fence11_271.png
+map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
 map_d -s 20 600 1 ../textures/fence11_271.png
 map_Bump -s 20 600 1 -bm 1.000000 ../textures/fence11_271_NRM.png
-map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
-map_Ka -s 20 600 1 ../textures/fence11_271_Ao.png
 
 newmtl Fence.003
-Ns 64.000000
+Ns 64.000023
 Ka 1.000000 1.000000 1.000000
-Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
 map_Kd -s 20 600 1 ../textures/fence11_271.png
+map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
 map_d -s 20 600 1 ../textures/fence11_271.png
 map_Bump -s 20 600 1 -bm 1.000000 ../textures/fence11_271_NRM.png
-map_Ks -s 20 600 1 ../textures/fence11_271_Spec.png
-map_Ka -s 20 600 1 ../textures/fence11_271_Ao.png
 
 newmtl Floor_1_30178
 Ns 0.000000
@@ -183,18 +175,58 @@ map_Kd ../textures/DecalsLeaking0223_1_S.png
 map_d ../textures/DecalsLeaking0223_1_S.png
 map_Bump -bm 1.000000 ../textures/DecalsLeaking0223_1_S_NRM.png
 
-newmtl Oil_Tank-Material__Untitled.tga_30316
-Ns 200
+newmtl Material
+Ns 250.000000
 Ka 1.000000 1.000000 1.000000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
+map_Kd -s 40 1 0 ../textures/05.png
+
+newmtl Material.002
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -s 40 1 0 ../textures/05.png
+
+newmtl Material.003
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -s 40 1 0 ../textures/05.png
+
+newmtl Material.004
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -s 40 1 0 ../textures/05.png
+map_Ks -s 40 1 0 ../textures/05_Spec.png
+map_Bump -s 40 1 0 -bm 1.000000 ../textures/05_NRM.png
+
+newmtl Oil_Tank-Material__Untitled.tga_30316
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
 map_Kd ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png
-map_Bump -bm 1.000000 ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_NRM.png
 map_Ks ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_Spec.png
-map_Ka ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_Ao.png
+map_Bump -bm 1.000000 ../textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_NRM.png
 
 newmtl Optimized_Bark_Material_9_29992
 Ns 0.000000
@@ -255,7 +287,7 @@ Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
-illum 2
+illum 1
 map_Kd -s 20 20 1 ../textures/TilesBroken0013_2_S.png
 map_Bump -s 20 20 1 -bm 1.000000 ../textures/TilesBroken0013_2_S_NRM.png
 

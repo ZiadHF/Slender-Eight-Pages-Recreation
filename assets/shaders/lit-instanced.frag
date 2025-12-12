@@ -28,6 +28,7 @@ struct Light {
     //Necessary for spotlight
     float inner_cone_angle;
     float outer_cone_angle;
+    bool isFlashlight;  // Whether this light uses the cookie texture
 };
 uniform int light_count;
 uniform Light lights[MAX_LIGHTS];
@@ -99,15 +100,7 @@ void main(){
         tangentNormal.xy *= bumpMultiplier;
         tangentNormal = normalize(tangentNormal);
         // Transform to world space
-        normal = TBN * tangentNormal;
-        
-        // Ensure normal has minimum length to prevent zero normals from bad normal maps
-        float normalLength = length(normal);
-        if (normalLength < 0.001) {
-            normal = N; // Fall back to vertex normal
-        } else {
-            normal = normal / normalLength; // normalize
-        }
+        normal = normalize(TBN * tangentNormal);
     }
     
     // Sample material texture maps (fallback to uniforms if no map)
@@ -162,32 +155,30 @@ void main(){
                 float intensity = smoothstep(lights[i].outer_cone_angle, lights[i].inner_cone_angle, theta);
                 attenuation *= intensity;
                 
-                // Apply spotlight cookie texture if available (only for first spotlight/flashlight)
-                if (has_spotlight_cookie && i == 0) {
-                    // Calculate UV based on angle from spotlight center
+                // Apply spotlight cookie texture if available for flashlights
+                if (has_spotlight_cookie && lights[i].isFlashlight) {
+                    // Efficient planar projection for cookie UV
                     vec3 spotDir = normalize(lights[i].direction);
-                    vec3 toFrag = normalize(fs_in.world_position - lights[i].position);
+                    vec3 toFrag = fs_in.world_position - lights[i].position;
                     
                     // Create a coordinate system for the spotlight
                     vec3 spotRight = normalize(cross(spotDir, vec3(0.0, 1.0, 0.0)));
                     vec3 spotUp = normalize(cross(spotRight, spotDir));
                     
-                    // Get the angle from center (0 at center, 1 at outer edge)
+                    // Project onto light plane and scale by distance along spotlight direction
+                    float distAlongSpot = dot(toFrag, spotDir);
+                    
+                    // Calculate cone spread at this distance (tan of outer angle)
                     float outerAngle = lights[i].outer_cone_angle;
-                    float angleFromCenter = acos(clamp(theta, -1.0, 1.0));
-                    float maxAngle = acos(clamp(outerAngle, -1.0, 1.0));
-                    float normalizedRadius = angleFromCenter / maxAngle;
+                    float coneRadius = distAlongSpot * sqrt(1.0 - outerAngle*outerAngle) / outerAngle;
                     
-                    // Get angular position around the cone
-                    float angularPos = atan(dot(toFrag, spotUp), dot(toFrag, spotRight));
-                    
-                    // Convert polar (radius, angle) to UV coordinates
-                    float u = normalizedRadius * cos(angularPos) * 0.5 + 0.5;
-                    float v = normalizedRadius * sin(angularPos) * 0.5 + 0.5;
+                    // UV from projection onto plane, normalized by cone radius
+                    float u = dot(toFrag, spotRight) / (coneRadius * 2.0) + 0.5;
+                    float v = dot(toFrag, spotUp) / (coneRadius * 2.0) + 0.5;
                     
                     // Sample cookie texture and apply as intensity multiplier
                     float cookie = texture(spotlight_cookie, vec2(u, v)).r;
-                    attenuation *= cookie;
+                    attenuation *= cookie * 1.2;
                 }
             }
         }
@@ -203,7 +194,7 @@ void main(){
             float spec = pow(max(0,dot(halfway,normal)), material_shininess);
             specular = spec * material_specular * lights[i].color;
         }
-        result += attenuation * (diffuse + specular);
+        result += attenuation * (diffuse + specular) * material_ao;
     }
     
     // Calculate fog only if enabled and there's any light
