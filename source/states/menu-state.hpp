@@ -214,7 +214,7 @@ class Menustate : public our::State {
 
         buttons[0].position = {441.0f * scaleX, 573.0f * scaleY}; // This is for a 1280x720 window so we have to adjust it if the window size is different
         buttons[0].size = {400.0f * scaleSize, 33.0f * scaleSize}; // Size has to be adjusted too so it can take the correct relative space
-        buttons[0].action = [this]() { this->getApp()->changeState("play"); };
+        buttons[0].action = [this]() { this->showLoadingScreenAndStart();};
 
         buttons[1].position = {441.0f * scaleX, 608.0f * scaleY};
         buttons[1].size = {400.0f * scaleSize, 33.0f * scaleSize};
@@ -382,8 +382,115 @@ class Menustate : public our::State {
             glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
         if (keyboard.justPressed(GLFW_KEY_SPACE)) {
-          
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            showLoadingScreenAndStart();
+            return;
+            
+        } else if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
+            // If the escape key is pressed in this frame, exit the game
+            getApp()->close();
+        }
+        else if (keyboard.justPressed(GLFW_KEY_S)) {
+            // If the S key is pressed in this frame, go to the settings state
+            getApp()->changeState("settings");
+        }
+
+        // Get a reference to the mouse object and get the current mouse
+        // position
+        auto& mouse = getApp()->getMouse();
+        glm::vec2 mousePosition = mouse.getMousePosition();
+
+        // If the mouse left-button is just pressed, check if the mouse was
+        // inside any menu button. If it was inside a menu button, run the
+        // action of the button.
+        if (mouse.justPressed(0)){
+            for (size_t i = 0; i < buttons.size(); i++)
+            {
+                if (buttons[i].isInside(mousePosition)){
+                    buttons[i].action();
+                    if (i == 0)
+                    { 
+                        return;
+                    }
+                }
+            }
+        }
+
+        // First, we apply the fading effect.
+        time += (float)deltaTime;
+        menuMaterial->tint = glm::vec4(glm::smoothstep(0.00f, 2.00f, time));
+        // Then we render the menu background
+        // Notice that I don't clear the screen first, since I assume that the
+        // menu rectangle will draw over the whole window anyway.
+        menuMaterial->setup();
+        menuMaterial->shader->set("transform", VP * M);
+        rectangle->draw();
+
+        // Update and draw animated image
+        if (currentImage) {
+            currentImage->currentTime += (float)deltaTime;
+
+            float t = currentImage->currentTime;
+            float maxAlpha = 0.1f;  // Base transparency (10% opacity to make it more subtle and avoid clashing with menu)
+
+            // Calculate alpha based on phase
+            if (t < currentImage->fadeInDuration) {
+                currentImage->alpha =
+                    (t / currentImage->fadeInDuration) * maxAlpha;
+            } else if (t < currentImage->fadeInDuration +
+                               currentImage->moveDuration) {
+                currentImage->alpha = maxAlpha;
+            } else if (t < currentImage->totalDuration) {
+                float fadeT = (t - currentImage->fadeInDuration -
+                               currentImage->moveDuration) /
+                              currentImage->fadeOutDuration;
+                currentImage->alpha = (1.0f - fadeT) * maxAlpha;
+            } else {
+                // Animation finished, start new one
+                startNewImageAnimation();
+                return;
+            }
+
+            // Calculate position with slow drift
+            float moveT = glm::clamp(
+                (t - currentImage->fadeInDuration) / currentImage->moveDuration,
+                0.0f, 1.0f);
+            currentImage->currentPosition = glm::mix(
+                currentImage->startPosition, currentImage->endPosition, moveT);
+
+            // Draw the image (zoomed in)
+            imageMaterial->texture = currentImage->texture;
+            imageMaterial->tint =
+                glm::vec4(1.0f, 1.0f, 1.0f, currentImage->alpha);
+            imageMaterial->setup();
+
+            glm::mat4 imageM =
+                glm::translate(glm::mat4(1.0f),
+                               glm::vec3(currentImage->currentPosition, 0.0f)) *
+                glm::scale(glm::mat4(1.0f),
+                           glm::vec3(400.0f * currentImage->zoom,
+                                     600.0f * currentImage->zoom,
+                                     1.0f));  // Increased scale
+            imageMaterial->shader->set("transform", VP * imageM);
+            rectangle->draw();
+        }
+
+        // For every button, check if the mouse is inside it. If the mouse is
+        // inside, we draw the highlight rectangle over it.
+        for (auto& button : buttons) {
+            if (button.isInside(mousePosition)) {
+                highlightMaterial->setup();
+                highlightMaterial->shader->set("transform",
+                                               VP * button.getLocalToWorld());
+                rectangle->draw();
+            }
+        }
+    }
+    void showLoadingScreenAndStart(){
+        glm::ivec2 size = getApp()->getFrameBufferSize();
+        glm::mat4 VP = glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f, 1.0f, -1.0f);
+        glm::mat4 M = glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
+
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             
           
             our::Texture2D* scratchyTexture = our::texture_utils::loadImage("assets/textures/Keyboard/scratchy.png");
@@ -476,102 +583,8 @@ class Menustate : public our::State {
             menuMaterial->texture = originalTexture;
 
             delete scratchyTexture;
+             
             getApp()->changeState("play");
-            return;
-            
-        } else if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
-            // If the escape key is pressed in this frame, exit the game
-            getApp()->close();
-        }
-        else if (keyboard.justPressed(GLFW_KEY_S)) {
-            // If the S key is pressed in this frame, go to the settings state
-            getApp()->changeState("settings");
-        }
-
-        // Get a reference to the mouse object and get the current mouse
-        // position
-        auto& mouse = getApp()->getMouse();
-        glm::vec2 mousePosition = mouse.getMousePosition();
-
-        // If the mouse left-button is just pressed, check if the mouse was
-        // inside any menu button. If it was inside a menu button, run the
-        // action of the button.
-        if (mouse.justPressed(0)) {
-            for (auto& button : buttons) {
-                if (button.isInside(mousePosition)) button.action();
-            }
-        }
-
-
-        // First, we apply the fading effect.
-        time += (float)deltaTime;
-        menuMaterial->tint = glm::vec4(glm::smoothstep(0.00f, 2.00f, time));
-        // Then we render the menu background
-        // Notice that I don't clear the screen first, since I assume that the
-        // menu rectangle will draw over the whole window anyway.
-        menuMaterial->setup();
-        menuMaterial->shader->set("transform", VP * M);
-        rectangle->draw();
-
-        // Update and draw animated image
-        if (currentImage) {
-            currentImage->currentTime += (float)deltaTime;
-
-            float t = currentImage->currentTime;
-            float maxAlpha = 0.1f;  // Base transparency (10% opacity to make it more subtle and avoid clashing with menu)
-
-            // Calculate alpha based on phase
-            if (t < currentImage->fadeInDuration) {
-                currentImage->alpha =
-                    (t / currentImage->fadeInDuration) * maxAlpha;
-            } else if (t < currentImage->fadeInDuration +
-                               currentImage->moveDuration) {
-                currentImage->alpha = maxAlpha;
-            } else if (t < currentImage->totalDuration) {
-                float fadeT = (t - currentImage->fadeInDuration -
-                               currentImage->moveDuration) /
-                              currentImage->fadeOutDuration;
-                currentImage->alpha = (1.0f - fadeT) * maxAlpha;
-            } else {
-                // Animation finished, start new one
-                startNewImageAnimation();
-                return;
-            }
-
-            // Calculate position with slow drift
-            float moveT = glm::clamp(
-                (t - currentImage->fadeInDuration) / currentImage->moveDuration,
-                0.0f, 1.0f);
-            currentImage->currentPosition = glm::mix(
-                currentImage->startPosition, currentImage->endPosition, moveT);
-
-            // Draw the image (zoomed in)
-            imageMaterial->texture = currentImage->texture;
-            imageMaterial->tint =
-                glm::vec4(1.0f, 1.0f, 1.0f, currentImage->alpha);
-            imageMaterial->setup();
-
-            glm::mat4 imageM =
-                glm::translate(glm::mat4(1.0f),
-                               glm::vec3(currentImage->currentPosition, 0.0f)) *
-                glm::scale(glm::mat4(1.0f),
-                           glm::vec3(400.0f * currentImage->zoom,
-                                     600.0f * currentImage->zoom,
-                                     1.0f));  // Increased scale
-            imageMaterial->shader->set("transform", VP * imageM);
-            rectangle->draw();
-        }
-
-        // For every button, check if the mouse is inside it. If the mouse is
-        // inside, we draw the highlight rectangle over it.
-        for (auto& button : buttons) {
-            if (button.isInside(mousePosition)) {
-                highlightMaterial->setup();
-                highlightMaterial->shader->set("transform",
-                                               VP * button.getLocalToWorld());
-                rectangle->draw();
-            }
-        }
     }
 
     void onDestroy() override {

@@ -15,6 +15,7 @@ class SlendermanComponent : public Component {
     glm::vec3 spawnAreaMax = glm::vec3(100.0f, 0.0f, 100.0f);
     float spawnHeight = 1.0f;   // Y position for spawns
     int maxSpawnAttempts = 10;  // Max attempts to find valid spawn
+    bool debugMode = false;
 
     // Teleportation parameters
     float teleportCooldown = 3.0f;       // seconds
@@ -59,16 +60,16 @@ class SlendermanComponent : public Component {
             }
         }
         // Teleportation parameters
-        teleportCooldown = data.value("teleportCooldown", 3.0f);
+        teleportCooldown = data.value("teleportCooldown", teleportCooldown);
 
         // Distance threshold
-        detectionDistance = data.value("detectionDistance", 20.0f);
-        closeDistance = data.value("closeDistance", 5.0f);
-        damageRate = data.value("damageRate", 10.0f);
+        detectionDistance = data.value("detectionDistance", detectionDistance);
+        closeDistance = data.value("closeDistance", closeDistance);
+        damageRate = data.value("damageRate", damageRate);
 
         // Health decrease parameters
-        distanceFactor = data.value("distanceFactor", 0.01f);
-        lookTimeFactor = data.value("lookTimeFactor", 0.5f);
+        distanceFactor = data.value("distanceFactor", distanceFactor);
+        lookTimeFactor = data.value("lookTimeFactor", lookTimeFactor);
 
         // AI parameters
         if (data.contains("maxAIValue") && data["maxAIValue"].is_number()) {
@@ -81,6 +82,10 @@ class SlendermanComponent : public Component {
             data["startingAIValue"].is_number()) {
             startingAIValue = data["startingAIValue"];
             currentAIValue = startingAIValue;
+        }
+
+        if(data.contains("debugMode")){
+            debugMode = data["debugMode"];
         }
 
         // Spawn area bounds
@@ -96,8 +101,8 @@ class SlendermanComponent : public Component {
                 glm::vec3(data["spawnAreaMax"][0], data["spawnAreaMax"][1],
                           data["spawnAreaMax"][2]);
         }
-        spawnHeight = data.value("spawnHeight", 1.0f);
-        maxSpawnAttempts = data.value("maxSpawnAttempts", 10);
+        spawnHeight = data.value("spawnHeight", spawnHeight);
+        maxSpawnAttempts = data.value("maxSpawnAttempts",maxSpawnAttempts);
     }
 };
 }  // namespace our

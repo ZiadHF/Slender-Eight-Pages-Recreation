@@ -35,7 +35,7 @@ class PageSystem {
     std::unordered_map<Entity*, btRigidBody*> pageColliders;
 
     // Raycast parameters
-    float interactionDistance = 1.0f;  // Max distance player can interact
+    float interactionDistance = 1.5f;  // Max distance player can interact
 
     void initialize(World* world, PhysicsSystem* physicsSystem,
                     TextRenderer* textRenderer,

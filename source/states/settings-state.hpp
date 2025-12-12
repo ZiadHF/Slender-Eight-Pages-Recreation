@@ -347,8 +347,7 @@ class SettingsState : public our::State
     // Control labels for UI
     std::vector<ControlLabel> controlLabels;
 
-    // Camera sensitivity
-    float cameraSensitivity = 1.2f;
+ 
     bool adjustingSensitivity = false;
 
     // Load player config
@@ -359,14 +358,13 @@ class SettingsState : public our::State
         {
             file >> playerConfig;
             file.close();
-            cameraSensitivity = playerConfig["camera"]["sensitivity"].get<float>();
+           
         }
     }
 
     // Save player config
     void saveConfig()
     {
-        playerConfig["camera"]["sensitivity"] = cameraSensitivity;
         std::ofstream file(configPath);
         if (file.is_open())
         {
@@ -625,18 +623,6 @@ class SettingsState : public our::State
         }
         else
         {
-            // Handle sensitivity adjustment with arrow keys
-            if (keyboard.isPressed(GLFW_KEY_UP))
-            {
-                cameraSensitivity = std::min(5.0f, cameraSensitivity + 0.01f);
-                saveConfig();
-            }
-            if (keyboard.isPressed(GLFW_KEY_DOWN))
-            {
-                cameraSensitivity = std::max(0.1f, cameraSensitivity - 0.01f);
-                saveConfig();
-            }
-
             // Click on control labels to rebind
             glm::vec2 mousePosition = mouse.getMousePosition();
             if (mouse.justPressed(0))
@@ -791,16 +777,9 @@ class SettingsState : public our::State
         }
         
 
-        // Render camera sensitivity text
-        std::string sensitivityText = "Camera Sensitivity: " + std::to_string(cameraSensitivity).substr(0, 4);
-        std::string instructionText = "(Use UP/DOWN arrows to adjust)";
-
-        glm::vec2 sensPos = glm::vec2(550.0f, 440.0f + 55.0f * 3.5f);
-        glm::vec2 instrPos = glm::vec2(550.0f, 440.0f + 55.0f * 3.9f);
-
-        textRenderer->renderText(sensitivityText, sensPos, 0.5f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), VP);
-        textRenderer->renderText(instructionText, instrPos, 0.4f, glm::vec4(0.7f, 0.7f, 0.7f, 1.0f), VP);
-
+       
+      
+    
         // Render ESC instruction at top
         std::string escText = "Press ESC to return to menu";
         glm::vec2 escPos = glm::vec2(0.0f, 20.0f);

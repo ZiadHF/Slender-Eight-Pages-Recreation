@@ -2,6 +2,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <unordered_map>
+#include <glm/glm.hpp>
 #include "../ecs/component.hpp"
 namespace our {
 
@@ -88,7 +89,7 @@ class PlayerComponent : public Component {
 
     // Movement speeds
     glm::vec3 walkSpeed = glm::vec3(3.0f);    // Walking speed in units per second
-    glm::vec3 sprintSpeedup = glm::vec3(2.0f);  // Sprinting speed in units per second
+    glm::vec3 sprintSpeedup = glm::vec3(5.0f);  // Sprinting speed in units per second
 
     // Player states
     bool isMoving = false;
@@ -114,16 +115,19 @@ class PlayerComponent : public Component {
     void deserialize(const nlohmann::json& data) override {
         if (!data.is_object()) return;
         // Health parameters
-        maxHealth = data.value("maxHealth", 100.0f);
-        healthRegenRate = data.value("healthRegenRate", 5.0f);
+        maxHealth = data.value("maxHealth", maxHealth);
+        healthRegenRate = data.value("healthRegenRate", healthRegenRate);
 
-        // Movement parameters
-        walkSpeed = glm::vec3(data.value("walkSpeed", 3.0f));
-        sprintSpeedup = glm::vec3(data.value("sprintSpeedup", 2.0f));
-
-        // Mouse sensitivity
-        mouseSensitivity = data.value("mouseSensitivity", 1.2f);
-
+        if (data.contains("walkSpeed")) {
+            float speed = data["walkSpeed"];
+            walkSpeed = glm::vec3(speed);
+        }
+        
+        if (data.contains("sprintSpeedup")) {
+            float speedup = data["sprintSpeedup"];
+            sprintSpeedup = glm::vec3(speedup);
+        }
+     
         if (data.contains("moveForward") && data["moveForward"].is_string())
             moveForward = stringToGLFWKey(data["moveForward"]);
         if (data.contains("moveBackward") && data["moveBackward"].is_string())

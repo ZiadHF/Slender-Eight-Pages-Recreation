@@ -12,7 +12,6 @@
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
 #include "physics-system.hpp"
-
 namespace our {
 
 // The free camera controller system is responsible for moving every entity
@@ -25,7 +24,10 @@ class FreeCameraControllerSystem {
     PhysicsSystem* physics = nullptr;  // Pointer to the physics system
     float playerEyeHeight = 1.2f;      // Height from capsule bottom to camera
     PlayerComponent* playerComp = nullptr;
-
+    float bobbingTime = 0.0f;          // Time accumulator for bobbing
+    float bobbingFrequency = 10.0f;    // Cycles per second while walking
+    float bobbingAmplitude = 0.14f;    // Vertical bob amount
+    float bobbingSway = 0.09f;
     std::map<std::string, int> controlKeys;
 
     void loadControls() {
@@ -76,6 +78,17 @@ class FreeCameraControllerSystem {
         loadControls();
         mouse_locked = true;
         app->getMouse().lockMouse(app->getWindow());
+        
+        // Manually sync mouse position to where lockMouse centered it
+        int width, height;
+        glfwGetWindowSize(app->getWindow(), &width, &height);
+        double centerX = width / 2.0;
+        double centerY = height / 2.0;
+        
+        // Update the mouse's internal position tracking
+        app->getMouse().CursorMoveEvent(centerX, centerY);
+        app->getMouse().update();
+        
         playerComp = nullptr;
     }
 
@@ -172,8 +185,25 @@ class FreeCameraControllerSystem {
 
             // Get physics position and offset for eye height
             glm::vec3 physPos = physics->getPlayerPosition();
-            position = physPos + glm::vec3(0, playerEyeHeight, 0);
+            glm::vec3 bobOffset(0.0f);
+            if (playerComp->isMoving)
+            {
+                float speedMultiplier = playerComp->isSprinting ? 1.4f : 1.0f;
+                bobbingTime += deltaTime * bobbingFrequency * speedMultiplier;
 
+                // Vertical bobbing - complete cycle (up and down) per step
+                bobOffset.y = glm::sin(bobbingTime) * bobbingAmplitude;
+
+                // Horizontal sway - half the frequency for natural side-to-side
+                bobOffset.x = glm::sin(bobbingTime * 0.5f) * bobbingSway;
+            }
+            else
+            {
+                // Smoothly decay bobbing when stopped
+                bobbingTime *= 0.9f;
+            }
+
+            position = physPos + glm::vec3(0, playerEyeHeight, 0) + bobOffset;
         } else {
             // Direct movement fallback
             position += moveDir * current_sensitivity * deltaTime;
