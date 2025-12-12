@@ -180,8 +180,8 @@ class FreeCameraControllerSystem {
         }
 
         if (physics && physics->isPlayerInitialized()) {
-            // Physics-based movement
-            physics->movePlayer(moveDir * current_sensitivity.x * deltaTime);
+            // Physics-based movement - Bullet handles timing internally via stepSimulation
+            physics->movePlayer(moveDir * current_sensitivity.x * 0.016f); // Use fixed timestep (~60fps)
 
             // Get physics position and offset for eye height
             glm::vec3 physPos = physics->getPlayerPosition();
@@ -199,8 +199,9 @@ class FreeCameraControllerSystem {
             }
             else
             {
-                // Smoothly decay bobbing when stopped
-                bobbingTime *= 0.9f;
+                // Smoothly decay bobbing when stopped (frame-rate independent)
+                float decayRate = 10.0f; // Higher = faster decay
+                bobbingTime *= glm::exp(-decayRate * deltaTime);
             }
 
             position = physPos + glm::vec3(0, playerEyeHeight, 0) + bobOffset;
