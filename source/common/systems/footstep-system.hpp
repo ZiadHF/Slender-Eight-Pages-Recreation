@@ -69,11 +69,14 @@ namespace our {
                     // Determine surface type using raycasting
                     glm::vec3 playerPos = physicsSystem->getPlayerPosition();
                     glm::vec3 rayStart = playerPos;
-                    glm::vec3 rayEnd = playerPos + glm::vec3(0.0f, -1.0f, 0.0f);
+                    glm::vec3 rayEnd = playerPos + glm::vec3(0.0f, 5.0f, 0.0f);
 
                     RaycastResult hit = physicsSystem->raycast(rayStart, rayEnd);
-                    if (hit.hitPoint.y > 1.005f){
-                        onGrass = false;
+                    if (hit.hit) {
+                        // Check if under roof -> play tile sounds
+                        if (hit.submeshName.find("Roof") != std::string::npos) {
+                            onGrass = false;
+                        }
                     }
                     
                     std::string soundFile;
