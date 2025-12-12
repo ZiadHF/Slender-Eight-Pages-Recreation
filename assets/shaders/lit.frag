@@ -28,6 +28,7 @@ struct Light {
     //Necessary for spotlight
     float inner_cone_angle;
     float outer_cone_angle;
+    bool isFlashlight;  // Whether this light uses the cookie texture
 };
 uniform int light_count;
 uniform Light lights[MAX_LIGHTS];
@@ -154,8 +155,8 @@ void main(){
                 float intensity = smoothstep(lights[i].outer_cone_angle, lights[i].inner_cone_angle, theta);
                 attenuation *= intensity;
                 
-                // Apply spotlight cookie texture if available (only for first spotlight/flashlight)
-                if (has_spotlight_cookie && i == 0) {
+                // Apply spotlight cookie texture if available for flashlights
+                if (has_spotlight_cookie && lights[i].isFlashlight) {
                     // Efficient planar projection for cookie UV
                     vec3 spotDir = normalize(lights[i].direction);
                     vec3 toFrag = fs_in.world_position - lights[i].position;

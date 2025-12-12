@@ -321,6 +321,8 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                                               light->inner_cone_angle);
                 command.material->shader->set(prefix + "outer_cone_angle",
                                               light->outer_cone_angle);
+                command.material->shader->set(prefix + "isFlashlight",
+                                              light->isFlashlight);
             }
         }
 
@@ -402,6 +404,7 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                             submeshMaterial->shader->set(prefix + "attenuation", light->attenuation);
                             submeshMaterial->shader->set(prefix + "inner_cone_angle", light->inner_cone_angle);
                             submeshMaterial->shader->set(prefix + "outer_cone_angle", light->outer_cone_angle);
+                            submeshMaterial->shader->set(prefix + "isFlashlight", light->isFlashlight);
                         }
 
                     glBindVertexArray(instancedRenderer->mesh->getVAO());
@@ -444,6 +447,7 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                         instancedRenderer->material->shader->set(prefix + "attenuation", light->attenuation);
                         instancedRenderer->material->shader->set(prefix + "inner_cone_angle", light->inner_cone_angle);
                         instancedRenderer->material->shader->set(prefix + "outer_cone_angle", light->outer_cone_angle);
+                        instancedRenderer->material->shader->set(prefix + "isFlashlight", light->isFlashlight);
                     }
 
                 instancedRenderer->mesh->drawInstanced(instanceCount);
@@ -535,6 +539,8 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                                               light->inner_cone_angle);
                 command.material->shader->set(prefix + "outer_cone_angle",
                                               light->outer_cone_angle);
+                command.material->shader->set(prefix + "isFlashlight",
+                                              light->isFlashlight);
             }
         }
 
