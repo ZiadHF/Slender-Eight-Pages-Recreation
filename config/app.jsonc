@@ -39,8 +39,6 @@
                 "Brick_Small_Brown": "assets/textures/Brick_Small_Brown.png",
                 "BuildingShed": "assets/textures/BuildingShed.png",
                 "wood": "assets/textures/wood.png",
-                "baldestboy": "assets/textures/baldestboy.jpg",
-                "baldest": "assets/textures/baldest.jpg",
                 "Concrete2_Brick_Small_Brown_Baked": "assets/textures/Brick_Small_Brown.png",
                 "Concrete_2_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse.png",
                 "Concrete_ConcreteBare0280_39_S_Baked": "assets/textures/ConcreteBare0280_39_S.png",
@@ -318,46 +316,6 @@
                         1
                     ],
                     "texture": "Terrain_Baked",
-                    "sampler": "default"
-                },
-                "BaldBoska_1_30176": {
-                    "type": "lit",
-                    "shader": "lit",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": true
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "baldestboy",
-                    "sampler": "default"
-                },
-                "BaldBoska_30036": {
-                    "type": "lit",
-                    "shader": "lit",
-                    "pipelineState": {
-                        "faceCulling": {
-                            "enabled": true
-                        },
-                        "depthTesting": {
-                            "enabled": true
-                        }
-                    },
-                    "tint": [
-                        1,
-                        1,
-                        1,
-                        1
-                    ],
-                    "texture": "baldest",
                     "sampler": "default"
                 },
                 "Brick_29994": {
@@ -1304,8 +1262,8 @@
                     {
                         "type": "Slenderman Component",
                         "startingAIValue": 0,
-                        "debugMode": true,
-                        "damageRate": 15.0
+                        "debugMode": false,
+                        "damageRate": 8.0
                     }
                 ]
             },
