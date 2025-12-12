@@ -60,7 +60,8 @@
                 "slenderman_texture": "assets/textures/slenderman_color.png",
                 "BarkMat_diffuse": "assets/textures/BarkMat_diffuse.png",
                 "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
-                "Grass": "assets/textures/Grass.png"
+                "Grass": "assets/textures/Grass.png",
+                "fence11_271": "assets/textures/fence11_271.png"
             },
             "meshes": {
                 "map": {
@@ -1091,6 +1092,104 @@
                         0.3
                     ],
                     "shininess": 32.0
+                },
+                "Fence": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.001": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.002": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.003": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
                 },
                 "transporter_02-truck_02_30312": {
                     "type": "lit",
