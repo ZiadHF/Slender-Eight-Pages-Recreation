@@ -75,7 +75,9 @@ namespace our
         glm::vec3 normalTextureScale = glm::vec3(1.0f);
         float bumpMultiplier = 1.0f;
         
-
+        // Normal mapping
+        Texture2D* normalMap = nullptr;
+        bool hasNormalMap = false;
 
         void setup() const override;
         void deserialize(const nlohmann::json &data) override;

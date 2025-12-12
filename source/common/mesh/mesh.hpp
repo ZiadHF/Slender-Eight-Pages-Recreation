@@ -13,6 +13,7 @@ namespace our {
 #define ATTRIB_LOC_COLOR 1
 #define ATTRIB_LOC_TEXCOORD 2
 #define ATTRIB_LOC_NORMAL 3
+#define ATTRIB_LOC_TANGENT 4
 
 // Represents a range of elements that use the same material
 struct Submesh {
@@ -106,6 +107,11 @@ class Mesh {
         glVertexAttribPointer(ATTRIB_LOC_NORMAL, 3, GL_FLOAT, GL_FALSE,
                               sizeof(Vertex), (void*)offsetof(Vertex, normal));
 
+        // Tangent attribute (for normal mapping)
+        glEnableVertexAttribArray(ATTRIB_LOC_TANGENT);
+        glVertexAttribPointer(ATTRIB_LOC_TANGENT, 3, GL_FLOAT, GL_FALSE,
+                              sizeof(Vertex), (void*)offsetof(Vertex, tangent));
+
         // Unbind VAO to prevent accidental modification
         glBindVertexArray(0);
     }
@@ -143,11 +149,11 @@ class Mesh {
         // Only set up vertex attributes if not already done
         if (!instanceBufferInitialized) {
             for (int i = 0; i < 4; i++) {
-                glEnableVertexAttribArray(4 + i);
-                glVertexAttribPointer(4 + i, 4, GL_FLOAT, GL_FALSE,
+                glEnableVertexAttribArray(5 + i);
+                glVertexAttribPointer(5 + i, 4, GL_FLOAT, GL_FALSE,
                                       sizeof(glm::mat4),
                                       (void*)(sizeof(glm::vec4) * i));
-                glVertexAttribDivisor(4 + i, 1);
+                glVertexAttribDivisor(5 + i, 1);
             }
         }
 
@@ -183,11 +189,11 @@ class Mesh {
         // Set up vertex attributes if not already done
         if (!instanceBufferInitialized) {
             for (int i = 0; i < 4; i++) {
-                glEnableVertexAttribArray(4 + i);
-                glVertexAttribPointer(4 + i, 4, GL_FLOAT, GL_FALSE,
+                glEnableVertexAttribArray(5 + i);
+                glVertexAttribPointer(5 + i, 4, GL_FLOAT, GL_FALSE,
                                       sizeof(glm::mat4),
                                       (void*)(sizeof(glm::vec4) * i));
-                glVertexAttribDivisor(4 + i, 1);
+                glVertexAttribDivisor(5 + i, 1);
             }
             instanceBufferInitialized = true;
         }

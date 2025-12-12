@@ -12,6 +12,7 @@ in Varyings {
     vec2 tex_coord;
     vec3 normal;
     vec3 world_position;
+    vec3 tangent;
 } fs_in;
 out vec4 frag_color;
 
@@ -40,7 +41,11 @@ uniform float shininess = 32.0;
 uniform int illuminationModel = 2;
 uniform vec2 textureScale = vec2(1.0);  // Texture UV scaling from MTL -s option
 
-
+// Normal mapping
+uniform sampler2D normalMap;
+uniform bool hasNormalMap = false;
+uniform vec2 normalTextureScale = vec2(1.0);
+uniform float bumpMultiplier = 1.0;
 
 // Fog properties
 uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
@@ -55,11 +60,36 @@ void main(){
     vec4 texture_color = tint * fs_in.color * texture(tex, scaled_tex_coord);
     // Apply Alpha thresholding
     if(texture_color.a < alphaThreshold) discard;
+    
+    // Calculate the normal - either from normal map or vertex normal
+    vec3 normal = normalize(fs_in.normal);
+    
+    if (hasNormalMap) {
+        // Construct TBN matrix for transforming normal map to world space
+        vec3 T = normalize(fs_in.tangent);
+        vec3 N = normal;
+        // Re-orthogonalize T with respect to N (Gram-Schmidt)
+        T = normalize(T - dot(T, N) * N);
+        // Calculate bitangent - use cross(N, T) for OpenGL normal map convention
+        vec3 B = cross(N, T);
+        mat3 TBN = mat3(T, B, N);
+        
+        // Sample normal map with its own texture scale
+        vec2 scaled_normal_coord = fs_in.tex_coord * normalTextureScale;
+        vec3 normalMapSample = texture(normalMap, scaled_normal_coord).rgb;
+        // Convert from [0,1] to [-1,1] range
+        vec3 tangentNormal = normalMapSample * 2.0 - 1.0;
+        // Apply bump multiplier to xy components
+        tangentNormal.xy *= bumpMultiplier;
+        tangentNormal = normalize(tangentNormal);
+        // Transform to world space
+        normal = normalize(TBN * tangentNormal);
+    }
+    
     // Viewing direction is a ray from object to camera
     vec3 view_dir = normalize(camera_position-fs_in.world_position);
     // No ambient light - only flashlight illuminates
     vec3 result = vec3(0.0);
-    vec3 normal = normalize(fs_in.normal);
     //Loop over all lights to add their effects to our rendered pixel
     for (int i = 0;i< light_count && i<MAX_LIGHTS;i++){
         vec3 light_direction;
@@ -89,8 +119,8 @@ void main(){
             }
         }
         }
-        // Diffuse:
-        float  diff = max(0.0,dot(normal,light_direction));
+        // Diffuse: using abs() for two-sided lighting (lights surfaces regardless of normal direction)
+        float  diff = abs(dot(normal, light_direction));
         vec3 diffuse =diff * diffuse_color * texture_color.rgb * lights[i].color;
         
         // Specular - only if illuminationModel is 2 (full Blinn-Phong)

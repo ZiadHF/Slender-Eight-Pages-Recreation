@@ -10,6 +10,114 @@
 #include <vector>
 #include <unordered_map>
 
+// Helper function to compute tangent vectors for normal mapping
+// Uses the UV derivatives method to calculate tangents for each triangle
+static void computeTangents(std::vector<our::Vertex>& vertices, const std::vector<GLuint>& elements) {
+    // Initialize all tangents to zero
+    for (auto& v : vertices) {
+        v.tangent = glm::vec3(0.0f);
+    }
+    
+    // Process each triangle
+    for (size_t i = 0; i < elements.size(); i += 3) {
+        GLuint i0 = elements[i];
+        GLuint i1 = elements[i + 1];
+        GLuint i2 = elements[i + 2];
+        
+        const glm::vec3& p0 = vertices[i0].position;
+        const glm::vec3& p1 = vertices[i1].position;
+        const glm::vec3& p2 = vertices[i2].position;
+        
+        const glm::vec2& uv0 = vertices[i0].tex_coord;
+        const glm::vec2& uv1 = vertices[i1].tex_coord;
+        const glm::vec2& uv2 = vertices[i2].tex_coord;
+        
+        // Edge vectors
+        glm::vec3 edge1 = p1 - p0;
+        glm::vec3 edge2 = p2 - p0;
+        
+        // UV deltas
+        glm::vec2 deltaUV1 = uv1 - uv0;
+        glm::vec2 deltaUV2 = uv2 - uv0;
+        
+        // Calculate tangent using UV derivatives
+        float denom = deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y;
+        
+        glm::vec3 tangent;
+        if (std::abs(denom) < 1e-6f) {
+            // Degenerate UV, use a default tangent
+            tangent = glm::vec3(1.0f, 0.0f, 0.0f);
+        } else {
+            float f = 1.0f / denom;
+            tangent = f * (deltaUV2.y * edge1 - deltaUV1.y * edge2);
+        }
+        
+        // Accumulate tangent for each vertex of the triangle
+        vertices[i0].tangent += tangent;
+        vertices[i1].tangent += tangent;
+        vertices[i2].tangent += tangent;
+    }
+    
+    // Normalize and orthogonalize tangents (Gram-Schmidt)
+    for (auto& v : vertices) {
+        if (glm::length(v.tangent) > 1e-6f) {
+            // Orthogonalize: T' = T - (N · T) * N
+            v.tangent = glm::normalize(v.tangent - glm::dot(v.normal, v.tangent) * v.normal);
+        } else {
+            // Fallback: create tangent perpendicular to normal
+            if (std::abs(v.normal.x) < 0.9f) {
+                v.tangent = glm::normalize(glm::cross(v.normal, glm::vec3(1.0f, 0.0f, 0.0f)));
+            } else {
+                v.tangent = glm::normalize(glm::cross(v.normal, glm::vec3(0.0f, 1.0f, 0.0f)));
+            }
+        }
+    }
+}
+
+// Helper function to recalculate normals from geometry when OBJ normals are incorrect
+// This computes smooth normals by averaging face normals at each vertex
+static void recalculateNormals(std::vector<our::Vertex>& vertices, const std::vector<GLuint>& elements) {
+    std::cout << "Recalculating normals from geometry..." << std::endl;
+    
+    // Initialize all normals to zero
+    for (auto& v : vertices) {
+        v.normal = glm::vec3(0.0f);
+    }
+    
+    // Calculate face normals and accumulate at each vertex
+    for (size_t i = 0; i < elements.size(); i += 3) {
+        GLuint i0 = elements[i];
+        GLuint i1 = elements[i + 1];
+        GLuint i2 = elements[i + 2];
+        
+        const glm::vec3& p0 = vertices[i0].position;
+        const glm::vec3& p1 = vertices[i1].position;
+        const glm::vec3& p2 = vertices[i2].position;
+        
+        // Calculate face normal using cross product
+        glm::vec3 edge1 = p1 - p0;
+        glm::vec3 edge2 = p2 - p0;
+        glm::vec3 faceNormal = glm::cross(edge1, edge2);
+        
+        // Weight by area (faceNormal length is proportional to area)
+        // Accumulate at each vertex for smooth normals
+        vertices[i0].normal += faceNormal;
+        vertices[i1].normal += faceNormal;
+        vertices[i2].normal += faceNormal;
+    }
+    
+    // Normalize all vertex normals
+    for (auto& v : vertices) {
+        if (glm::length(v.normal) > 1e-6f) {
+            v.normal = glm::normalize(v.normal);
+        } else {
+            v.normal = glm::vec3(0.0f, 1.0f, 0.0f); // Default up
+        }
+    }
+    
+    std::cout << "Normals recalculated." << std::endl;
+}
+
 our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
 {
     std::cout << "Loading OBJ file: " << filename << std::endl;
@@ -56,7 +164,24 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         props.illuminationModel = mat.illum;
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
-        props.normalTexture = mat.bump_texname;
+        // Resolve normal texture path relative to MTL directory
+        if (!mat.bump_texname.empty()) {
+            // Convert relative path (e.g., "../textures/foo.png") to proper path
+            std::string normalPath = mat.bump_texname;
+            // If path starts with "../", resolve it relative to mtl_basedir
+            if (normalPath.substr(0, 3) == "../") {
+                // mtl_basedir is "assets/models/", so "../textures" becomes "assets/textures/"
+                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
+                if (lastSlash != std::string::npos) {
+                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
+                    normalPath = parentDir + normalPath.substr(3);
+                }
+            } else if (normalPath[0] != '/' && normalPath.find(':') == std::string::npos) {
+                // Relative path without "../", prepend mtl_basedir
+                normalPath = mtl_basedir + normalPath;
+            }
+            props.normalTexture = normalPath;
+        }
         
         // Extract texture scaling from MTL -s option
         props.diffuseTextureScale = glm::vec3(mat.diffuse_texopt.scale[0], mat.diffuse_texopt.scale[1], mat.diffuse_texopt.scale[2]);
@@ -153,6 +278,13 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         }
     }
 
+    // WORKAROUND: Recalculate normals from geometry since OBJ normals may be incorrect
+    // This computes smooth normals based on face geometry
+    recalculateNormals(vertices, elements);
+
+    // Compute tangent vectors for normal mapping
+    computeTangents(vertices, elements);
+
     return new our::Mesh(vertices, elements);
 }
 
@@ -236,7 +368,24 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
         props.illuminationModel = mat.illum;
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
-        props.normalTexture = mat.bump_texname;
+        // Resolve normal texture path relative to MTL directory
+        if (!mat.bump_texname.empty()) {
+            // Convert relative path (e.g., "../textures/foo.png") to proper path
+            std::string normalPath = mat.bump_texname;
+            // If path starts with "../", resolve it relative to mtl_basedir
+            if (normalPath.substr(0, 3) == "../") {
+                // mtl_basedir is "assets/models/", so "../textures" becomes "assets/textures/"
+                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
+                if (lastSlash != std::string::npos) {
+                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
+                    normalPath = parentDir + normalPath.substr(3);
+                }
+            } else if (normalPath[0] != '/' && normalPath.find(':') == std::string::npos) {
+                // Relative path without "../", prepend mtl_basedir
+                normalPath = mtl_basedir + normalPath;
+            }
+            props.normalTexture = normalPath;
+        }
         
         // Extract texture scaling from MTL -s option
         props.diffuseTextureScale = glm::vec3(mat.diffuse_texopt.scale[0], mat.diffuse_texopt.scale[1], mat.diffuse_texopt.scale[2]);
@@ -336,6 +485,13 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
             submeshes.push_back(submesh);
         }
     }
+
+    // WORKAROUND: Recalculate normals from geometry since OBJ normals may be incorrect
+    // This computes smooth normals based on face geometry
+    recalculateNormals(vertices, elements);
+
+    // Compute tangent vectors for normal mapping
+    computeTangents(vertices, elements);
 
     auto mesh = new our::Mesh(vertices, elements,keepCPUCopy);
     mesh->setSubmeshes(submeshes);

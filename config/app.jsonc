@@ -1217,8 +1217,8 @@
                             0.0009,
                             0.006
                         ],
-                        "innerConeAngle": 35.0,
-                        "outerConeAngle": 45.0,
+                        "innerConeAngle": 40.0,
+                        "outerConeAngle": 55.0,
                         "flickerMode": "candle",
                         "flickerIntensity": 1.1,
                         "flickerFrequency": 0.2
@@ -1537,8 +1537,8 @@
                     {
                         "type": "Slenderman Component",
                         "startingAIValue": 0,
-                        "debugMode" : true,
-                        "damageRate" : 15.0
+                        "debugMode": true,
+                        "damageRate": 15.0
                     }
                 ]
             },

@@ -1,6 +1,7 @@
 #include "material.hpp"
 
 #include "../asset-loader.hpp"
+#include "../texture/texture-utils.hpp"
 #include "deserialize-utils.hpp"
 #include "mtl-material-registry.hpp"
 #include <iostream>
@@ -101,7 +102,17 @@ namespace our
             // Send texture scale to shader (use xy for 2D textures)
             shader->set("textureScale", glm::vec2(diffuseTextureScale.x, diffuseTextureScale.y));
             
-
+            // Normal mapping
+            shader->set("hasNormalMap", hasNormalMap);
+            if (hasNormalMap && normalMap) {
+                glActiveTexture(GL_TEXTURE1);
+                normalMap->bind();
+                shader->set("normalMap", 1);
+                shader->set("normalTextureScale", glm::vec2(normalTextureScale.x, normalTextureScale.y));
+                shader->set("bumpMultiplier", bumpMultiplier);
+                // Restore active texture unit to 0 for other operations
+                glActiveTexture(GL_TEXTURE0);
+            }
         }
     }
 
@@ -147,7 +158,13 @@ namespace our
             bumpMultiplier = mtlProps->bumpMultiplier;
             std::cout << "Applied texture scale: (" << diffuseTextureScale.x << ", " << diffuseTextureScale.y << ", " << diffuseTextureScale.z << ")" << std::endl;
             
-
+            // Load normal map texture if specified
+            if (!mtlProps->normalTexture.empty()) {
+                std::cout << "Loading normal map: " << mtlProps->normalTexture << std::endl;
+                normalMap = texture_utils::loadImage(mtlProps->normalTexture, true);
+                hasNormalMap = (normalMap != nullptr);
+                std::cout << "Normal map loaded: " << (hasNormalMap ? "yes" : "no") << std::endl;
+            }
         }
 
         // JSON values only override if MTL wasn't found (fallback/defaults)
