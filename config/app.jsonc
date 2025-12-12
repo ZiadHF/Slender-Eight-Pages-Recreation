@@ -35,14 +35,14 @@
             "textures": {
                 "Terrain_Baked": "assets/textures/Terrain_Baked.png",
                 "diffuse_3": "assets/textures/diffuse_3.png",
-                "Brick_Brick_Small_Brown_Baked": "assets/textures/Brick_Brick_Small_Brown_Baked.png",
+                "Brick_Small_Brown": "assets/textures/Brick_Small_Brown.png",
                 "BuildingShed": "assets/textures/BuildingShed.png",
                 "wood": "assets/textures/wood.png",
                 "baldestboy": "assets/textures/baldestboy.jpg",
                 "baldest": "assets/textures/baldest.jpg",
-                "Concrete2_Brick_Small_Brown_Baked": "assets/textures/Concrete2_Brick_Small_Brown_Baked.png",
-                "Concrete_2_RockJagged0021Diffuse_Baked": "assets/textures/Concrete_2_RockJagged0021Diffuse_Baked.png",
-                "Concrete_ConcreteBare0280_39_S_Baked": "assets/textures/Concrete_ConcreteBare0280_39_S_Baked.png",
+                "Concrete2_Brick_Small_Brown_Baked": "assets/textures/Brick_Small_Brown.png",
+                "Concrete_2_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse.png",
+                "Concrete_ConcreteBare0280_39_S_Baked": "assets/textures/ConcreteBare0280_39_S.png",
                 "DecalsDamageFloor0001_1_S": "assets/textures/DecalsDamageFloor0001_1_S.png",
                 "DecalsDamageFloor0004_1_S": "assets/textures/DecalsDamageFloor0004_1_S.png",
                 "DecalsLeaking0165_1_S": "assets/textures/DecalsLeaking0165_1_S.png",
@@ -52,9 +52,9 @@
                 "diffuse_1": "assets/textures/diffuse_1.png",
                 "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png",
                 "Roof_Roof_ao_Baked": "assets/textures/Roof_Roof_ao_Baked.png",
-                "SiloRust_05_Baked": "assets/textures/SiloRust_05_Baked.png",
-                "Tiles_TilesBroken0013_2_S_Baked": "assets/textures/Tiles_TilesBroken0013_2_S_Baked.png",
-                "genericconcrete_genericConcrete_Baked": "assets/textures/genericconcrete_genericConcrete_Baked.png",
+                "SiloRust_05_Baked": "assets/textures/05.png",
+                "Tiles_TilesBroken0013_2_S_Baked": "assets/textures/TilesBroken0013_2_S.png",
+                "genericconcrete_genericConcrete_Baked": "assets/textures/genericConcrete.png",
                 "transporter_01-truck_01_truck_01g_Baked": "assets/textures/transporter_01-truck_01_truck_01g_Baked.png",
                 "transporter_02-truck_02_truck_02b_Baked": "assets/textures/transporter_02-truck_02_truck_02b_Baked.png",
                 "slenderman_texture": "assets/textures/slenderman_color.png",
@@ -75,7 +75,7 @@
                     "path": "assets/models/tree2.obj",
                     "keepCPUCopy": true
                 },
-                "grass" : "assets/models/testgrass.obj",
+                "grass": "assets/models/testgrass.obj",
                 "slender": "assets/models/Slenderman.obj",
                 "page": "assets/models/page.obj"
             },
@@ -390,7 +390,7 @@
                         1,
                         1
                     ],
-                    "texture": "Brick_Brick_Small_Brown_Baked",
+                    "texture": "Brick_Small_Brown",
                     "sampler": "default",
                     "ambient": [
                         0.05,
@@ -1266,68 +1266,196 @@
                         "totalPages": 8,
                         "spawnPoints": [
                             {
-                                "spawnPoint": [-15, -0.376, 3],
-                                "rotation": [0, -90, 90]
+                                "spawnPoint": [
+                                    -15,
+                                    -0.376,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    90
+                                ]
                             },
                             {
-                                "spawnPoint": [-32.5, -1.08, 3],
-                                "rotation": [0, -90, 90]
+                                "spawnPoint": [
+                                    -32.5,
+                                    -1.08,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    90
+                                ]
                             },
                             {
-                                "spawnPoint": [-73, -110.67, 3],
-                                "rotation": [0, 90, -90]
+                                "spawnPoint": [
+                                    -73,
+                                    -110.67,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    90,
+                                    -90
+                                ]
                             },
                             {
-                                "spawnPoint": [80.26, -105.73, 3],
-                                "rotation": [0, 84.493, -76.223]
+                                "spawnPoint": [
+                                    80.26,
+                                    -105.73,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    84.493,
+                                    -76.223
+                                ]
                             },
                             {
-                                "spawnPoint": [80.329, -102.35, 3],
-                                "rotation": [4, 75.889, 81.044]
+                                "spawnPoint": [
+                                    80.329,
+                                    -102.35,
+                                    3
+                                ],
+                                "rotation": [
+                                    4,
+                                    75.889,
+                                    81.044
+                                ]
                             },
                             {
-                                "spawnPoint": [107.46, -37.231, 2.42],
-                                "rotation": [2.1291, 82.148, 110.42]
+                                "spawnPoint": [
+                                    107.46,
+                                    -37.231,
+                                    2.42
+                                ],
+                                "rotation": [
+                                    2.1291,
+                                    82.148,
+                                    110.42
+                                ]
                             },
                             {
-                                "spawnPoint": [130.4, 64.142, 2.192],
-                                "rotation": [-7.6018, 90.129, 160.49]
+                                "spawnPoint": [
+                                    130.4,
+                                    64.142,
+                                    2.192
+                                ],
+                                "rotation": [
+                                    -7.6018,
+                                    90.129,
+                                    160.49
+                                ]
                             },
                             {
-                                "spawnPoint": [40.532, 83.864, 1],
-                                "rotation": [0, 0, -45]
+                                "spawnPoint": [
+                                    40.532,
+                                    83.864,
+                                    1
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    -45
+                                ]
                             },
                             {
-                                "spawnPoint": [-39.642, 88.467, 1],
-                                "rotation": [0, 0, -45]
+                                "spawnPoint": [
+                                    -39.642,
+                                    88.467,
+                                    1
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    -45
+                                ]
                             },
                             {
-                                "spawnPoint": [-42.726, 86.539, 3],
-                                "rotation": [0, 90, -45]
+                                "spawnPoint": [
+                                    -42.726,
+                                    86.539,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    90,
+                                    -45
+                                ]
                             },
                             {
-                                "spawnPoint": [-122.6, 106.63, 3],
-                                "rotation": [0, -90, 0]
+                                "spawnPoint": [
+                                    -122.6,
+                                    106.63,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [-122.6, 114.48, 3],
-                                "rotation": [0, -90, 0]
+                                "spawnPoint": [
+                                    -122.6,
+                                    114.48,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [-107.78, -24.374, 3],
-                                "rotation": [0, -90, 0]
+                                "spawnPoint": [
+                                    -107.78,
+                                    -24.374,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -90,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [-112.211, -22.744, 1],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    -112.211,
+                                    -22.744,
+                                    1
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [19.56, -7.0513, 1.73],
-                                "rotation": [0, 0, 0]
+                                "spawnPoint": [
+                                    19.56,
+                                    -7.0513,
+                                    1.73
+                                ],
+                                "rotation": [
+                                    0,
+                                    0,
+                                    0
+                                ]
                             },
                             {
-                                "spawnPoint": [23.846, -11.072, 3],
-                                "rotation": [0, -91.558, -5.5376]
+                                "spawnPoint": [
+                                    23.846,
+                                    -11.072,
+                                    3
+                                ],
+                                "rotation": [
+                                    0,
+                                    -91.558,
+                                    -5.5376
+                                ]
                             }
                         ],
                         "pageTextures": [
@@ -1441,12 +1569,35 @@
                         "Density": 0.00009,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [2.0, 4.0, 2.0],
-                        "scaleRandomRange": [0.0, 0.5],
-                        "rotationMultiplier": [0.0, 0.0, 0.0],
-                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
-                        "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "scaleMultiplier": [
+                            2.0,
+                            4.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            0.0,
+                            0.5
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
                         "maxRenderDistance": 100.0,
                         "cullingBoundingRadius": 50.0,
                         "enableDistanceCulling": true,
@@ -1486,12 +1637,35 @@
                         "Density": 0.00003,
                         "worldWidth": 400.0,
                         "worldHeight": 400.0,
-                        "scaleMultiplier": [2.0, 4.0, 2.0],
-                        "scaleRandomRange": [1.0, 1.25],
-                        "rotationMultiplier": [0.0, 0.0, 0.0],
-                        "rotationRandomRange": [0.0, 6.28318530718, 0.0],
-                        "positionOffset": [0.0, 0.0, 0.0],
-                        "positionRandomRange": [3.0, 0.0, 3.0],
+                        "scaleMultiplier": [
+                            2.0,
+                            4.0,
+                            2.0
+                        ],
+                        "scaleRandomRange": [
+                            1.0,
+                            1.25
+                        ],
+                        "rotationMultiplier": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "rotationRandomRange": [
+                            0.0,
+                            6.28318530718,
+                            0.0
+                        ],
+                        "positionOffset": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "positionRandomRange": [
+                            3.0,
+                            0.0,
+                            3.0
+                        ],
                         "maxRenderDistance": 100.0,
                         "cullingBoundingRadius": 50.0,
                         "enableDistanceCulling": true,
@@ -1594,7 +1768,12 @@
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
                     "texture": "slenderman_texture",
                     "sampler": "default"
                 }
