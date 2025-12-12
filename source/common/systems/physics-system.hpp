@@ -99,21 +99,21 @@ class PhysicsSystem {
         float halfDepth = size.z / 2.0f;
         float halfHeight = size.y / 2.0f;
 
-        // North wall (+Z)
-        addStaticBox(glm::vec3(center.x, center.y, center.z + halfDepth), 
-                     glm::vec3(halfWidth, halfHeight, wallThickness));
+        // // North wall (+Z)
+        // addStaticBox(glm::vec3(center.x, center.y, center.z + halfDepth), 
+        //              glm::vec3(halfWidth, halfHeight, wallThickness));
 
-        // South wall (-Z)
-        addStaticBox(glm::vec3(center.x, center.y, center.z - halfDepth), 
-                     glm::vec3(halfWidth, halfHeight, wallThickness));
+        // // South wall (-Z)
+        // addStaticBox(glm::vec3(center.x, center.y, center.z - halfDepth), 
+        //              glm::vec3(halfWidth, halfHeight, wallThickness));
 
-        // East wall (+X)
-        addStaticBox(glm::vec3(center.x + halfWidth, center.y, center.z), 
-                     glm::vec3(wallThickness, halfHeight, halfDepth));
+        // // East wall (+X)
+        // addStaticBox(glm::vec3(center.x + halfWidth, center.y, center.z), 
+        //              glm::vec3(wallThickness, halfHeight, halfDepth));
 
-        // West wall (-X)
-        addStaticBox(glm::vec3(center.x - halfWidth, center.y, center.z), 
-                     glm::vec3(wallThickness, halfHeight, halfDepth));
+        // // West wall (-X)
+        // addStaticBox(glm::vec3(center.x - halfWidth, center.y, center.z), 
+        //              glm::vec3(wallThickness, halfHeight, halfDepth));
     }
 
     void initializePlayerCollider(const glm::vec3 &position, float radius = 0.4f, float height = 1.8f)
