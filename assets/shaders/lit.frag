@@ -28,6 +28,7 @@ struct Light {
     //Necessary for spotlight
     float inner_cone_angle;
     float outer_cone_angle;
+    bool isFlashlight;  
 };
 uniform int light_count;
 uniform Light lights[MAX_LIGHTS];
@@ -117,6 +118,9 @@ void main(){
         ? texture(aoMap, scaled_tex_coord).r 
         : 1.0;
     
+    // Apply AO to diffuse color (represents indirect light occlusion)
+    vec3 material_diffuse = diffuse_color * texture_color.rgb * material_ao;
+    
     vec3 material_emissive = hasEmissiveMap 
         ? texture(emissiveMap, scaled_tex_coord).rgb 
         : vec3(0.0);
@@ -154,8 +158,8 @@ void main(){
                 float intensity = smoothstep(lights[i].outer_cone_angle, lights[i].inner_cone_angle, theta);
                 attenuation *= intensity;
                 
-                // Apply spotlight cookie texture if available (only for first spotlight/flashlight)
-                if (has_spotlight_cookie && i == 0) {
+                // Apply spotlight cookie texture if available for flashlights
+                if (has_spotlight_cookie && lights[i].isFlashlight) {
                     // Efficient planar projection for cookie UV
                     vec3 spotDir = normalize(lights[i].direction);
                     vec3 toFrag = fs_in.world_position - lights[i].position;
@@ -184,7 +188,7 @@ void main(){
         }
         // Diffuse: using abs() for two-sided lighting (lights surfaces regardless of normal direction)
         float  diff = abs(dot(normal, light_direction));
-        vec3 diffuse =diff * diffuse_color * texture_color.rgb * lights[i].color;
+        vec3 diffuse = diff * material_diffuse * lights[i].color;
         
         // Specular - only if illuminationModel is 2 (full Blinn-Phong)
         vec3 specular = vec3(0.0);
@@ -209,11 +213,6 @@ void main(){
         // Mix result with distance-scaled fog
         result = mix(result, distance_scaled_fog, fog_factor);
     }
-    
-    // DEBUG: Uncomment ONE of these lines to visualize:
-    // frag_color = vec4(normal * 0.5 + 0.5, 1.0);  // Visualize normals (should be consistent on parallel walls)
-    // frag_color = vec4(abs(normal), 1.0);  // Visualize absolute normals
-    // if (light_count > 0) frag_color = vec4(normalize(lights[0].direction) * 0.5 + 0.5, 1.0);  // Visualize light direction
     
     frag_color = vec4(result, texture_color.a);
 }
