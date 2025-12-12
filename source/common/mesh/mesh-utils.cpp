@@ -57,6 +57,12 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
         props.normalTexture = mat.bump_texname;
+        
+        // Extract texture scaling from MTL -s option
+        props.diffuseTextureScale = glm::vec3(mat.diffuse_texopt.scale[0], mat.diffuse_texopt.scale[1], mat.diffuse_texopt.scale[2]);
+        props.specularTextureScale = glm::vec3(mat.specular_texopt.scale[0], mat.specular_texopt.scale[1], mat.specular_texopt.scale[2]);
+        props.normalTextureScale = glm::vec3(mat.bump_texopt.scale[0], mat.bump_texopt.scale[1], mat.bump_texopt.scale[2]);
+        props.bumpMultiplier = mat.bump_texopt.bump_multiplier;
 
         std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
         std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
@@ -65,8 +71,12 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         std::cout << "  Dissolve: " << props.dissolve << std::endl;
         std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
         std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
+        std::cout << "  Diffuse Texture Scale: (" << props.diffuseTextureScale.x << ", " << props.diffuseTextureScale.y << ", " << props.diffuseTextureScale.z << ")" << std::endl;
         std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
+        std::cout << "  Specular Texture Scale: (" << props.specularTextureScale.x << ", " << props.specularTextureScale.y << ", " << props.specularTextureScale.z << ")" << std::endl;
         std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
+        std::cout << "  Normal Texture Scale: (" << props.normalTextureScale.x << ", " << props.normalTextureScale.y << ", " << props.normalTextureScale.z << ")" << std::endl;
+        std::cout << "  Bump Multiplier: " << props.bumpMultiplier << std::endl;
 
         MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
         std::cout << "=== Registration Complete ===\n"
@@ -227,6 +237,12 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
         props.diffuseTexture = mat.diffuse_texname;
         props.specularTexture = mat.specular_texname;
         props.normalTexture = mat.bump_texname;
+        
+        // Extract texture scaling from MTL -s option
+        props.diffuseTextureScale = glm::vec3(mat.diffuse_texopt.scale[0], mat.diffuse_texopt.scale[1], mat.diffuse_texopt.scale[2]);
+        props.specularTextureScale = glm::vec3(mat.specular_texopt.scale[0], mat.specular_texopt.scale[1], mat.specular_texopt.scale[2]);
+        props.normalTextureScale = glm::vec3(mat.bump_texopt.scale[0], mat.bump_texopt.scale[1], mat.bump_texopt.scale[2]);
+        props.bumpMultiplier = mat.bump_texopt.bump_multiplier;
 
         std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
         std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
@@ -235,8 +251,12 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
         std::cout << "  Dissolve: " << props.dissolve << std::endl;
         std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
         std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
+        std::cout << "  Diffuse Texture Scale: (" << props.diffuseTextureScale.x << ", " << props.diffuseTextureScale.y << ", " << props.diffuseTextureScale.z << ")" << std::endl;
         std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
+        std::cout << "  Specular Texture Scale: (" << props.specularTextureScale.x << ", " << props.specularTextureScale.y << ", " << props.specularTextureScale.z << ")" << std::endl;
         std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
+        std::cout << "  Normal Texture Scale: (" << props.normalTextureScale.x << ", " << props.normalTextureScale.y << ", " << props.normalTextureScale.z << ")" << std::endl;
+        std::cout << "  Bump Multiplier: " << props.bumpMultiplier << std::endl;
 
         MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
         std::cout << "=== Registration Complete ===\n"

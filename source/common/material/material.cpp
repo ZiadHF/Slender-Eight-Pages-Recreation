@@ -60,6 +60,8 @@ namespace our
         if (shader)
         {
             shader->set("alphaThreshold", alphaThreshold);
+            // Explicitly bind diffuse texture to unit 0
+            glActiveTexture(GL_TEXTURE0);
             if (texture)
             {
                 texture->bind();
@@ -96,6 +98,10 @@ namespace our
             shader->set("specular_color", specular);
             shader->set("shininess", shininess);
             shader->set("illuminationModel", illuminationModel);
+            // Send texture scale to shader (use xy for 2D textures)
+            shader->set("textureScale", glm::vec2(diffuseTextureScale.x, diffuseTextureScale.y));
+            
+
         }
     }
 
@@ -134,6 +140,14 @@ namespace our
             specular = mtlProps->specular;
             shininess = mtlProps->shininess;
             illuminationModel = mtlProps->illuminationModel;
+            // Texture scaling from MTL -s option
+            diffuseTextureScale = mtlProps->diffuseTextureScale;
+            specularTextureScale = mtlProps->specularTextureScale;
+            normalTextureScale = mtlProps->normalTextureScale;
+            bumpMultiplier = mtlProps->bumpMultiplier;
+            std::cout << "Applied texture scale: (" << diffuseTextureScale.x << ", " << diffuseTextureScale.y << ", " << diffuseTextureScale.z << ")" << std::endl;
+            
+
         }
 
         // JSON values only override if MTL wasn't found (fallback/defaults)

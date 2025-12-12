@@ -38,6 +38,9 @@ uniform vec3 diffuse_color = vec3(0.8);
 uniform vec3 specular_color = vec3(0.5);
 uniform float shininess = 32.0;
 uniform int illuminationModel = 1;
+uniform vec2 textureScale = vec2(1.0);  // Texture UV scaling from MTL -s option
+
+
 
 // Fog properties
 uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
@@ -46,8 +49,10 @@ uniform float fog_start = 30.0;
 uniform float fog_end = 100.0;
 
 void main(){
+    // Apply texture scaling to UV coordinates
+    vec2 scaled_tex_coord = fs_in.tex_coord * textureScale;
     // Calculates the original color of the object pre lighting
-    vec4 texture_color = tint * fs_in.color * texture(tex, fs_in.tex_coord);
+    vec4 texture_color = tint * fs_in.color * texture(tex, scaled_tex_coord);
     // Apply Alpha thresholding
     if(texture_color.a < alphaThreshold) discard;
     // Viewing direction is a ray from object to camera

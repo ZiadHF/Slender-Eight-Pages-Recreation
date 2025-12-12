@@ -21,6 +21,12 @@ namespace our
         std::string diffuseTexture;           // map_Kd
         std::string specularTexture;          // map_Ks
         std::string normalTexture;            // map_Bump or bump
+        
+        // Texture scaling from MTL -s option (default 1,1,1 = no scaling)
+        glm::vec3 diffuseTextureScale = glm::vec3(1.0f);   // map_Kd -s
+        glm::vec3 specularTextureScale = glm::vec3(1.0f);  // map_Ks -s
+        glm::vec3 normalTextureScale = glm::vec3(1.0f);    // map_Bump -s
+        float bumpMultiplier = 1.0f;                        // map_Bump -bm
     };
 
     // Singleton registry to store MTL material properties globally

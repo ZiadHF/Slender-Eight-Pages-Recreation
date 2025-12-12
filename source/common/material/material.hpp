@@ -68,6 +68,14 @@ namespace our
         glm::vec3 specular = glm::vec3(0.5f);
         float shininess = 32.0f;
         int illuminationModel = 2;
+        
+        // Texture scaling from MTL -s option
+        glm::vec3 diffuseTextureScale = glm::vec3(1.0f);
+        glm::vec3 specularTextureScale = glm::vec3(1.0f);
+        glm::vec3 normalTextureScale = glm::vec3(1.0f);
+        float bumpMultiplier = 1.0f;
+        
+
 
         void setup() const override;
         void deserialize(const nlohmann::json &data) override;
