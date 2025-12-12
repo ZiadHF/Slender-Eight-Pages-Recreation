@@ -118,6 +118,33 @@ static void recalculateNormals(std::vector<our::Vertex>& vertices, const std::ve
     std::cout << "Normals recalculated." << std::endl;
 }
 
+// Helper function to resolve texture paths relative to MTL file location
+// Handles relative paths like "../textures/foo.png" by resolving them from mtl_basedir
+static std::string resolveTexturePath(const std::string& texturePath, const std::string& mtl_basedir) {
+    if (texturePath.empty()) {
+        return "";
+    }
+    
+    std::string resolvedPath = texturePath;
+    
+    // If path starts with "../", resolve it relative to mtl_basedir's parent
+    if (resolvedPath.length() >= 3 && resolvedPath.substr(0, 3) == "../") {
+        // mtl_basedir is like "assets/models/", so "../textures" becomes "assets/textures/"
+        size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
+        if (lastSlash != std::string::npos) {
+            std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
+            resolvedPath = parentDir + resolvedPath.substr(3);
+        }
+    } 
+    // If it's a relative path without "../", prepend mtl_basedir
+    else if (!resolvedPath.empty() && resolvedPath[0] != '/' && resolvedPath.find(':') == std::string::npos) {
+        resolvedPath = mtl_basedir + resolvedPath;
+    }
+    // Absolute paths are returned as-is
+    
+    return resolvedPath;
+}
+
 our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
 {
     std::cout << "Loading OBJ file: " << filename << std::endl;
@@ -162,42 +189,14 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         props.shininess = mat.shininess;
         props.dissolve = mat.dissolve;
         props.illuminationModel = mat.illum;
-        props.diffuseTexture = mat.diffuse_texname;
-        props.specularTexture = mat.specular_texname;
         
-        // Resolve AO texture path (map_Ka)
-        if (!mat.ambient_texname.empty()) {
-            std::string aoPath = mat.ambient_texname;
-            if (aoPath.substr(0, 3) == "../") {
-                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
-                if (lastSlash != std::string::npos) {
-                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
-                    aoPath = parentDir + aoPath.substr(3);
-                }
-            } else if (aoPath[0] != '/' && aoPath.find(':') == std::string::npos) {
-                aoPath = mtl_basedir + aoPath;
-            }
-            props.aoTexture = aoPath;
-        }
-        
-        // Resolve normal texture path relative to MTL directory
-        if (!mat.bump_texname.empty()) {
-            // Convert relative path (e.g., "../textures/foo.png") to proper path
-            std::string normalPath = mat.bump_texname;
-            // If path starts with "../", resolve it relative to mtl_basedir
-            if (normalPath.substr(0, 3) == "../") {
-                // mtl_basedir is "assets/models/", so "../textures" becomes "assets/textures/"
-                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
-                if (lastSlash != std::string::npos) {
-                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
-                    normalPath = parentDir + normalPath.substr(3);
-                }
-            } else if (normalPath[0] != '/' && normalPath.find(':') == std::string::npos) {
-                // Relative path without "../", prepend mtl_basedir
-                normalPath = mtl_basedir + normalPath;
-            }
-            props.normalTexture = normalPath;
-        }
+        // Resolve all texture paths relative to MTL directory
+        props.diffuseTexture = resolveTexturePath(mat.diffuse_texname, mtl_basedir);
+        props.specularTexture = resolveTexturePath(mat.specular_texname, mtl_basedir);
+        props.normalTexture = resolveTexturePath(mat.bump_texname, mtl_basedir);
+        props.aoTexture = resolveTexturePath(mat.ambient_texname, mtl_basedir);
+        props.emissiveTexture = resolveTexturePath(mat.emissive_texname, mtl_basedir);
+        props.roughnessTexture = resolveTexturePath(mat.roughness_texname, mtl_basedir);
         
         // Extract texture scaling from MTL -s option
         props.diffuseTextureScale = glm::vec3(mat.diffuse_texopt.scale[0], mat.diffuse_texopt.scale[1], mat.diffuse_texopt.scale[2]);
@@ -382,42 +381,14 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
         props.shininess = mat.shininess;
         props.dissolve = mat.dissolve;
         props.illuminationModel = mat.illum;
-        props.diffuseTexture = mat.diffuse_texname;
-        props.specularTexture = mat.specular_texname;
         
-        // Resolve AO texture path (map_Ka)
-        if (!mat.ambient_texname.empty()) {
-            std::string aoPath = mat.ambient_texname;
-            if (aoPath.substr(0, 3) == "../") {
-                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
-                if (lastSlash != std::string::npos) {
-                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
-                    aoPath = parentDir + aoPath.substr(3);
-                }
-            } else if (aoPath[0] != '/' && aoPath.find(':') == std::string::npos) {
-                aoPath = mtl_basedir + aoPath;
-            }
-            props.aoTexture = aoPath;
-        }
-        
-        // Resolve normal texture path relative to MTL directory
-        if (!mat.bump_texname.empty()) {
-            // Convert relative path (e.g., "../textures/foo.png") to proper path
-            std::string normalPath = mat.bump_texname;
-            // If path starts with "../", resolve it relative to mtl_basedir
-            if (normalPath.substr(0, 3) == "../") {
-                // mtl_basedir is "assets/models/", so "../textures" becomes "assets/textures/"
-                size_t lastSlash = mtl_basedir.find_last_of("/\\", mtl_basedir.length() - 2);
-                if (lastSlash != std::string::npos) {
-                    std::string parentDir = mtl_basedir.substr(0, lastSlash + 1);
-                    normalPath = parentDir + normalPath.substr(3);
-                }
-            } else if (normalPath[0] != '/' && normalPath.find(':') == std::string::npos) {
-                // Relative path without "../", prepend mtl_basedir
-                normalPath = mtl_basedir + normalPath;
-            }
-            props.normalTexture = normalPath;
-        }
+        // Resolve all texture paths relative to MTL directory
+        props.diffuseTexture = resolveTexturePath(mat.diffuse_texname, mtl_basedir);
+        props.specularTexture = resolveTexturePath(mat.specular_texname, mtl_basedir);
+        props.normalTexture = resolveTexturePath(mat.bump_texname, mtl_basedir);
+        props.aoTexture = resolveTexturePath(mat.ambient_texname, mtl_basedir);
+        props.emissiveTexture = resolveTexturePath(mat.emissive_texname, mtl_basedir);
+        props.roughnessTexture = resolveTexturePath(mat.roughness_texname, mtl_basedir);
         
         // Extract texture scaling from MTL -s option
         props.diffuseTextureScale = glm::vec3(mat.diffuse_texopt.scale[0], mat.diffuse_texopt.scale[1], mat.diffuse_texopt.scale[2]);
