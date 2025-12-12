@@ -885,7 +885,11 @@
         },
         "world": [
             {
-                "position": [0,2,10],
+                "position": [
+                    -3,
+                    1.2,
+                    158
+                ],
                 "components": [
                     {
                         "type": "Camera"
@@ -1226,9 +1230,9 @@
             },
             {
                 "position": [
-                    24.6091,
+                    500,
                     1,
-                    -9.85004
+                    500
                 ],
                 "rotation": [
                     0,
