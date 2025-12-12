@@ -22,6 +22,9 @@ namespace our
    
         std::random_device dev;
         std::mt19937 gen(dev());
+
+        // Print seed for debugging
+        std::cout << "Random generator seeded with: " << dev() << std::endl;
         
         // Create distributions based on provided ranges
         std::uniform_real_distribution<float> randomOffsetX(-posRandomRange.x, posRandomRange.x);
