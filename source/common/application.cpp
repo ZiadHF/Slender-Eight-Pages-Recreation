@@ -9,7 +9,8 @@
 #include <queue>
 #include <tuple>
 #include <filesystem>
-
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb/stb_image.h>
 #include <flags/flags.h>
 
 // Include the Dear ImGui implementation headers
@@ -182,6 +183,15 @@ int our::Application::run(int run_for_frames) {
         return -1;
     }
     glfwMakeContextCurrent(window);         // Tell GLFW to make the context of our window the main context on the current thread.
+
+    // Load and set window icon
+    GLFWimage icon;
+    int channels;
+    icon.pixels = stbi_load("assets/textures/icon.png", &icon.width, &icon.height, &channels, 4);
+    glfwSetWindowIcon(window, 1, &icon);
+    stbi_image_free(icon.pixels);
+ 
+  
 
     gladLoadGL(glfwGetProcAddress);         // Load the OpenGL functions from the driver
 
