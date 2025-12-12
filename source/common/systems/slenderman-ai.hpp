@@ -120,9 +120,8 @@ class SlendermanAISystem {
 
     void update(World* world, float deltaTime, ForwardRenderer* renderer,
                 PhysicsSystem* physics) {
-        
         if (!player || !slenderman) return;  // Safety check
-        
+
         gameTime += deltaTime;  // Track total game time
 
         auto* slenderComp = slenderman->getComponent<SlendermanComponent>();
@@ -145,7 +144,9 @@ class SlendermanAISystem {
         float yaw = atan2(direction.x, direction.z) + glm::half_pi<float>();
         slenderman->localTransform.rotation = glm::vec3(0.0f, yaw, 0.0f);
 
-        if(slenderComp->debugMode){return;}
+        if (slenderComp->debugMode) {
+            return;
+        }
         // Get frustum from renderer and check if Slenderman is inside it
         const Frustum& frustum = renderer->getFrustum();
         bool isInFrustum = frustum.isSphereInside(slenderPos, 1.0f);
@@ -181,15 +182,20 @@ class SlendermanAISystem {
 
         // Health decrease - scales with lookTime (the longer you look, the more
         // damage)
-        float distanceFactor =
-            1.0f - (distance / slenderComp->detectionDistance);
-        float lookTimeMultiplier =
-            1.0f + (playerComp->lookTime * slenderComp->lookTimeFactor *
-                    proximityMultiplier);
-        playerComp->health =
-            std::max(0.0f, playerComp->health -
-                               distanceFactor * slenderComp->damageRate *
-                                   lookTimeMultiplier * deltaTime);
+        float distanceFactor = (isPlayerLooking || isPlayerInProximity) ? 1.0f - (distance / slenderComp->detectionDistance) : 0.0f;
+        float lookTimeMultiplier = 1.0f + (playerComp->lookTime * slenderComp->lookTimeFactor * proximityMultiplier);
+        playerComp->health = std::max(0.0f, playerComp->health - distanceFactor * slenderComp->damageRate * lookTimeMultiplier * deltaTime);
+
+        // Print debug info every few frames
+        static float debugTimer = 0.0f;
+        debugTimer += deltaTime;
+        if (debugTimer >= 2.0f) {
+            std::cout << "Slenderman AI Debug -- Distance: " << distance
+                      << ", InFrustum: " << isInFrustum
+                      << ", IsLooking: " << isPlayerLooking
+                      << ", IsInProximity: " << isPlayerInProximity
+                      << ", PlayerHealth: " << playerComp->health << std::endl;
+        }
 
         // Teleportation logic
         slenderComp->timeSinceLastTeleport += deltaTime;
@@ -222,11 +228,9 @@ class SlendermanAISystem {
 
                 // Determine spawn distance based on aggressiveness
                 // More aggressive = spawn closer to player
-                float minSpawnDist =
-                    slenderComp->closeDistance + 2.0f;  // Never spawn too close
-                float maxSpawnDist = slenderComp->detectionDistance * 2.0f;
-                float targetDist =
-                    glm::mix(maxSpawnDist, minSpawnDist, aggressivenessRatio);
+                float minSpawnDist = slenderComp->closeDistance + 4.0f;  // Never spawn too close
+                float maxSpawnDist = slenderComp->detectionDistance * 3.0f;
+                float targetDist = glm::mix(maxSpawnDist, minSpawnDist, aggressivenessRatio);
 
                 // Add some randomness to target distance
                 std::uniform_real_distribution<float> distVariation(0.7f, 1.3f);
@@ -290,6 +294,15 @@ class SlendermanAISystem {
             playerComp->health = std::min(
                 playerComp->maxHealth,
                 playerComp->health + playerComp->healthRegenRate * deltaTime);
+        }
+
+        if (debugTimer >= 2.0f) {
+            std::cout << "Slenderman AI Debug -- Distance: " << distance
+                      << ", InFrustum: " << isInFrustum
+                      << ", IsLooking: " << isPlayerLooking
+                      << ", IsInProximity: " << isPlayerInProximity
+                      << ", PlayerHealth: " << playerComp->health << std::endl;
+            debugTimer = 0.0f;
         }
     }
 
