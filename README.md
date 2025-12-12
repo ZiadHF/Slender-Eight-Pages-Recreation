@@ -1,73 +1,96 @@
 # Slender: The Eight Pages - OpenGL Recreation
 
-This repository contains a fan-made OpenGL recreation of the classic indie horror experience "Slender: The Eight Pages." The goal of the project is to implement the core gameplay loop, exploring a dark forest, finding eight pages, and surviving encounters with the stalking entity using OpenGL.
+A fan-made OpenGL recreation of the classic indie horror experience "Slender: The Eight Pages." The goal of the project is to implement the core gameplay loop—exploring a dark forest, finding eight pages, and surviving encounters with the stalking entity—using modern OpenGL techniques.
 
-IMPORTANT: This is an unofficial, fan-made project and is not affiliated with or endorsed by the original creators of Slender: The Eight Pages.
+> **Note:** This is an unofficial, fan-made project and is not affiliated with or endorsed by the original creators of Slender: The Eight Pages.
 
-## Highlights
+## Features
 
-- Lightweight OpenGL-based renderer using GLFW, GLAD, GLM and custom shaders.
-- Config-driven levels and assets in `config/` and `assets/`.
-- Small, readable codebase intended for teaching Graphics/Engine concepts.
-- Postprocessing and basic audio.
+- **Entity Component System (ECS)** — Flexible, data-driven architecture
+- **Blinn-Phong Lighting** — With normal mapping and specular highlights
+- **Instanced Rendering** — Efficient vegetation (trees, grass) rendering
+- **Physics** — Bullet Physics integration for collision detection
+- **Adaptive AI** — Slenderman difficulty scales with pages collected and time played
+- **Flashlight Cookie** — Projected spotlight texture for realistic flashlight effect
+- **Postprocessing** — Static noise, vignette, and health-based visual effects
+- **3D Spatial Audio** — Positional sound for immersive atmosphere
+- **Config-Driven** — Levels and assets defined in JSON for easy customization
 
-## Gameplay (Short)
+## Gameplay
 
-You explore a dimly-lit forest searching for eight pages scattered across the map. A mysterious, unkillable entity stalks you, look away or stay in the open too long and it will end the game. The objective is to collect all eight pages and reach the exit or survive until all pages are found.
+You explore a dimly-lit forest searching for eight pages scattered across the map. A mysterious, unkillable entity stalks you—look at him for too long or get too close and you die. The objective is to collect all eight pages before the entity kills you.
 
-This recreation focuses on core mechanics: exploration, page collection, simple AI/encounters, and atmospheric rendering.
+## Screenshots
 
-## Screenshots (TBA)
+![Slenderman inside building](./assets/screenshots/slender_inhouse.png)
+
+![Collecting page](./assets/screenshots/page_collection.png)
 
 ## Controls
 
-For custom mappings, see `config/player.json` for controls.
+For custom mappings, see `config/player.json` or the settings menu.
 
-- Move: W A S D
-- Sprint / Walk modifier: Left Shift
-- Look: mouse (free look)
-- Toggle flashlight: F
-- Interact / Pick up page: Left Click (when near a page)
-- Pause / Menu: Esc
+| Action | Key |
+|--------|-----|
+| Move | `W` `A` `S` `D` |
+| Sprint | `Left Shift` |
+| Look | Mouse |
+| Toggle Flashlight | `F` |
+| Interact / Pick up page | `Left Click` |
+| Pause / Menu | `Esc` |
 
-## Quick Build & Run (Windows)
+## Requirements
 
-### Run (if already built)
+- Windows 10/11
+- OpenGL 3.3+ compatible GPU
+- ~200MB disk space
+
+## Quick Start (Windows)
+
+### Release:
+
+Just launch `Slender.exe`.
+
+### If already built:
 
 ```powershell
 cd bin
-Slender.exe
+.\Slender.exe -c ../config/app.jsonc
 ```
 
-## Build & Run in VS Code
+## Build Instructions (VS Code)
 
-1. **Install:**
-
+1. **Install prerequisites:**
    - [CMake](https://cmake.org/download/)
    - [Visual Studio Build Tools](https://visualstudio.microsoft.com/downloads/)
-   - VS Code extensions: _CMake Tools_ & _C/C++_
+   - VS Code extensions: *CMake Tools* & *C/C++*
 
-2. **Open Project:**
-   Open the folder with `CMakeLists.txt` in VS Code.
+2. **Open the project:**
+   Open the folder containing `CMakeLists.txt` in VS Code.
 
 3. **Configure & Build:**
-
    - `Ctrl+Shift+P` → **CMake: Configure**
    - `Ctrl+Shift+P` → **CMake: Build**
 
-4. **Run the Game:**
-
+4. **Run:**
    ```powershell
    cd bin
-   .\Slender.exe
+   .\Slender.exe -c ../config/app.jsonc
    ```
 
-## Project layout
+## Project Layout
 
-- `source/` — application and engine source code; main entry is `main.cpp`.
-- `assets/` — models, textures, shaders and other runtime assets.
-- `assets/shaders/` — GLSL shaders used by the renderer.
-- `config/` — JSONC level, entity and material test files used to compose scenes.
-- `build/` — CMake intermediate files and build output (ignored by VCS normally).
-- `bin/` — typical runtime output location for the compiled executable.
-- `vendor/` — included 3rd-party libraries (GLFW, GLAD, GLM, ImGui, etc.).
+| Directory | Description |
+|-----------|-------------|
+| `source/` | Application and engine source code (entry: `main.cpp`) |
+| `assets/` | Models, textures, shaders, sounds |
+| `assets/shaders/` | GLSL vertex and fragment shaders |
+| `config/` | JSON scene, entity, and material definitions |
+| `vendor/` | Third-party libraries (GLFW, GLAD, GLM, ImGui, Bullet, etc.) |
+| `build/` | CMake intermediate files (git-ignored) |
+| `bin/` | Compiled executable output |
+
+## Credits
+
+- Original *Slender: The Eight Pages* by Parsec Productions
+- Libraries: GLFW, GLAD, GLM, stb_image, Bullet Physics, ImGui, miniaudio
