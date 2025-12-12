@@ -926,9 +926,9 @@
                         "type": "Light",
                         "lightType": "directional",
                         "color": [
-                            0.0,
-                            0.0,
-                            0.0
+                            0.1,
+                            0.1,
+                            0.1
                         ],
                         "direction": [
                             0.3,

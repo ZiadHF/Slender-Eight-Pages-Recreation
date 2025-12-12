@@ -11,7 +11,7 @@ namespace our {
         set(GL_TEXTURE_MIN_FILTER, (GLint)gl_enum_deserialize::texture_minification_filters.at(data.value("MIN_FILTER", "GL_LINEAR_MIPMAP_LINEAR")));
         set(GL_TEXTURE_WRAP_S, (GLint)gl_enum_deserialize::texture_wrapping_modes.at(data.value("WRAP_S", "GL_REPEAT")));
         set(GL_TEXTURE_WRAP_T, (GLint)gl_enum_deserialize::texture_wrapping_modes.at(data.value("WRAP_T", "GL_REPEAT")));
-        set(GL_TEXTURE_MAX_ANISOTROPY_EXT, data.value("MAX_ANISOTROPY", 1.0f));
+        set(GL_TEXTURE_MAX_ANISOTROPY_EXT, data.value("MAX_ANISOTROPY", 16.0f));
         set(GL_TEXTURE_BORDER_COLOR, data.value("BORDER_COLOR", glm::vec4(0, 0, 0, 0)));
     }
 

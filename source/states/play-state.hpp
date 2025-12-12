@@ -77,6 +77,17 @@ class Playstate : public our::State {
         auto& keyboard = getApp()->getKeyboard();
 
         if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
+            // Lock mouse after
+            getApp()->getMouse().lockMouse(getApp()->getWindow());
+            // Manually sync mouse position to where lockMouse centered it
+            int width, height;
+            glfwGetWindowSize(getApp()->getWindow(), &width, &height);
+            double centerX = width / 2.0;
+            double centerY = height / 2.0;
+
+            // Update the mouse's internal position tracking
+            getApp()->getMouse().CursorMoveEvent(centerX, centerY);
+            getApp()->getMouse().update();
             paused = !paused;
         }
 
@@ -86,6 +97,9 @@ class Playstate : public our::State {
                 paused = false;
                 getApp()->changeState("menu"); // End Game
             }
+
+            // Unlock mouse
+            getApp()->getMouse().unlockMouse(getApp()->getWindow());
 
             // Render game state frozen
             renderer.render(&world, 0.0f);
@@ -139,6 +153,12 @@ class Playstate : public our::State {
                     glm::normalize(glm::vec3(matrix * glm::vec4(0, 0, -1, 0)));
                 break;
             }
+        }
+
+        // DEBUG: Print position
+        if (keyboard.justPressed(GLFW_KEY_P)) {
+            std::cout << "Player Position: (" << cameraPos.x << ", " << cameraPos.y
+                      << ", " << cameraPos.z << ")\n";
         }
 
         // Check for interact key

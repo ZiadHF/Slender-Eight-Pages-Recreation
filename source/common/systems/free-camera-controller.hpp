@@ -9,6 +9,7 @@
 #include "../application.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/audio-controller.hpp"
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
 #include "physics-system.hpp"
@@ -24,12 +25,20 @@ class FreeCameraControllerSystem {
     PhysicsSystem* physics = nullptr;  // Pointer to the physics system
     float playerEyeHeight = 1.2f;      // Height from capsule bottom to camera
     PlayerComponent* playerComp = nullptr;
-    float bobbingTime = 0.0f;          // Time accumulator for bobbing
-    float bobbingFrequency = 10.0f;    // Cycles per second while walking
-    float bobbingAmplitude = 0.14f;    // Vertical bob amount
+    float bobbingTime = 0.0f;        // Time accumulator for bobbing
+    float bobbingFrequency = 10.0f;  // Cycles per second while walking
+    float bobbingAmplitude = 0.14f;  // Vertical bob amount
     float bobbingSway = 0.09f;
     std::map<std::string, int> controlKeys;
     bool flashlightKeyWasPressed = false;  // For detecting key press edge
+
+    void playFlashlightSound(AudioController* audio, const std::string& soundFile) {
+        if (!audio) return;
+        audio->uninitializeMusic();
+        audio->initializeMusic(soundFile.c_str(), false);
+        audio->setVolume(0.3f);
+        audio->playMusic();
+    }
 
     void loadControls() {
         std::ifstream file("config/player.json");
@@ -79,17 +88,16 @@ class FreeCameraControllerSystem {
         loadControls();
         mouse_locked = true;
         app->getMouse().lockMouse(app->getWindow());
-        
+
         // Manually sync mouse position to where lockMouse centered it
         int width, height;
         glfwGetWindowSize(app->getWindow(), &width, &height);
         double centerX = width / 2.0;
         double centerY = height / 2.0;
-        
+
         // Update the mouse's internal position tracking
         app->getMouse().CursorMoveEvent(centerX, centerY);
         app->getMouse().update();
-        
         playerComp = nullptr;
     }
 
@@ -165,9 +173,10 @@ class FreeCameraControllerSystem {
             playerComp->isSprinting = false;
         }
 
-        // Flashlight toggle (edge detection - only toggle on key press, not hold)
+        // Flashlight toggle
         bool flashlightKeyPressed = isKeyPressed("toggle_flashlight");
         if (flashlightKeyPressed && !flashlightKeyWasPressed) {
+            playFlashlightSound(entity->getComponent<AudioController>(), "assets/sounds/flashlight_click.wav");
             playerComp->flashlightOn = !playerComp->flashlightOn;
         }
         flashlightKeyWasPressed = flashlightKeyPressed;
@@ -188,14 +197,15 @@ class FreeCameraControllerSystem {
         }
 
         if (physics && physics->isPlayerInitialized()) {
-            // Physics-based movement - Bullet handles timing internally via stepSimulation
-            physics->movePlayer(moveDir * current_sensitivity.x * 0.016f); // Use fixed timestep (~60fps)
+            // Physics-based movement - Bullet handles timing internally via
+            // stepSimulation
+            physics->movePlayer(moveDir * current_sensitivity.x *
+                                0.016f);  // Use fixed timestep (~60fps)
 
             // Get physics position and offset for eye height
             glm::vec3 physPos = physics->getPlayerPosition();
             glm::vec3 bobOffset(0.0f);
-            if (playerComp->isMoving)
-            {
+            if (playerComp->isMoving) {
                 float speedMultiplier = playerComp->isSprinting ? 1.4f : 1.0f;
                 bobbingTime += deltaTime * bobbingFrequency * speedMultiplier;
 
@@ -204,11 +214,9 @@ class FreeCameraControllerSystem {
 
                 // Horizontal sway - half the frequency for natural side-to-side
                 bobOffset.x = glm::sin(bobbingTime * 0.5f) * bobbingSway;
-            }
-            else
-            {
+            } else {
                 // Smoothly decay bobbing when stopped (frame-rate independent)
-                float decayRate = 10.0f; // Higher = faster decay
+                float decayRate = 10.0f;  // Higher = faster decay
                 bobbingTime *= glm::exp(-decayRate * deltaTime);
             }
 

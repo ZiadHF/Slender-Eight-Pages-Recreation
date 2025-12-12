@@ -6,6 +6,8 @@
 #include "../components/light.hpp"
 #include "../asset-loader.hpp"
 #include "../common/components/instanced-renderer.hpp"
+#include "../components/player.hpp"
+#include "../components/camera.hpp"
 
 #include <glad/gl.h>
 #include <vector>
@@ -57,6 +59,9 @@ namespace our
         StaticPostprocessUniforms postprocessUniforms;
         // Fog control
         bool fogEnabled = true;
+        // Cached camera and player component pointers
+        CameraComponent *camera = nullptr;
+        PlayerComponent *playerComp = nullptr;
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
         // windowSize is the width & height of the window (in pixels).
