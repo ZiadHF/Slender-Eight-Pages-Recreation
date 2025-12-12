@@ -14,13 +14,20 @@
 
 namespace our {
 
+// Stores collision metadata for each rigid body
+struct CollisionUserData {
+    void* entity = nullptr;      // Entity* pointer
+    std::string submeshName;     // Name of the submesh (empty if not applicable)
+};
+
 // Raycast result structure
 struct RaycastResult {
     bool hit = false;
     glm::vec3 hitPoint = glm::vec3(0.0f);
     glm::vec3 hitNormal = glm::vec3(0.0f);
     float hitFraction = 1.0f;
-    void* userData = nullptr;  // Can store Entity* pointer
+    void* userData = nullptr;    // Can store Entity* pointer
+    std::string submeshName;     // Name of the submesh that was hit
 };
 
 class PhysicsSystem {
@@ -31,6 +38,7 @@ class PhysicsSystem {
     btSequentialImpulseConstraintSolver* solver = nullptr;
     btDiscreteDynamicsWorld* dynamicsWorld = nullptr;
     std::vector<btTriangleMesh*> triangleMeshes;
+    std::vector<CollisionUserData*> collisionUserDataList;  // Track allocations for cleanup
     // Character controller for player
     btKinematicCharacterController* characterController = nullptr;
     btPairCachingGhostObject* ghostObject = nullptr;
@@ -195,7 +203,14 @@ class PhysicsSystem {
                                          rayCallback.m_hitNormalWorld.y(),
                                          rayCallback.m_hitNormalWorld.z());
             result.hitFraction = rayCallback.m_closestHitFraction;
-            result.userData = rayCallback.m_collisionObject->getUserPointer();
+            
+            // Extract entity and submesh name from CollisionUserData
+            void* userPtr = rayCallback.m_collisionObject->getUserPointer();
+            if (userPtr) {
+                CollisionUserData* collisionData = static_cast<CollisionUserData*>(userPtr);
+                result.userData = collisionData->entity;
+                result.submeshName = collisionData->submeshName;
+            }
         }
 
         return result;
@@ -207,50 +222,100 @@ class PhysicsSystem {
         glm::vec3 to = origin + glm::normalize(direction) * maxDistance;
         return raycast(origin, to);
     }
-     void addMeshCollision(Mesh *mesh, const glm::mat4 &transform, void *userPointer = nullptr)
+    void addMeshCollision(Mesh *mesh, const glm::mat4 &transform, void *userPointer = nullptr)
     {
         const auto &Vertices = mesh->getVertices();
         const auto &indices = mesh->getIndices();
+        const auto &submeshes = mesh->getSubmeshes();
 
         if (Vertices.empty() || indices.empty())
             return;
-         
-        btTriangleMesh *triangleMesh = new btTriangleMesh();
-        triangleMeshes.push_back(triangleMesh);
-        // loop through all triangles
-        for (size_t i = 0; i < indices.size(); i += 3)
-        {
-            // Transform vertices to world space
-            glm::vec4 v0 = transform * glm::vec4(Vertices[indices[i]].position, 1.0f);
-            glm::vec4 v1 = transform * glm::vec4(Vertices[indices[i + 1]].position, 1.0f);
-            glm::vec4 v2 = transform * glm::vec4(Vertices[indices[i + 2]].position, 1.0f);
+        
+        // If mesh has submeshes, create separate collision bodies for each
+        if (!submeshes.empty()) {
+            for (const auto& submesh : submeshes) {
+                btTriangleMesh *triangleMesh = new btTriangleMesh();
+                triangleMeshes.push_back(triangleMesh);
+                
+                // Get the element range for this submesh
+                size_t startIdx = submesh.elementOffset;
+                size_t endIdx = startIdx + submesh.elementCount;
+                
+                // Add triangles for this submesh only
+                for (size_t i = startIdx; i < endIdx; i += 3) {
+                    if (i + 2 >= indices.size()) break;
+                    
+                    glm::vec4 v0 = transform * glm::vec4(Vertices[indices[i]].position, 1.0f);
+                    glm::vec4 v1 = transform * glm::vec4(Vertices[indices[i + 1]].position, 1.0f);
+                    glm::vec4 v2 = transform * glm::vec4(Vertices[indices[i + 2]].position, 1.0f);
 
-            btVector3 bv0(v0.x, v0.y, v0.z);
-            btVector3 bv1(v1.x, v1.y, v1.z);
-            btVector3 bv2(v2.x, v2.y, v2.z);
+                    btVector3 bv0(v0.x, v0.y, v0.z);
+                    btVector3 bv1(v1.x, v1.y, v1.z);
+                    btVector3 bv2(v2.x, v2.y, v2.z);
 
-            triangleMesh->addTriangle(bv0, bv1, bv2);
+                    triangleMesh->addTriangle(bv0, bv1, bv2);
+                }
+                
+                if (triangleMesh->getNumTriangles() == 0) continue;
+                
+                btBvhTriangleMeshShape *meshShape = new btBvhTriangleMeshShape(triangleMesh, true);
+
+                btTransform groundTransform;
+                groundTransform.setIdentity();
+                
+                btDefaultMotionState* motionState = new btDefaultMotionState(groundTransform);
+                btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, motionState, meshShape, btVector3(0, 0, 0));
+                btRigidBody *body = new btRigidBody(rbInfo);
+                
+                // Create CollisionUserData with entity and submesh name
+                CollisionUserData* collisionData = new CollisionUserData();
+                collisionData->entity = userPointer;
+                collisionData->submeshName = submesh.materialName;
+                collisionUserDataList.push_back(collisionData);
+                
+                body->setUserPointer(collisionData);
+                body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+                
+                dynamicsWorld->addRigidBody(body, btBroadphaseProxy::StaticFilter, 
+                    btBroadphaseProxy::AllFilter);
+            }
+        } else {
+            // No submeshes - create single collision body (legacy behavior)
+            btTriangleMesh *triangleMesh = new btTriangleMesh();
+            triangleMeshes.push_back(triangleMesh);
+            
+            for (size_t i = 0; i < indices.size(); i += 3) {
+                glm::vec4 v0 = transform * glm::vec4(Vertices[indices[i]].position, 1.0f);
+                glm::vec4 v1 = transform * glm::vec4(Vertices[indices[i + 1]].position, 1.0f);
+                glm::vec4 v2 = transform * glm::vec4(Vertices[indices[i + 2]].position, 1.0f);
+
+                btVector3 bv0(v0.x, v0.y, v0.z);
+                btVector3 bv1(v1.x, v1.y, v1.z);
+                btVector3 bv2(v2.x, v2.y, v2.z);
+
+                triangleMesh->addTriangle(bv0, bv1, bv2);
+            }
+          
+            btBvhTriangleMeshShape *meshShape = new btBvhTriangleMeshShape(triangleMesh, true);
+
+            btTransform groundTransform;
+            groundTransform.setIdentity();
+            
+            btDefaultMotionState* motionState = new btDefaultMotionState(groundTransform);
+            btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, motionState, meshShape, btVector3(0, 0, 0));
+            btRigidBody *body = new btRigidBody(rbInfo);
+            
+            // Create CollisionUserData without submesh name
+            CollisionUserData* collisionData = new CollisionUserData();
+            collisionData->entity = userPointer;
+            collisionUserDataList.push_back(collisionData);
+            
+            body->setUserPointer(collisionData);
+            body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
+            
+            dynamicsWorld->addRigidBody(body, btBroadphaseProxy::StaticFilter, 
+                btBroadphaseProxy::AllFilter);
         }
-      
-        btBvhTriangleMeshShape *meshShape =
-            new btBvhTriangleMeshShape(triangleMesh, true);
-      
-
-        // Create proper rigid body construction info for static body
-        btTransform groundTransform;
-        groundTransform.setIdentity();
-        
-        btDefaultMotionState* motionState = new btDefaultMotionState(groundTransform);
-        btRigidBody::btRigidBodyConstructionInfo rbInfo(0.0f, motionState, meshShape, btVector3(0, 0, 0));
-        btRigidBody *body = new btRigidBody(rbInfo);
-        
-        body->setUserPointer(userPointer);
-        body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_STATIC_OBJECT);
-        
-        
-        // Add with proper collision filtering
-        dynamicsWorld->addRigidBody(body, btBroadphaseProxy::StaticFilter, 
-            btBroadphaseProxy::AllFilter);
     }
 
 
@@ -271,7 +336,12 @@ class PhysicsSystem {
         btRigidBody::btRigidBodyConstructionInfo rbInfo(0, motionState, shape);
         btRigidBody* body = new btRigidBody(rbInfo);
 
-        body->setUserPointer(userPointer);
+        // Wrap in CollisionUserData for consistent raycast handling
+        CollisionUserData* collisionData = new CollisionUserData();
+        collisionData->entity = userPointer;
+        collisionUserDataList.push_back(collisionData);
+        
+        body->setUserPointer(collisionData);
         
         dynamicsWorld->addRigidBody(body);
 
@@ -292,7 +362,12 @@ class PhysicsSystem {
         btRigidBody::btRigidBodyConstructionInfo rbInfo(0, motionState, shape);
         btRigidBody* body = new btRigidBody(rbInfo);
 
-        body->setUserPointer(userPointer);
+        // Wrap in CollisionUserData for consistent raycast handling
+        CollisionUserData* collisionData = new CollisionUserData();
+        collisionData->entity = userPointer;
+        collisionUserDataList.push_back(collisionData);
+        
+        body->setUserPointer(collisionData);
 
         body->setCollisionFlags(body->getCollisionFlags() | btCollisionObject::CF_NO_CONTACT_RESPONSE);
         dynamicsWorld->addRigidBody(body);
@@ -358,6 +433,12 @@ class PhysicsSystem {
             delete mesh;
         }
         triangleMeshes.clear();
+        
+        // Clean up collision user data
+        for (CollisionUserData* data : collisionUserDataList) {
+            delete data;
+        }
+        collisionUserDataList.clear();
         delete dynamicsWorld;
         delete solver;
         delete broadphase;
