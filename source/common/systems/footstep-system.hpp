@@ -2,6 +2,8 @@
 #include "../components/audio-controller.hpp"
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
+#include "../components/mesh-renderer.hpp"
+#include "./physics-system.hpp"
 
 namespace our {
     class FootstepSystem {
@@ -9,6 +11,7 @@ namespace our {
         // Reference to player entity and its audio controller
         Entity* player = nullptr;
         AudioController* walkingAudio = nullptr;
+        PhysicsSystem* physicsSystem = nullptr;
         
         // Sound files for walking
         std::vector<std::string> grassSounds = {
@@ -29,7 +32,7 @@ namespace our {
         float walkStepInterval = 0.7f; // seconds between footsteps
         float runStepInterval = 0.4f;  // seconds between footsteps when running
 
-        void initialize(World* world) {
+        void initialize(World* world, PhysicsSystem* physicsSys) {
             for (auto entity : world->getEntities()) {
                 if (entity->getComponent<PlayerComponent>()) {
                     player = entity;
@@ -45,10 +48,11 @@ namespace our {
                     }
                 }
             }
+            physicsSystem = physicsSys;
         }
-
+        
         void update(World* world, float deltaTime) {
-            if (player == nullptr || walkingAudio == nullptr) return;
+            if (player == nullptr || walkingAudio == nullptr || physicsSystem == nullptr) return;
             auto* playerComp = player->getComponent<PlayerComponent>();
             if (playerComp == nullptr) return;
 
@@ -61,8 +65,17 @@ namespace our {
                     // Time to play footstep sound
                     footstepTimer = 0.0f;
 
-                    // Determine surface type (currently always grass for simplicity)
-                    bool onGrass = true; // Placeholder for actual surface detection
+                    bool onGrass = true;
+                    // Determine surface type using raycasting
+                    glm::vec3 playerPos = physicsSystem->getPlayerPosition();
+                    glm::vec3 rayStart = playerPos;
+                    glm::vec3 rayEnd = playerPos + glm::vec3(0.0f, -1.0f, 0.0f);
+
+                    RaycastResult hit = physicsSystem->raycast(rayStart, rayEnd);
+                    if (hit.hitPoint.y > 1.005f){
+                        onGrass = false;
+                    }
+                    
                     std::string soundFile;
                     if (onGrass) {
                         soundFile = grassSounds[grassIndex];

@@ -59,7 +59,7 @@ class Playstate : public our::State {
         pageSystem.initialize(&world, &physicsSystem, textRenderer,
                               glm::vec2(size.x, size.y));
         // Initialize footstep system
-        footstepSystem.initialize(&world);
+        footstepSystem.initialize(&world, &physicsSystem);
         ambientTensionSystem.initialize(&world);
         staticSoundSystem.initialize(&world);
         glm::vec2 centerPos = glm::vec2(size.x / 2.0f - 75, size.y / 2.0f);
