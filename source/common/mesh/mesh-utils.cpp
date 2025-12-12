@@ -74,50 +74,6 @@ static void computeTangents(std::vector<our::Vertex>& vertices, const std::vecto
     }
 }
 
-// Helper function to recalculate normals from geometry when OBJ normals are incorrect
-// This computes smooth normals by averaging face normals at each vertex
-static void recalculateNormals(std::vector<our::Vertex>& vertices, const std::vector<GLuint>& elements) {
-    std::cout << "Recalculating normals from geometry..." << std::endl;
-    
-    // Initialize all normals to zero
-    for (auto& v : vertices) {
-        v.normal = glm::vec3(0.0f);
-    }
-    
-    // Calculate face normals and accumulate at each vertex
-    for (size_t i = 0; i < elements.size(); i += 3) {
-        GLuint i0 = elements[i];
-        GLuint i1 = elements[i + 1];
-        GLuint i2 = elements[i + 2];
-        
-        const glm::vec3& p0 = vertices[i0].position;
-        const glm::vec3& p1 = vertices[i1].position;
-        const glm::vec3& p2 = vertices[i2].position;
-        
-        // Calculate face normal using cross product
-        glm::vec3 edge1 = p1 - p0;
-        glm::vec3 edge2 = p2 - p0;
-        glm::vec3 faceNormal = glm::cross(edge1, edge2);
-        
-        // Weight by area (faceNormal length is proportional to area)
-        // Accumulate at each vertex for smooth normals
-        vertices[i0].normal += faceNormal;
-        vertices[i1].normal += faceNormal;
-        vertices[i2].normal += faceNormal;
-    }
-    
-    // Normalize all vertex normals
-    for (auto& v : vertices) {
-        if (glm::length(v.normal) > 1e-6f) {
-            v.normal = glm::normalize(v.normal);
-        } else {
-            v.normal = glm::vec3(0.0f, 1.0f, 0.0f); // Default up
-        }
-    }
-    
-    std::cout << "Normals recalculated." << std::endl;
-}
-
 // Helper function to resolve texture paths relative to MTL file location
 // Handles relative paths like "../textures/foo.png" by resolving them from mtl_basedir
 static std::string resolveTexturePath(const std::string& texturePath, const std::string& mtl_basedir) {
@@ -292,10 +248,6 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
             }
         }
     }
-
-    // WORKAROUND: Recalculate normals from geometry since OBJ normals may be incorrect
-    // This computes smooth normals based on face geometry
-    recalculateNormals(vertices, elements);
 
     // Compute tangent vectors for normal mapping
     computeTangents(vertices, elements);
@@ -488,10 +440,6 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
             submeshes.push_back(submesh);
         }
     }
-
-    // WORKAROUND: Recalculate normals from geometry since OBJ normals may be incorrect
-    // This computes smooth normals based on face geometry
-    recalculateNormals(vertices, elements);
 
     // Compute tangent vectors for normal mapping
     computeTangents(vertices, elements);
