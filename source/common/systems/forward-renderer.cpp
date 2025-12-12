@@ -18,6 +18,9 @@ namespace our
         // Read fog configuration
         this->fogEnabled = config.value("fog_enabled", true);
 
+        // Load spotlight cookie texture
+        this->spotlightCookie = texture_utils::loadImage("assets/textures/flashlight_cookie.png");
+
         // Then we check if there is a sky texture in the configuration
         if (config.contains("sky"))
         {
@@ -302,6 +305,17 @@ namespace our
                 command.material->shader->set("camera_position", eye);
                 command.material->shader->set("light_count", (int)lightCommands.size());
                 command.material->shader->set("fog_enabled", fogEnabled);
+                
+                // Bind spotlight cookie texture
+                if (spotlightCookie) {
+                    glActiveTexture(GL_TEXTURE5);
+                    spotlightCookie->bind();
+                    command.material->shader->set("spotlight_cookie", 5);
+                    command.material->shader->set("has_spotlight_cookie", true);
+                } else {
+                    command.material->shader->set("has_spotlight_cookie", false);
+                }
+                
                 command.material->shader->set("M", M);
                 command.material->shader->set("M_IT", glm::transpose(glm::inverse(M)));
 
@@ -391,6 +405,16 @@ namespace our
                         submeshMaterial->shader->set("camera_position", eye);
                         submeshMaterial->shader->set("light_count", (int)lightCommands.size());
                         submeshMaterial->shader->set("fog_enabled", fogEnabled);
+                        
+                        // Bind spotlight cookie texture
+                        if (spotlightCookie) {
+                            glActiveTexture(GL_TEXTURE5);
+                            spotlightCookie->bind();
+                            submeshMaterial->shader->set("spotlight_cookie", 5);
+                            submeshMaterial->shader->set("has_spotlight_cookie", true);
+                        } else {
+                            submeshMaterial->shader->set("has_spotlight_cookie", false);
+                        }
                         for (size_t li = 0; li < lightCommands.size(); li++)
                         {
                             LightComponent *light = lightCommands[li];
@@ -424,6 +448,16 @@ namespace our
                     instancedRenderer->material->shader->set("camera_position", eye);
                     instancedRenderer->material->shader->set("light_count", (int)lightCommands.size());
                     instancedRenderer->material->shader->set("fog_enabled", fogEnabled);
+                    
+                    // Bind spotlight cookie texture
+                    if (spotlightCookie) {
+                        glActiveTexture(GL_TEXTURE5);
+                        spotlightCookie->bind();
+                        instancedRenderer->material->shader->set("spotlight_cookie", 5);
+                        instancedRenderer->material->shader->set("has_spotlight_cookie", true);
+                    } else {
+                        instancedRenderer->material->shader->set("has_spotlight_cookie", false);
+                    }
                     
                     for (size_t li = 0; li < lightCommands.size(); li++)
                     {
@@ -491,6 +525,17 @@ namespace our
             {
                 command.material->shader->set("camera_position", eye);
                 command.material->shader->set("light_count", (int)lightCommands.size());
+                
+                // Bind spotlight cookie texture
+                if (spotlightCookie) {
+                    glActiveTexture(GL_TEXTURE5);
+                    spotlightCookie->bind();
+                    command.material->shader->set("spotlight_cookie", 5);
+                    command.material->shader->set("has_spotlight_cookie", true);
+                } else {
+                    command.material->shader->set("has_spotlight_cookie", false);
+                }
+                
                 command.material->shader->set("M", M);
                 command.material->shader->set("M_IT", glm::transpose(glm::inverse(M)));
 

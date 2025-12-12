@@ -57,6 +57,8 @@ namespace our
         StaticPostprocessUniforms postprocessUniforms;
         // Fog control
         bool fogEnabled = true;
+        // Spotlight cookie texture
+        Texture2D* spotlightCookie = nullptr;
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
         // windowSize is the width & height of the window (in pixels).

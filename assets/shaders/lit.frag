@@ -33,6 +33,10 @@ uniform int light_count;
 uniform Light lights[MAX_LIGHTS];
 uniform vec3 camera_position;
 
+// Spotlight cookie texture (projects pattern through spotlight)
+uniform sampler2D spotlight_cookie;
+uniform bool has_spotlight_cookie = false;
+
 // Material properties (Blinn-Phong)
 uniform vec3 ambient_color = vec3(0.1);
 uniform vec3 diffuse_color = vec3(0.8);
@@ -149,6 +153,34 @@ void main(){
                 // Smooth transition only between outer and inner cone
                 float intensity = smoothstep(lights[i].outer_cone_angle, lights[i].inner_cone_angle, theta);
                 attenuation *= intensity;
+                
+                // Apply spotlight cookie texture if available (only for first spotlight/flashlight)
+                if (has_spotlight_cookie && i == 0) {
+                    // Calculate UV based on angle from spotlight center
+                    vec3 spotDir = normalize(lights[i].direction);
+                    vec3 toFrag = normalize(fs_in.world_position - lights[i].position);
+                    
+                    // Create a coordinate system for the spotlight
+                    vec3 spotRight = normalize(cross(spotDir, vec3(0.0, 1.0, 0.0)));
+                    vec3 spotUp = normalize(cross(spotRight, spotDir));
+                    
+                    // Get the angle from center (0 at center, 1 at outer edge)
+                    float outerAngle = lights[i].outer_cone_angle;
+                    float angleFromCenter = acos(clamp(theta, -1.0, 1.0));
+                    float maxAngle = acos(clamp(outerAngle, -1.0, 1.0));
+                    float normalizedRadius = angleFromCenter / maxAngle;
+                    
+                    // Get angular position around the cone
+                    float angularPos = atan(dot(toFrag, spotUp), dot(toFrag, spotRight));
+                    
+                    // Convert polar (radius, angle) to UV coordinates
+                    float u = normalizedRadius * cos(angularPos) * 0.5 + 0.5;
+                    float v = normalizedRadius * sin(angularPos) * 0.5 + 0.5;
+                    
+                    // Sample cookie texture and apply as intensity multiplier
+                    float cookie = texture(spotlight_cookie, vec2(u, v)).r;
+                    attenuation *= cookie;
+                }
             }
         }
         }
