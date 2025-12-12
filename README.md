@@ -1,6 +1,6 @@
 # Slender: The Eight Pages - OpenGL Recreation
 
-A fan-made OpenGL recreation of the classic indie horror experience "Slender: The Eight Pages." The goal of the project is to implement the core gameplay loop—exploring a dark forest, finding eight pages, and surviving encounters with the stalking entity—using modern OpenGL techniques.
+A fan-made OpenGL recreation of the classic indie horror experience "Slender: The Eight Pages." The goal of the project is to implement the core gameplay loop, exploring a dark forest, finding eight pages, and surviving encounters with the stalking entity using modern OpenGL techniques.
 
 > **Note:** This is an unofficial, fan-made project and is not affiliated with or endorsed by the original creators of Slender: The Eight Pages.
 
@@ -18,7 +18,7 @@ A fan-made OpenGL recreation of the classic indie horror experience "Slender: Th
 
 ## Gameplay
 
-You explore a dimly-lit forest searching for eight pages scattered across the map. A mysterious, unkillable entity stalks you—look at him for too long or get too close and you die. The objective is to collect all eight pages before the entity kills you.
+You explore a dimly-lit forest searching for eight pages scattered across the map. A mysterious, unkillable entity stalks you, look at him for too long or get too close and you die. The objective is to collect all eight pages before the entity kills you.
 
 ## Screenshots
 
