@@ -127,7 +127,6 @@ class SlendermanAISystem {
 
         auto* slenderComp = slenderman->getComponent<SlendermanComponent>();
         auto* playerComp = player->getComponent<PlayerComponent>();
-        if(slenderComp->debugMode){return;}
         bool isPlayerLooking = false;
         bool isPlayerInProximity = false;
         bool canTeleport = false;
@@ -146,6 +145,7 @@ class SlendermanAISystem {
         float yaw = atan2(direction.x, direction.z) + glm::half_pi<float>();
         slenderman->localTransform.rotation = glm::vec3(0.0f, yaw, 0.0f);
 
+        if(slenderComp->debugMode){return;}
         // Get frustum from renderer and check if Slenderman is inside it
         const Frustum& frustum = renderer->getFrustum();
         bool isInFrustum = frustum.isSphereInside(slenderPos, 1.0f);
