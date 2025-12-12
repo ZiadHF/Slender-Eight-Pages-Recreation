@@ -51,7 +51,7 @@
                 "Oil_Tank-Material__Untitled_tga_Oil_Tank_d_Baked": "assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png",
                 "diffuse_1": "assets/textures/diffuse_1.png",
                 "RockJagged0021Diffuse_RockJagged0021Diffuse_Baked": "assets/textures/RockJagged0021Diffuse.png",
-                "Roof_Roof_ao_Baked": "assets/textures/Roof_Roof_ao_Baked.png",
+                "Roof_Roof_ao_Baked": "assets/textures/Roof_ao.png",
                 "SiloRust_05_Baked": "assets/textures/05.png",
                 "Tiles_TilesBroken0013_2_S_Baked": "assets/textures/TilesBroken0013_2_S.png",
                 "genericconcrete_genericConcrete_Baked": "assets/textures/genericConcrete.png",
@@ -60,7 +60,8 @@
                 "slenderman_texture": "assets/textures/slenderman_color.png",
                 "BarkMat_diffuse": "assets/textures/BarkMat_diffuse.png",
                 "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
-                "Grass": "assets/textures/Grass.png"
+                "Grass": "assets/textures/Grass.png",
+                "fence11_271": "assets/textures/fence11_271.png"
             },
             "meshes": {
                 "map": {
@@ -349,9 +350,9 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.552,
+                        0.517,
+                        0.439,
                         1
                     ],
                     "texture": "Concrete2_Brick_Small_Brown_Baked",
@@ -369,9 +370,9 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.417,
+                        0.359,
+                        0.227,
                         1
                     ],
                     "texture": "Concrete_2_RockJagged0021Diffuse_Baked",
@@ -469,9 +470,9 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.408,
+                        0.745,
+                        0.647,
                         1
                     ],
                     "texture": "Roof_Roof_ao_Baked",
@@ -529,9 +530,9 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.8024,
+                        0.8024,
+                        0.8024,
                         1
                     ],
                     "texture": "genericconcrete_genericConcrete_Baked",
@@ -684,12 +685,110 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.784,
+                        0.784,
+                        0.784,
                         1
                     ],
                     "texture": "transporter_01-truck_01_truck_01g_Baked",
+                    "sampler": "default"
+                },
+                "Fence": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.001": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.002": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
+                    "sampler": "default"
+                },
+                "Fence.003": {
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        0.405,
+                        0.222,
+                        0.112,
+                        1
+                    ],
+                    "texture": "fence11_271",
                     "sampler": "default"
                 },
                 "transporter_02-truck_02_30312": {
@@ -704,9 +803,9 @@
                         }
                     },
                     "tint": [
-                        1,
-                        1,
-                        1,
+                        0.784,
+                        0.784,
+                        0.784,
                         1
                     ],
                     "texture": "transporter_02-truck_02_truck_02b_Baked",
