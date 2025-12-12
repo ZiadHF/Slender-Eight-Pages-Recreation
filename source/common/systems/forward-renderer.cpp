@@ -148,14 +148,20 @@ namespace our
         transparentCommands.clear();
         lightCommands.clear();
         std::vector<InstancedRendererComponent *> instancedRenderers;
+        
+        // Wer need to find the player component first before processing lights
+        for (auto entity : world->getEntities())
+        {
+            playerComp = entity->getComponent<PlayerComponent>();
+            if (playerComp)
+                break;
+        }
+        
         for (auto entity : world->getEntities())
         {
             // If we hadn't found a camera yet, we look for a camera in this entity
             if (!camera)
                 camera = entity->getComponent<CameraComponent>();
-            // Find player component for flashlight state
-            if (!playerComp)
-                playerComp = entity->getComponent<PlayerComponent>();
             if (auto instancedRenderer =
                     entity->getComponent<InstancedRendererComponent>();
                 instancedRenderer)
