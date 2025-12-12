@@ -118,6 +118,9 @@ void main(){
         ? texture(aoMap, scaled_tex_coord).r 
         : 1.0;
     
+    // Apply AO to diffuse color (represents indirect light occlusion)
+    vec3 material_diffuse = diffuse_color * texture_color.rgb * material_ao;
+    
     vec3 material_emissive = hasEmissiveMap 
         ? texture(emissiveMap, scaled_tex_coord).rgb 
         : vec3(0.0);
@@ -185,7 +188,7 @@ void main(){
         }
         // Diffuse: using abs() for two-sided lighting (lights surfaces regardless of normal direction)
         float  diff = abs(dot(normal, light_direction));
-        vec3 diffuse =diff * diffuse_color * texture_color.rgb * lights[i].color;
+        vec3 diffuse = diff * material_diffuse * lights[i].color;
         
         // Specular - only if illuminationModel is 2 (full Blinn-Phong)
         vec3 specular = vec3(0.0);
@@ -194,7 +197,7 @@ void main(){
             float spec = pow(max(0,dot(halfway,normal)), material_shininess);
             specular = spec * material_specular * lights[i].color;
         }
-        result += attenuation * (diffuse + specular) * material_ao;
+        result += attenuation * (diffuse + specular);
     }
     
     // Calculate fog only if enabled and there's any light
