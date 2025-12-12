@@ -1,26 +1,6 @@
 # Blender 5.0.0 MTL File: 'None'
 # www.blender.org
 
-newmtl BaldBoska_1_30176
-Ns 0.000000
-Ka 1.000000 1.000000 1.000000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 1.000000
-illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/baldestboy.jpg
-
-newmtl BaldBoska_30036
-Ns 0.000000
-Ka 1.000000 1.000000 1.000000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.500000
-d 1.000000
-illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/baldest.jpg
-
 newmtl Brick_29994
 Ns 0.000000
 Ka 1.000000 1.000000 1.000000
@@ -29,8 +9,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd -s 10 10 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Brick_Small_Brown.png
-map_Bump -s 10 10 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Brick_Small_Brown_Normal.png
+map_Kd -s 10 10 1 ../assets/textures/Brick_Small_Brown.png
+map_Bump -s 10 10 1 -bm 1.000000 ../assets/textures/Brick_Small_Brown_Normal.png
 
 newmtl BuildingShed_29974
 Ns 0.000000
@@ -40,8 +20,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/BuildingShed.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/BuildingShed_normalmap.png
+map_Kd ../assets/textures/BuildingShed.png
+map_Bump -bm 1.000000 ../assets/textures/BuildingShed_normalmap.png
 
 newmtl Concrete2_30092
 Ns 0.000000
@@ -51,8 +31,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd -s 5 1 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Brick_Small_Brown.png
-map_Bump -s 5 1 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Brick_Small_Brown_Normal.png
+map_Kd -s 5 1 1 ../assets/textures/Brick_Small_Brown.png
+map_Bump -s 5 1 1 -bm 1.000000 ../assets/textures/Brick_Small_Brown_Normal.png
 
 newmtl Concrete_2_30340
 Ns 0.020661
@@ -62,8 +42,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd -s 1 3 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/RockJagged0021Diffuse.png
-map_Bump -s 1 3 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/RockJagged0021Bump.png
+map_Kd -s 1 3 1 ../assets/textures/RockJagged0021Diffuse.png
+map_Bump -s 1 3 1 -bm 1.000000 ../assets/textures/RockJagged0021Bump.png
 
 newmtl Concrete_30314
 Ns 0.000000
@@ -73,8 +53,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd -s 20 20 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/ConcreteBare0280_39_S.png
-map_Bump -s 20 20 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/ConcreteBare0280_39_S_NRM.png
+map_Kd -s 20 20 1 ../assets/textures/ConcreteBare0280_39_S.png
+map_Bump -s 20 20 1 -bm 1.000000 ../assets/textures/ConcreteBare0280_39_S_NRM.png
 
 newmtl Fence
 Ns 64.000023
@@ -82,10 +62,10 @@ Ka 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
-map_Kd -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Ks -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_Spec.png
-map_d -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Bump -s 20 600 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_NRM.png
+map_Kd -s 20 600 1 ../assets/textures/fence11_271.png
+map_Ks -s 20 600 1 ../assets/textures/fence11_271_Spec.png
+map_d -s 20 600 1 ../assets/textures/fence11_271.png
+map_Bump -s 20 600 1 -bm 1.000000 ../assets/textures/fence11_271_NRM.png
 
 newmtl Fence.001
 Ns 64.000023
@@ -93,10 +73,10 @@ Ka 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
-map_Kd -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Ks -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_Spec.png
-map_d -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Bump -s 20 600 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_NRM.png
+map_Kd -s 20 600 1 ../assets/textures/fence11_271.png
+map_Ks -s 20 600 1 ../assets/textures/fence11_271_Spec.png
+map_d -s 20 600 1 ../assets/textures/fence11_271.png
+map_Bump -s 20 600 1 -bm 1.000000 ../assets/textures/fence11_271_NRM.png
 
 newmtl Fence.002
 Ns 64.000023
@@ -104,10 +84,10 @@ Ka 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
-map_Kd -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Ks -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_Spec.png
-map_d -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Bump -s 20 600 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_NRM.png
+map_Kd -s 20 600 1 ../assets/textures/fence11_271.png
+map_Ks -s 20 600 1 ../assets/textures/fence11_271_Spec.png
+map_d -s 20 600 1 ../assets/textures/fence11_271.png
+map_Bump -s 20 600 1 -bm 1.000000 ../assets/textures/fence11_271_NRM.png
 
 newmtl Fence.003
 Ns 64.000023
@@ -115,10 +95,10 @@ Ka 1.000000 1.000000 1.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 2
-map_Kd -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Ks -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_Spec.png
-map_d -s 20 600 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271.png
-map_Bump -s 20 600 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/fence11_271_NRM.png
+map_Kd -s 20 600 1 ../assets/textures/fence11_271.png
+map_Ks -s 20 600 1 ../assets/textures/fence11_271_Spec.png
+map_d -s 20 600 1 ../assets/textures/fence11_271.png
+map_Bump -s 20 600 1 -bm 1.000000 ../assets/textures/fence11_271_NRM.png
 
 newmtl Floor_1_30178
 Ns 0.000000
@@ -127,9 +107,9 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsDamageFloor0001_1_S.png
-map_d C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsDamageFloor0001_1_S.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsDamageFloor0001_1_S_NRM.png
+map_Kd ../assets/textures/DecalsDamageFloor0001_1_S.png
+map_d ../assets/textures/DecalsDamageFloor0001_1_S.png
+map_Bump -bm 1.000000 ../assets/textures/DecalsDamageFloor0001_1_S_NRM.png
 
 newmtl Floor_2_30374
 Ns 0.000000
@@ -138,9 +118,9 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsDamageFloor0004_1_S.png
-map_d C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsDamageFloor0004_1_S.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsDamageFloor0004_1_S_NRM.png
+map_Kd ../assets/textures/DecalsDamageFloor0004_1_S.png
+map_d ../assets/textures/DecalsDamageFloor0004_1_S.png
+map_Bump -bm 1.000000 ../assets/textures/DecalsDamageFloor0004_1_S_NRM.png
 
 newmtl Leaking_1_30382
 Ns 0.000000
@@ -149,9 +129,9 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0165_1_S.png
-map_d C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0165_1_S.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0165_1_S_NRM.png
+map_Kd ../assets/textures/DecalsLeaking0165_1_S.png
+map_d ../assets/textures/DecalsLeaking0165_1_S.png
+map_Bump -bm 1.000000 ../assets/textures/DecalsLeaking0165_1_S_NRM.png
 
 newmtl Leaking_2_30336
 Ns 0.000000
@@ -160,9 +140,9 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0197_1_S.png
-map_d C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0197_1_S.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0197_1_S_NRM.png
+map_Kd ../assets/textures/DecalsLeaking0197_1_S.png
+map_d ../assets/textures/DecalsLeaking0197_1_S.png
+map_Bump -bm 1.000000 ../assets/textures/DecalsLeaking0197_1_S_NRM.png
 
 newmtl Leaking_3_30252
 Ns 0.000000
@@ -171,11 +151,21 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0223_1_S.png
-map_d C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0223_1_S.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/DecalsLeaking0223_1_S_NRM.png
+map_Kd ../assets/textures/DecalsLeaking0223_1_S.png
+map_d ../assets/textures/DecalsLeaking0223_1_S.png
+map_Bump -bm 1.000000 ../assets/textures/DecalsLeaking0223_1_S_NRM.png
 
 newmtl Material
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+
+newmtl Material.001
 Ns 250.000000
 Ka 1.000000 1.000000 1.000000
 Ks 0.500000 0.500000 0.500000
@@ -183,7 +173,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd -s 40 1 0 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/05.png
+map_Kd -s 40 1 0 ../assets/textures/05.png
 
 newmtl Material.002
 Ns 250.000000
@@ -193,7 +183,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd -s 40 1 0 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/05.png
+map_Kd -s 40 1 0 ../assets/textures/05.png
 
 newmtl Material.003
 Ns 250.000000
@@ -203,7 +193,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd -s 40 1 0 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/05.png
+map_Kd -s 40 1 0 ../assets/textures/05.png
 
 newmtl Material.004
 Ns 250.000000
@@ -213,7 +203,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd -s 40 1 0 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/05.png
+map_Kd -s 40 1 0 ../assets/textures/05.png
 
 newmtl Oil_Tank-Material__Untitled.tga_30316
 Ns 200.000000
@@ -222,9 +212,9 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png
-map_Ks C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_Spec.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_NRM.png
+map_Kd ../assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked.png
+map_Ks ../assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_Spec.png
+map_Bump -bm 1.000000 ../assets/textures/Oil_Tank-Material__Untitled.tga_Oil Tank_d_Baked_NRM.png
 
 newmtl Optimized_Bark_Material_9_29992
 Ns 0.000000
@@ -234,7 +224,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/diffuse_1.png
+map_Kd ../assets/textures/diffuse_1.png
 
 newmtl RockJagged0021Diffuse_30360
 Ns 0.000000
@@ -243,9 +233,9 @@ Ks 0.000000 0.000000 0.000000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 illum 1
-map_Kd -s 5 5 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/RockJagged0021Diffuse.png
-map_d -s 5 5 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
-map_Bump -s 5 5 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/RockJagged0021Bump.png
+map_Kd -s 5 5 1 ../assets/textures/RockJagged0021Diffuse.png
+map_d -s 5 5 1 ../assets/textures/RockJagged0021Diffuse_RockJagged0021Diffuse_Baked.png
+map_Bump -s 5 5 1 -bm 1.000000 ../assets/textures/RockJagged0021Bump.png
 
 newmtl Roof_30222
 Ns 0.000000
@@ -255,8 +245,8 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Roof_ao.png
-map_Bump -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Roof_normals.png
+map_Kd ../assets/textures/Roof_ao.png
+map_Bump -bm 1.000000 ../assets/textures/Roof_normals.png
 
 newmtl SiloRust_30198
 Ns 0.000000
@@ -266,7 +256,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd -s 4.28 5 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/05.png
+map_Kd -s 4.28 5 1 ../assets/textures/05.png
 
 newmtl Terrain_Baked_-4838
 Ns 0.000000
@@ -276,29 +266,29 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/Terrain_Baked.png
+map_Kd ../assets/textures/Terrain_Baked.png
 
 newmtl Tiles_30344
-Ns 14
+Ns 14.000000
 Ka 1.000000 1.000000 1.000000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
-illum 1
-map_Kd -s 20 20 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/TilesBroken0013_2_S.png
-map_Bump -s 20 20 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/TilesBroken0013_2_S_NRM.png
+illum 2
+map_Kd -s 20 20 1 ../assets/textures/TilesBroken0013_2_S.png
+map_Bump -s 20 20 1 -bm 1.000000 ../assets/textures/TilesBroken0013_2_S_NRM.png
 
 newmtl genericconcrete_30302
-Ns 200
+Ns 200.000000
 Ka 1.000000 1.000000 1.000000
 Ks 0.200000 0.200000 0.200000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
-illum 1
-map_Kd -s 6 8 1 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/genericConcrete.png
-map_Bump -s 6 8 1 -bm 1.000000 C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/genericConcreteBump.png
+illum 2
+map_Kd -s 6 8 1 ../assets/textures/genericConcrete.png
+map_Bump -s 6 8 1 -bm 1.000000 ../assets/textures/genericConcreteBump.png
 
 newmtl transporter_01-truck_01_30288
 Ns 0.000000
@@ -308,7 +298,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/transporter_01-truck_01_truck_01g_Baked.png
+map_Kd ../assets/textures/transporter_01-truck_01_truck_01g_Baked.png
 
 newmtl transporter_02-truck_02_30312
 Ns 0.000000
@@ -318,7 +308,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/transporter_02-truck_02_truck_02b_Baked.png
+map_Kd ../assets/textures/transporter_02-truck_02_truck_02b_Baked.png
 
 newmtl wood_30310
 Ns 0.000000
@@ -328,4 +318,4 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 1
-map_Kd C:/Users/ziad-/Desktop/Slender-Eight-Pages-Recreation/assets/textures/wood.png
+map_Kd ../assets/textures/wood.png
