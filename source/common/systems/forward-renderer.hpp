@@ -55,6 +55,8 @@ namespace our
         TexturedMaterial* postprocessMaterial;
         // Struct to hold player health
         StaticPostprocessUniforms postprocessUniforms;
+        // Fog control
+        bool fogEnabled = true;
     public:
         // Initialize the renderer including the sky and the Postprocessing objects.
         // windowSize is the width & height of the window (in pixels).

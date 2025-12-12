@@ -3,15 +3,16 @@
     "window": {
         "title": "Slender - The Eight Pages",
         "size": {
-           "width": 1280,
-           "height": 720
+            "width": 1280,
+            "height": 720
         },
         "fullscreen": false
     },
     "scene": {
         "renderer": {
             "sky": "assets/textures/sky.png",
-            "postprocess": "assets/shaders/postprocess/static.frag"
+            "postprocess": "assets/shaders/postprocess/static.frag",
+            "fog_enabled": true
         },
         "assets": {
             "shaders": {
@@ -888,6 +889,7 @@
                             {
                                 "type": "Light",
                                 "lightType": "spot",
+                                "isFlashlight": true,
                                 "color": [
                                     1.0,
                                     0.95,

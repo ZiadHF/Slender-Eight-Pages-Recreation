@@ -26,6 +26,9 @@ namespace our
         float inner_cone_angle = glm::cos(glm::radians(12.5f));
         float outer_cone_angle = glm::cos(glm::radians(17.5f));
 
+        // Whether this is the player's flashlight (can be toggled on/off)
+        bool isFlashlight = false;
+
         // Flickering settings
         bool flickerEnabled = false;
         float flickerIntensity = 0.15f; // How much the light flickers (0-1)
@@ -150,6 +153,9 @@ namespace our
             flickerIntensity = data.value("flickerIntensity", 0.15f);
             flickerSpeed = data.value("flickerFrequency", data.value("flickerSpeed", 8.0f));
             flickerRandomness = data.value("flickerRandomness", 0.5f);
+
+            // Parse flashlight flag
+            isFlashlight = data.value("isFlashlight", false);
         }
     };
 

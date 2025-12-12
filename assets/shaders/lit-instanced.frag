@@ -63,6 +63,7 @@ uniform vec3 fog_color = vec3(0.02, 0.02, 0.02);  // Dark bluish fog
 uniform float fog_density = 0.01;
 uniform float fog_start = 30.0;
 uniform float fog_end = 100.0;
+uniform bool fog_enabled = true;
 
 void main(){
     // Apply texture scaling to UV coordinates
@@ -173,8 +174,8 @@ void main(){
         result += attenuation * (diffuse + specular);
     }
     
-    // Calculate fog only if there's any light (avoid applying fog to pitch black areas)
-    if (length(result) > 0.001) {
+    // Calculate fog only if enabled and there's any light
+    if (fog_enabled && length(result) > 0.001) {
         float distance_to_camera = length(camera_position - fs_in.world_position);
         
         // Linear fog that increases between fog_start and fog_end

@@ -29,6 +29,7 @@ class FreeCameraControllerSystem {
     float bobbingAmplitude = 0.14f;    // Vertical bob amount
     float bobbingSway = 0.09f;
     std::map<std::string, int> controlKeys;
+    bool flashlightKeyWasPressed = false;  // For detecting key press edge
 
     void loadControls() {
         std::ifstream file("config/player.json");
@@ -163,6 +164,13 @@ class FreeCameraControllerSystem {
         } else {
             playerComp->isSprinting = false;
         }
+
+        // Flashlight toggle (edge detection - only toggle on key press, not hold)
+        bool flashlightKeyPressed = isKeyPressed("toggle_flashlight");
+        if (flashlightKeyPressed && !flashlightKeyWasPressed) {
+            playerComp->flashlightOn = !playerComp->flashlightOn;
+        }
+        flashlightKeyWasPressed = flashlightKeyPressed;
 
         glm::vec3 moveDir(0.0f);
 

@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include "../components/instanced-renderer.hpp"
+#include "../components/player.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 namespace our
@@ -13,6 +14,9 @@ namespace our
     {
         // First, we store the window size for later use
         this->windowSize = windowSize;
+
+        // Read fog configuration
+        this->fogEnabled = config.value("fog_enabled", true);
 
         // Then we check if there is a sky texture in the configuration
         if (config.contains("sky"))
@@ -139,6 +143,7 @@ namespace our
     {
         // First of all, we search for a camera and for all the mesh renderers
         CameraComponent *camera = nullptr;
+        PlayerComponent *playerComp = nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
         lightCommands.clear();
@@ -148,6 +153,9 @@ namespace our
             // If we hadn't found a camera yet, we look for a camera in this entity
             if (!camera)
                 camera = entity->getComponent<CameraComponent>();
+            // Find player component for flashlight state
+            if (!playerComp)
+                playerComp = entity->getComponent<PlayerComponent>();
             if (auto instancedRenderer =
                     entity->getComponent<InstancedRendererComponent>();
                 instancedRenderer)
@@ -157,6 +165,10 @@ namespace our
             // Collect light components and update their flicker
             if (auto light = entity->getComponent<LightComponent>(); light)
             {
+                // Skip flashlight if player has it turned off
+                if (light->isFlashlight && playerComp && !playerComp->flashlightOn) {
+                    continue;
+                }
                 light->updateFlicker(deltaTime);
                 lightCommands.push_back(light);
             }
@@ -283,6 +295,7 @@ namespace our
             {
                 command.material->shader->set("camera_position", eye);
                 command.material->shader->set("light_count", (int)lightCommands.size());
+                command.material->shader->set("fog_enabled", fogEnabled);
                 command.material->shader->set("M", M);
                 command.material->shader->set("M_IT", glm::transpose(glm::inverse(M)));
 
@@ -371,6 +384,7 @@ namespace our
                         // Set lighting uniforms for instanced lit materials
                         submeshMaterial->shader->set("camera_position", eye);
                         submeshMaterial->shader->set("light_count", (int)lightCommands.size());
+                        submeshMaterial->shader->set("fog_enabled", fogEnabled);
                         for (size_t li = 0; li < lightCommands.size(); li++)
                         {
                             LightComponent *light = lightCommands[li];
@@ -403,6 +417,7 @@ namespace our
                     // Set lighting uniforms for instanced lit materials
                     instancedRenderer->material->shader->set("camera_position", eye);
                     instancedRenderer->material->shader->set("light_count", (int)lightCommands.size());
+                    instancedRenderer->material->shader->set("fog_enabled", fogEnabled);
                     
                     for (size_t li = 0; li < lightCommands.size(); li++)
                     {
@@ -432,6 +447,7 @@ namespace our
 
             // Set fog uniforms for sky
             skyMaterial->shader->set("fog_color", glm::vec3(0.02f, 0.02f, 0.02f));
+            skyMaterial->shader->set("fog_enabled", fogEnabled);
             skyMaterial->shader->set("apply_fog", true);
 
             // Get the camera position
