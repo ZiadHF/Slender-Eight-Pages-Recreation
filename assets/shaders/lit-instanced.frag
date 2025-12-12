@@ -100,15 +100,7 @@ void main(){
         tangentNormal.xy *= bumpMultiplier;
         tangentNormal = normalize(tangentNormal);
         // Transform to world space
-        normal = TBN * tangentNormal;
-        
-        // Ensure normal has minimum length to prevent zero normals from bad normal maps
-        float normalLength = length(normal);
-        if (normalLength < 0.001) {
-            normal = N; // Fall back to vertex normal
-        } else {
-            normal = normal / normalLength; // normalize
-        }
+        normal = normalize(TBN * tangentNormal);
     }
     
     // Sample material texture maps (fallback to uniforms if no map)
@@ -186,7 +178,7 @@ void main(){
                     
                     // Sample cookie texture and apply as intensity multiplier
                     float cookie = texture(spotlight_cookie, vec2(u, v)).r;
-                    attenuation *= cookie;
+                    attenuation *= cookie * 1.2;
                 }
             }
         }
@@ -202,7 +194,7 @@ void main(){
             float spec = pow(max(0,dot(halfway,normal)), material_shininess);
             specular = spec * material_specular * lights[i].color;
         }
-        result += attenuation * (diffuse + specular);
+        result += attenuation * (diffuse + specular) * material_ao;
     }
     
     // Calculate fog only if enabled and there's any light

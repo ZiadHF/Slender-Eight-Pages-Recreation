@@ -28,7 +28,7 @@ struct Light {
     //Necessary for spotlight
     float inner_cone_angle;
     float outer_cone_angle;
-    bool isFlashlight;  // Whether this light uses the cookie texture
+    bool isFlashlight;  
 };
 uniform int light_count;
 uniform Light lights[MAX_LIGHTS];
@@ -194,7 +194,7 @@ void main(){
             float spec = pow(max(0,dot(halfway,normal)), material_shininess);
             specular = spec * material_specular * lights[i].color;
         }
-        result += attenuation * (diffuse + specular);
+        result += attenuation * (diffuse + specular) * material_ao;
     }
     
     // Calculate fog only if enabled and there's any light
@@ -210,11 +210,6 @@ void main(){
         // Mix result with distance-scaled fog
         result = mix(result, distance_scaled_fog, fog_factor);
     }
-    
-    // DEBUG: Uncomment ONE of these lines to visualize:
-    // frag_color = vec4(normal * 0.5 + 0.5, 1.0);  // Visualize normals (should be consistent on parallel walls)
-    // frag_color = vec4(abs(normal), 1.0);  // Visualize absolute normals
-    // if (light_count > 0) frag_color = vec4(normalize(lights[0].direction) * 0.5 + 0.5, 1.0);  // Visualize light direction
     
     frag_color = vec4(result, texture_color.a);
 }
