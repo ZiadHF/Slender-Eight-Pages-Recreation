@@ -63,6 +63,7 @@
                 "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
                 "Grass": "assets/textures/Grass.png",
                 "fence11_271": "assets/textures/fence11_271.png"
+                 
             },
             "meshes": {
                 "map": {
@@ -85,6 +86,86 @@
                 "default": {}
             },
             "materials": {
+                "Material":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                  "Material.002":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                  "Material.003":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
+                  "Material.004":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
                 "Grass.002": {
                     "type": "lit",
                     "shader": "lit-instanced",
