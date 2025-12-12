@@ -698,7 +698,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": true
+                            "enabled": false
                         },
                         "blending": {
                             "enabled": true,
@@ -710,6 +710,7 @@
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         0.405,
                         0.222,
@@ -724,12 +725,19 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": true
+                            "enabled": false
+                        },
+                        "blending": {
+                            "enabled": true,
+                            "equation": "GL_FUNC_ADD",
+                            "sourceFactor": "GL_SRC_ALPHA",
+                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
                         },
                         "depthTesting": {
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         0.405,
                         0.222,
@@ -744,7 +752,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": true
+                            "enabled": false
                         },
                         "blending": {
                             "enabled": true,
@@ -756,6 +764,7 @@
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         0.405,
                         0.222,
@@ -770,7 +779,7 @@
                     "shader": "lit",
                     "pipelineState": {
                         "faceCulling": {
-                            "enabled": true
+                            "enabled": false
                         },
                         "blending": {
                             "enabled": true,
@@ -782,6 +791,7 @@
                             "enabled": true
                         }
                     },
+                    "transparent": true,
                     "tint": [
                         0.405,
                         0.222,
