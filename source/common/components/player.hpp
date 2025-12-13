@@ -73,6 +73,7 @@ inline int stringToGLFWKey(const std::string& keyName) {
     return (it != keyMap.end()) ? it->second : -1;
 }
 
+
 class PlayerComponent : public Component {
    public:
     // Number of pages collected by the player
@@ -90,6 +91,14 @@ class PlayerComponent : public Component {
     // Movement speeds
     glm::vec3 walkSpeed = glm::vec3(3.0f);    // Walking speed in units per second
     glm::vec3 sprintSpeedup = glm::vec3(2.0f);  // Sprinting speed in units per second
+
+    // Stamina parameters
+    float maxStamina = 100.0f;
+    float stamina = maxStamina;
+    float staminaDrainRate = 7.0f;   // Stamina drain rate per second while sprinting
+    float staminaRegenRate = 5.0f;    // Stamina regeneration rate per second
+    float staminaRegenDelay = 1.5f;   // Seconds to wait before stamina starts regenerating
+    float staminaRegenTimer = 0.0f;   // Current regen delay timer
 
     // Player states
     bool isMoving = false;
@@ -115,6 +124,12 @@ class PlayerComponent : public Component {
             float speedup = data["sprintSpeedup"];
             sprintSpeedup = glm::vec3(speedup);
         }
+
+        // Stamina parameters
+        maxStamina = data.value("maxStamina", maxStamina);
+        staminaDrainRate = data.value("staminaDrainRate", staminaDrainRate);
+        staminaRegenRate = data.value("staminaRegenRate", staminaRegenRate);
+        staminaRegenDelay = data.value("staminaRegenDelay", staminaRegenDelay);
     }
 };
 
