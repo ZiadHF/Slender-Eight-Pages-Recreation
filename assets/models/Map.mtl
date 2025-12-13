@@ -158,12 +158,12 @@ map_Bump -bm 1.000000 ../textures/DecalsLeaking0223_1_S_NRM.png
 newmtl Material
 Ns 250.000000
 Ka 1.000000 1.000000 1.000000
-Kd 0.800000 0.800000 0.800000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
 Ni 1.500000
 d 1.000000
 illum 2
+map_Kd -s 40 1 0 ../textures/05.png
 
 newmtl Material.001
 Ns 250.000000
@@ -271,7 +271,7 @@ illum 1
 map_Kd ../textures/Terrain_Baked.png
 
 newmtl Tiles_30344
-Ns 14.000000
+Ns 14
 Ka 1.000000 1.000000 1.000000
 Ks 0.500000 0.500000 0.500000
 Ke 0.000000 0.000000 0.000000
@@ -282,7 +282,7 @@ map_Kd -s 20 20 1 ../textures/TilesBroken0013_2_S.png
 map_Bump -s 20 20 1 -bm 1.000000 ../textures/TilesBroken0013_2_S_NRM.png
 
 newmtl genericconcrete_30302
-Ns 200.000000
+Ns 200
 Ka 1.000000 1.000000 1.000000
 Ks 0.200000 0.200000 0.200000
 Ke 0.000000 0.000000 0.000000

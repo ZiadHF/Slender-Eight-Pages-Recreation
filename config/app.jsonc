@@ -104,6 +104,26 @@
                     "texture": "SiloRust_05_Baked",
                     "sampler": "default"
                 },
+                "Material.001":{
+                    "type": "lit",
+                    "shader": "lit",
+                    "pipelineState": {
+                        "faceCulling": {
+                            "enabled": true
+                        },
+                        "depthTesting": {
+                            "enabled": true
+                        }
+                    },
+                    "tint": [
+                        1,
+                        1,
+                        1,
+                        1
+                    ],
+                    "texture": "SiloRust_05_Baked",
+                    "sampler": "default"
+                },
                   "Material.002":{
                     "type": "lit",
                     "shader": "lit",
