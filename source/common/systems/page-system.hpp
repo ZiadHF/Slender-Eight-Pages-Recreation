@@ -14,6 +14,7 @@
 #include "../common/ecs/entity.hpp"
 #include "../common/systems/text-renderer.hpp"
 #include "physics-system.hpp"
+#include "debug-renderer.hpp"
 
 namespace our {
 
@@ -37,6 +38,17 @@ class PageSystem {
     // Raycast parameters
     float interactionDistance = 1.5f;  // Max distance player can interact
 
+    DebugRenderer* debugRenderer = nullptr;
+    bool debugMode = true; // Toggle for debug visualization
+
+    // Store camera info for debug rendering
+    glm::vec3 lastCameraPos = glm::vec3(0);
+    glm::vec3 lastCameraForward = glm::vec3(0, 0, -1);
+    
+    // Track if currently looking at a collectible page
+    bool canCollectPage = false;
+    float closestPageDistance = -1.0f;
+
     void initialize(World* world, PhysicsSystem* physicsSystem,
                     TextRenderer* textRenderer,
                     const glm::ivec2& screenSizeParam) {
@@ -44,6 +56,12 @@ class PageSystem {
         this->textRenderer = textRenderer;
         this->screenSize = screenSizeParam;
         totalPages = 0;
+
+        // Initialize debug renderer
+        if (!debugRenderer) {
+            debugRenderer = new DebugRenderer();
+            debugRenderer->initialize();
+        }
 
         // Clear any existing data
         spawnedPages.clear();
@@ -221,6 +239,13 @@ class PageSystem {
             delete pageShader;
             pageShader = nullptr;
         }
+
+        // Cleanup debug renderer
+        if (debugRenderer) {
+            debugRenderer->destroy();
+            delete debugRenderer;
+            debugRenderer = nullptr;
+        }
     }
 
     void registerPageCollider(Entity* entity) {
@@ -243,26 +268,46 @@ class PageSystem {
                 const glm::vec3& cameraForward, bool interactPressed) {
         if (!player || !physics) return;
 
+        // Store camera info for debug rendering
+        lastCameraPos = cameraPos;
+        lastCameraForward = cameraForward;
+
         auto* playerComp = player->getComponent<PlayerComponent>();
         if (!playerComp) return;
 
-            // Only check for interaction when player presses interact key
-        if (!interactPressed) return;
+        // Always check if we're looking at a page (for crosshair color)
+        canCollectPage = false;
+        closestPageDistance = -1.0f;
+        
+        // Find closest page distance for UI feedback
+        for (Entity* page : spawnedPages) {
+            auto* pageComp = page->getComponent<PageComponent>();
+            if (pageComp && !pageComp->isCollected) {
+                glm::vec3 pagePos = glm::vec3(page->getLocalToWorldMatrix()[3]);
+                float dist = glm::length(pagePos - cameraPos);
+                if (closestPageDistance < 0 || dist < closestPageDistance) {
+                    closestPageDistance = dist;
+                }
+            }
+        }
 
-            // Raycast from camera position in camera forward direction
-            RaycastResult hit =
-                physics->raycast(cameraPos, cameraForward, interactionDistance);
+        // Raycast to check if looking at a page
+        RaycastResult hit =
+            physics->raycast(cameraPos, cameraForward, interactionDistance);
 
         if (hit.hit && hit.userData) {
-                // Check if we hit a page entity
             Entity* hitEntity = static_cast<Entity*>(hit.userData);
             auto* pageComp = hitEntity->getComponent<PageComponent>();
-
             if (pageComp && !pageComp->isCollected) {
+                canCollectPage = true;
+                
+                // Only collect if interact was pressed
+                if (interactPressed) {
                     collectPage(hitEntity, pageComp, playerComp);
                 }
             }
         }
+    }
 
     void collectPage(Entity* entity, PageComponent* pageComp,
                      PlayerComponent* playerComp) {
@@ -301,6 +346,23 @@ class PageSystem {
             return player->getComponent<PlayerComponent>()->collectedPages >=
                    totalPages;
         }
+
+    void renderDebug(const glm::mat4& VP, const glm::ivec2& screenSize) {
+        if (!debugMode || !debugRenderer) return;
+
+        // Draw crosshair that changes color based on interaction state
+        debugRenderer->drawCrosshair(screenSize, canCollectPage, closestPageDistance);
+
+        // Draw sphere colliders for uncollected pages
+        for (Entity* page : spawnedPages) {
+            auto* pageComp = page->getComponent<PageComponent>();
+            if (pageComp && !pageComp->isCollected) {
+                glm::vec3 pagePos = glm::vec3(page->getLocalToWorldMatrix()[3]);
+                debugRenderer->drawSphere(pagePos, interactionDistance, 
+                    glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), VP);
+            }
+        }
+    }
 
    private:
     void onPageCollected(PlayerComponent* playerComp) {

@@ -14,6 +14,7 @@
 #include <systems/slenderman-ai.hpp>
 #include <systems/static-effect.hpp>
 #include <systems/static-sound-system.hpp>
+#include <systems/debug-renderer.hpp>
 
 #include "../common/systems/text-renderer.hpp"
 // This state shows how to use the ECS framework and deserialization.
@@ -30,6 +31,7 @@ class Playstate : public our::State {
     our::AmbientTensionSystem ambientTensionSystem;
     our::StaticSoundSystem staticSoundSystem;
     our::TextRenderer* textRenderer;
+    our::DebugRenderer debugRenderer;
 
     bool paused = false;
 
@@ -70,6 +72,9 @@ class Playstate : public our::State {
         glm::vec2 centerPos = glm::vec2(size.x / 2.0f - 75, size.y / 2.0f);
         textRenderer->startTimedText("Collect " + std::to_string(pageSystem.totalPages) + " Pages", 15.0f, centerPos, 0.5f,
                                      glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+
+        // Initialize debug renderer
+        debugRenderer.initialize();
     }
 
     void onDraw(double deltaTime) override {
@@ -180,7 +185,28 @@ class Playstate : public our::State {
 
         // And finally we use the renderer system to draw the scene
         renderer.render(&world, (float)deltaTime);
+        
+        // Get VP matrix for debug rendering AFTER renderer has run
         auto size = getApp()->getFrameBufferSize();
+        glm::mat4 VP = glm::mat4(1.0f);
+        for (auto entity : world.getEntities()) {
+            auto* camera = entity->getComponent<our::CameraComponent>();
+            if (camera) {
+                VP = camera->getProjectionMatrix(size) * camera->getViewMatrix();
+                break;
+            }
+        }
+        
+        // NOW render debug visualizations on top of everything
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        
+        pageSystem.renderDebug(VP, size);
+        
+        glDisable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        
         glm::mat4 projection =
             glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f);
         textRenderer->renderTimedTexts(projection);
@@ -214,5 +240,8 @@ class Playstate : public our::State {
         // and we delete all the loaded assets to free memory on the RAM and the
         // VRAM
         our::clearAllAssets();
+
+        // Destroy debug renderer
+        debugRenderer.destroy();
     }
 };
