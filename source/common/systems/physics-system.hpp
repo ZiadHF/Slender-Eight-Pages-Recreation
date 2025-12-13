@@ -43,6 +43,7 @@ class PhysicsSystem {
     btKinematicCharacterController* characterController = nullptr;
     btPairCachingGhostObject* ghostObject = nullptr;
     btConvexShape* playerShape = nullptr;
+    btGhostPairCallback* ghostPairCallback = nullptr;
     bool playerInitialized = false;
 
 
@@ -65,8 +66,9 @@ class PhysicsSystem {
         // Set gravity (optional, not needed for pure raycasting)
         dynamicsWorld->setGravity(btVector3(0, -9.81f, 0));
 
+        ghostPairCallback = new btGhostPairCallback();
         broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(
-            new btGhostPairCallback());
+            ghostPairCallback);
 
         for (auto entity : world->getEntities())
         {
@@ -450,6 +452,12 @@ class PhysicsSystem {
         broadphase = nullptr;
         dispatcher = nullptr;
         collisionConfig = nullptr;
+        
+        // Delete ghost pair callback
+        if (ghostPairCallback) {
+            delete ghostPairCallback;
+            ghostPairCallback = nullptr;
+        }
     }
 }
 

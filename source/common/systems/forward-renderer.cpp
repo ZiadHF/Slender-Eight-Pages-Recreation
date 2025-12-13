@@ -127,6 +127,11 @@ void ForwardRenderer::destroy() {
         delete skyMaterial->sampler;
         delete skyMaterial;
     }
+    // Delete cookie texture
+    if (spotlightCookie) {
+        delete spotlightCookie;
+    }
+
     // Delete all objects related to post processing
     if (postprocessMaterial) {
         glDeleteFramebuffers(1, &postprocessFrameBuffer);
