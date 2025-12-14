@@ -6,9 +6,11 @@
 namespace our
 {
     std::vector<TreeInstance> generateFromMap(const std::string &mapFilename, glm::vec2 worldSize, float density,
-                                              glm::vec3 posRandomRange,
-                                              glm::vec3 rotRandomRange,
-                                              glm::vec2 scaleRandomRange)
+                                          glm::vec3 posRandomRange,
+                                          glm::vec3 rotRandomRange,
+                                          glm::vec2 scaleRandomRange,
+                                          float minTreeDistance,
+                                          bool usePositionRegistry)
     {
         int width, height, channels;
         // Load the image
@@ -39,12 +41,13 @@ namespace our
         std::uniform_real_distribution<float> randomWidthScale(0.7f, 2.4f);
         
         std::vector<TreeInstance> instances;
+        TreePositionRegistry& registry = TreePositionRegistry::getInstance();
+        
         // How many pixels to traverse according to the density 
         float pixelsPerTree = 1.0f/density;
         int step = glm::max(1, (int) glm::sqrt(pixelsPerTree));
      
-        // Loop on grayscale map
-        int blackPixels = 0;
+        
         for (int y = 0; y < height; y+=step)
         {
             for (int x = 0; x < width; x+=step)
@@ -53,36 +56,44 @@ namespace our
                 unsigned char pixelValue = data[index];
                 
                 if (pixelValue > 128) {
-                    blackPixels++;
                     float normalizedX = (float)x / width;
                     float normalizedY = (float)y / height;
                     
-                    TreeInstance instance;
-                    instance.pos = glm::vec3(
+                    glm::vec3 basePos = glm::vec3(
                         (normalizedX - 0.5f) * worldSize.x,
                         0.0f,
                         (normalizedY - 0.5f) * worldSize.y
                     );
                     
-                    instance.posRandom = glm::vec3(
+                    glm::vec3 randomOffset = glm::vec3(
                         randomOffsetX(gen),
                         randomOffsetY(gen),
                         randomOffsetZ(gen)
                     );
                     
-                    instance.scale = 1.0f;
-                    instance.scaleRandom = randomScale(gen);
+                    glm::vec3 finalPos = basePos + randomOffset;
                     
-                    instance.rotation = 0.0f;
-                    instance.rotationRandom = glm::vec3(
-                        randomRotX(gen),
-                        randomRotY(gen),
-                        randomRotZ(gen)
-                    );
-                    
-                    instance.widthScale = randomWidthScale(gen);
-                    
-                    instances.push_back(instance);
+                    // Check if position is valid before adding (or skip if registry disabled)
+                    bool positionValid = !usePositionRegistry || registry.isPositionValid(finalPos, minTreeDistance);
+                    if (positionValid) {
+                        TreeInstance instance;
+                        instance.pos = basePos;
+                        instance.posRandom = randomOffset;
+                        instance.scale = 1.0f;
+                        instance.scaleRandom = randomScale(gen);
+                        instance.rotation = 0.0f;
+                        instance.rotationRandom = glm::vec3(
+                            randomRotX(gen),
+                            randomRotY(gen),
+                            randomRotZ(gen)
+                        );
+                        instance.widthScale = randomWidthScale(gen);
+                        
+                        instances.push_back(instance);
+                        if (usePositionRegistry) {
+                            registry.registerPosition(finalPos);
+                        }
+                    }
                 }
             }
         }

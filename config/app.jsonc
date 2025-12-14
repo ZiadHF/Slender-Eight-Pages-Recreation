@@ -3,8 +3,8 @@
     "window": {
         "title": "Slender - The Eight Pages",
         "size": {
-            "width": 1280,
-            "height": 720
+            "width": 1920,
+            "height": 1080
         },
         "fullscreen": false
     },
@@ -1354,7 +1354,9 @@
                         "maxRenderDistance": 100.0,
                         "cullingBoundingRadius": 100.0,
                         "enableDistanceCulling": true,
-                        "enableFrustumCulling": true
+                        "enableFrustumCulling": true,
+                        "minTreeDistance": 5.0,
+                        "usePositionRegistry": true
                     },
                     {
                         "type": "Collider"
@@ -1422,7 +1424,9 @@
                         "maxRenderDistance": 100.0,
                         "cullingBoundingRadius": 100.0,
                         "enableDistanceCulling": true,
-                        "enableFrustumCulling": true
+                        "enableFrustumCulling": true,
+                        "minTreeDistance": 5.0,
+                        "usePositionRegistry": true
                     },
                     {
                         "type": "Collider"
@@ -1486,7 +1490,8 @@
                         "maxRenderDistance": 60.0,
                         "cullingBoundingRadius": 5.0,
                         "enableDistanceCulling": true,
-                        "enableFrustumCulling": true
+                        "enableFrustumCulling": true,
+                        "usePositionRegistry": false
                     }
                 ]
             }

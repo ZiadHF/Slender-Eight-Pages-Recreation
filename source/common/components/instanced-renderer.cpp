@@ -81,9 +81,14 @@ void InstancedRendererComponent::deserialize(const nlohmann::json& data) {
         enableDistanceCulling = data.value("enableDistanceCulling", true);
         enableFrustumCulling = data.value("enableFrustumCulling", true);
 
+      
+        float minTreeDistance = data.value("minTreeDistance", 2.0f);
+        bool usePositionRegistry = data.value("usePositionRegistry", true);
+
         auto instances =
             generateFromMap(filename, worldSize, density, positionRandomRange,
-                            rotationRandomRange, scaleRandomRange);
+                            rotationRandomRange, scaleRandomRange,
+                            minTreeDistance, usePositionRegistry);
 
         for (const auto& inst : instances) {
             // Apply position
