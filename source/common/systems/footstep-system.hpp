@@ -71,7 +71,7 @@ namespace our {
                 // Play stamina warning sound if not already playing
                 if (!staminaAudio->isMusicStarted()) {
                     staminaAudio->initializeMusic("assets/sounds/breath.wav", true);
-                    staminaAudio->setVolume(0.2f);
+                    staminaAudio->setVolume(0.1f);
                     staminaAudio->playMusic();
                 }
                 // If stamina has recovered, stop the warning sound
