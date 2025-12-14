@@ -44,6 +44,7 @@ class PhysicsSystem {
     btPairCachingGhostObject* ghostObject = nullptr;
     btConvexShape* playerShape = nullptr;
     bool playerInitialized = false;
+    btGhostPairCallback* ghostPairCallback = nullptr;
 
 
    public:
@@ -65,8 +66,8 @@ class PhysicsSystem {
         // Set gravity (optional, not needed for pure raycasting)
         dynamicsWorld->setGravity(btVector3(0, -9.81f, 0));
 
-        broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(
-            new btGhostPairCallback());
+        ghostPairCallback = new btGhostPairCallback();
+        broadphase->getOverlappingPairCache()->setInternalGhostPairCallback(ghostPairCallback);
 
         for (auto entity : world->getEntities())
         {
@@ -415,33 +416,42 @@ class PhysicsSystem {
     playerInitialized = false;
 
     if (dynamicsWorld) {
-        // Remove all rigid bodies
-        for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0;
-             i--) {
-            btCollisionObject* obj =
-                dynamicsWorld->getCollisionObjectArray()[i];
+        // Remove all collision objects and clean up properly
+        for (int i = dynamicsWorld->getNumCollisionObjects() - 1; i >= 0; i--) {
+            btCollisionObject* obj = dynamicsWorld->getCollisionObjectArray()[i];
             btRigidBody* body = btRigidBody::upcast(obj);
-            if (body && body->getMotionState()) {
-                delete body->getMotionState();
+            
+            if (body) {
+                if (body->getMotionState()) {
+                    delete body->getMotionState();
+                }
             }
+            
             dynamicsWorld->removeCollisionObject(obj);
             delete obj->getCollisionShape();
             delete obj;
         }
-        for (btTriangleMesh *mesh : triangleMeshes)
-        {
+        
+        for (btTriangleMesh *mesh : triangleMeshes) {
             delete mesh;
         }
         triangleMeshes.clear();
         
-        // Clean up collision user data
         for (CollisionUserData* data : collisionUserDataList) {
             delete data;
         }
         collisionUserDataList.clear();
+        
         delete dynamicsWorld;
         delete solver;
         delete broadphase;
+        
+       
+        if (ghostPairCallback) {
+            delete ghostPairCallback;
+            ghostPairCallback = nullptr;
+        }
+        
         delete dispatcher;
         delete collisionConfig;
 
