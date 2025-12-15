@@ -214,7 +214,7 @@ class Menustate : public our::State {
 
         buttons[0].position = {441.0f * scaleX, 573.0f * scaleY}; // This is for a 1280x720 window so we have to adjust it if the window size is different
         buttons[0].size = {400.0f * scaleSize, 33.0f * scaleSize}; // Size has to be adjusted too so it can take the correct relative space
-        buttons[0].action = [this]() { this->showLoadingScreenAndStart();};
+        buttons[0].action = [this]() { this->getApp()->changeState("play");};
 
         buttons[1].position = {441.0f * scaleX, 608.0f * scaleY};
         buttons[1].size = {400.0f * scaleSize, 33.0f * scaleSize};
@@ -382,7 +382,7 @@ class Menustate : public our::State {
             glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
         if (keyboard.justPressed(GLFW_KEY_SPACE)) {
-            showLoadingScreenAndStart();
+            getApp()->changeState("play");
             return;
             
         } else if (keyboard.justPressed(GLFW_KEY_ESCAPE)) {
@@ -484,107 +484,6 @@ class Menustate : public our::State {
                 rectangle->draw();
             }
         }
-    }
-    void showLoadingScreenAndStart(){
-        glm::ivec2 size = getApp()->getFrameBufferSize();
-        glm::mat4 VP = glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f, 1.0f, -1.0f);
-        glm::mat4 M = glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
-
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            
-          
-            our::Texture2D* scratchyTexture = our::texture_utils::loadImage("assets/textures/Keyboard/scratchy.png");
-            
-            our::Texture2D* originalTexture = menuMaterial->texture;
-            
-            menuMaterial->texture = scratchyTexture;
-            menuMaterial->tint = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-            menuMaterial->setup();
-           
-            menuMaterial->shader->set("transform", VP * M);
-            rectangle->draw();
-            nlohmann::json playerConfig = loadPlayerConfig();
-
-            std::vector<std::pair<std::string, std::string>> controls = {
-                {"Forward", "forward"},
-                {"Backward", "backward"},
-                {"Left", "left"},
-                {"Right", "right"},
-                {"Sprint", "sprint"},
-                {"Flashlight", "toggle_flashlight"},
-                {"Interact", "interact"}
-            };
-
-            float startY = size.y / 2.0f - (controls.size() * 60.0f) / 2.0f;
-            float centerX = size.x / 2.0f;
-
-            for (size_t i = 0; i < controls.size(); i++) {
-                const auto& [displayName, configKey] = controls[i];
-                float yPos = startY + i * 60.0f;
-
-                // Render control name
-                std::string controlText = displayName + ": ";
-                glm::vec2 textSize = TextRenderer->measureText(controlText, 0.6f);
-                glm::vec2 textPos = glm::vec2(centerX - 150.0f - textSize.x, yPos + 25.0f);
-                TextRenderer->renderText(controlText, textPos, 0.6f, glm::vec4(1.0f, 1.0f, 1.0f, 1.0f), VP);
-
-                // Unbind sampler before rendering keyboard icons
-                glBindSampler(0, 0);
-
-                // Get and render keyboard icon
-                if (playerConfig.contains("controls") && playerConfig["controls"].contains(configKey)) {
-                    std::string keyBinding = playerConfig["controls"][configKey].get<std::string>();
-                    int keyCode = our::getKeyFromString(keyBinding);
-                    std::string texturePath = "";
-
-                    if (keyBinding == "LEFT_CLICK") {
-                        texturePath = "assets/textures/Keyboard/LeftClick.png";
-                    } else if (keyBinding == "RIGHT_CLICK") {
-                        texturePath = "assets/textures/Keyboard/RightClick.png";
-                    } else if (keyCode != -1000 && our::keyToTexture.find(keyCode) != our::keyToTexture.end()) {
-                        texturePath = "assets/textures/Keyboard/red/" + our::keyToTexture[keyCode];
-                    }
-
-                    if (!texturePath.empty()) {
-                        our::Texture2D* keyTexture = our::texture_utils::loadImage(texturePath, true);
-                        imageMaterial->texture = keyTexture;
-                        imageMaterial->tint = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
-                        imageMaterial->setup();
-
-                        glm::mat4 iconM = glm::translate(glm::mat4(1.0f), glm::vec3(centerX - 100.0f, yPos, 0.0f)) *
-                                         glm::scale(glm::mat4(1.0f), glm::vec3(50.0f, 50.0f, 1.0f));
-                        imageMaterial->shader->set("transform", VP * iconM);
-                        rectangle->draw();
-
-                        delete keyTexture;
-                    }
-                }
-            }
-            
-             
-            std::string loadingText = "Loading map...";
-            float textScale = 1.0f;
-            glm::vec2 loadTextSize = TextRenderer->measureText(loadingText, textScale);
-            
-            float padding = 20.0f;
-            glm::vec2 textPosition = glm::vec2(
-                size.x - loadTextSize.x - padding,
-                size.y - padding
-            );
-            
-            TextRenderer->renderText(
-                loadingText,
-                textPosition,
-                textScale,
-                glm::vec4(1.0f, 1.0f, 1.0f, 1.0f),
-                VP
-            );
-            
-            menuMaterial->texture = originalTexture;
-
-            delete scratchyTexture;
-             
-            getApp()->changeState("play");
     }
 
     void onDestroy() override {
