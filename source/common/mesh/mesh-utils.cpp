@@ -9,6 +9,7 @@
 #include <iostream>
 #include <vector>
 #include <unordered_map>
+#include "../debug-utils.hpp"
 
 // Helper function to compute tangent vectors for normal mapping
 // Uses the UV derivatives method to calculate tangents for each triangle
@@ -77,7 +78,7 @@ static void computeTangents(std::vector<our::Vertex>& vertices, const std::vecto
 // Helper function to recalculate normals from geometry when OBJ normals are incorrect
 // This computes smooth normals by averaging face normals at each vertex
 static void recalculateNormals(std::vector<our::Vertex>& vertices, const std::vector<GLuint>& elements) {
-    std::cout << "Recalculating normals from geometry..." << std::endl;
+    if (our::g_debugMode) std::cout << "Recalculating normals from geometry..." << std::endl;
     
     // Initialize all normals to zero
     for (auto& v : vertices) {
@@ -115,7 +116,7 @@ static void recalculateNormals(std::vector<our::Vertex>& vertices, const std::ve
         }
     }
     
-    std::cout << "Normals recalculated." << std::endl;
+    if (our::g_debugMode) std::cout << "Normals recalculated." << std::endl;
 }
 
 // Helper function to resolve texture paths relative to MTL file location
@@ -147,7 +148,7 @@ static std::string resolveTexturePath(const std::string& texturePath, const std:
 
 our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
 {
-    std::cout << "Loading OBJ file: " << filename << std::endl;
+    if (our::g_debugMode) std::cout << "Loading OBJ file: " << filename << std::endl;
     // The data that we will use to initialize our mesh
     std::vector<our::Vertex> vertices;
     std::vector<GLuint> elements;
@@ -174,13 +175,13 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
     }
     if (!warn.empty())
     {
-        std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
+        if (our::g_debugMode) std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
     }
 
     // ✓ ADD: Register materials to global registry
     for (const auto &mat : materials)
     {
-        std::cout << "\n=== Registering MTL Material: " << mat.name << " ===" << std::endl;
+        if (our::g_debugMode) std::cout << "\n=== Registering MTL Material: " << mat.name << " ===" << std::endl;
         MTLMaterialProperties props;
         props.name = mat.name;
         props.ambient = glm::vec3(mat.ambient[0], mat.ambient[1], mat.ambient[2]);
@@ -204,22 +205,22 @@ our::Mesh *our::mesh_utils::loadOBJ(const std::string &filename)
         props.normalTextureScale = glm::vec3(mat.bump_texopt.scale[0], mat.bump_texopt.scale[1], mat.bump_texopt.scale[2]);
         props.bumpMultiplier = mat.bump_texopt.bump_multiplier;
 
-        std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
-        std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
-        std::cout << "  Specular: (" << props.specular.x << ", " << props.specular.y << ", " << props.specular.z << ")" << std::endl;
-        std::cout << "  Shininess: " << props.shininess << std::endl;
-        std::cout << "  Dissolve: " << props.dissolve << std::endl;
-        std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
-        std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
-        std::cout << "  Diffuse Texture Scale: (" << props.diffuseTextureScale.x << ", " << props.diffuseTextureScale.y << ", " << props.diffuseTextureScale.z << ")" << std::endl;
-        std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
-        std::cout << "  Specular Texture Scale: (" << props.specularTextureScale.x << ", " << props.specularTextureScale.y << ", " << props.specularTextureScale.z << ")" << std::endl;
-        std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
-        std::cout << "  Normal Texture Scale: (" << props.normalTextureScale.x << ", " << props.normalTextureScale.y << ", " << props.normalTextureScale.z << ")" << std::endl;
-        std::cout << "  Bump Multiplier: " << props.bumpMultiplier << std::endl;
+        if (our::g_debugMode) std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Specular: (" << props.specular.x << ", " << props.specular.y << ", " << props.specular.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Shininess: " << props.shininess << std::endl;
+        if (our::g_debugMode) std::cout << "  Dissolve: " << props.dissolve << std::endl;
+        if (our::g_debugMode) std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
+        if (our::g_debugMode) std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
+        if (our::g_debugMode) std::cout << "  Diffuse Texture Scale: (" << props.diffuseTextureScale.x << ", " << props.diffuseTextureScale.y << ", " << props.diffuseTextureScale.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
+        if (our::g_debugMode) std::cout << "  Specular Texture Scale: (" << props.specularTextureScale.x << ", " << props.specularTextureScale.y << ", " << props.specularTextureScale.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
+        if (our::g_debugMode) std::cout << "  Normal Texture Scale: (" << props.normalTextureScale.x << ", " << props.normalTextureScale.y << ", " << props.normalTextureScale.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Bump Multiplier: " << props.bumpMultiplier << std::endl;
 
         MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
-        std::cout << "=== Registration Complete ===\n"
+        if (our::g_debugMode) std::cout << "=== Registration Complete ===\n"
                   << std::endl;
     }
 
@@ -366,13 +367,13 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
     }
     if (!warn.empty())
     {
-        std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
+        if (our::g_debugMode) std::cout << "WARN while loading obj file \"" << filename << "\": " << warn << std::endl;
     }
 
     // Register materials to global registry
     for (const auto &mat : materials)
     {
-        std::cout << "\n=== Registering MTL Material (submesh): " << mat.name << " ===" << std::endl;
+        if (our::g_debugMode) std::cout << "\n=== Registering MTL Material (submesh): " << mat.name << " ===" << std::endl;
         MTLMaterialProperties props;
         props.name = mat.name;
         props.ambient = glm::vec3(mat.ambient[0], mat.ambient[1], mat.ambient[2]);
@@ -396,22 +397,22 @@ our::Mesh* our::mesh_utils::loadOBJWithMaterials(const std::string& filename,boo
         props.normalTextureScale = glm::vec3(mat.bump_texopt.scale[0], mat.bump_texopt.scale[1], mat.bump_texopt.scale[2]);
         props.bumpMultiplier = mat.bump_texopt.bump_multiplier;
 
-        std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
-        std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
-        std::cout << "  Specular: (" << props.specular.x << ", " << props.specular.y << ", " << props.specular.z << ")" << std::endl;
-        std::cout << "  Shininess: " << props.shininess << std::endl;
-        std::cout << "  Dissolve: " << props.dissolve << std::endl;
-        std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
-        std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
-        std::cout << "  Diffuse Texture Scale: (" << props.diffuseTextureScale.x << ", " << props.diffuseTextureScale.y << ", " << props.diffuseTextureScale.z << ")" << std::endl;
-        std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
-        std::cout << "  Specular Texture Scale: (" << props.specularTextureScale.x << ", " << props.specularTextureScale.y << ", " << props.specularTextureScale.z << ")" << std::endl;
-        std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
-        std::cout << "  Normal Texture Scale: (" << props.normalTextureScale.x << ", " << props.normalTextureScale.y << ", " << props.normalTextureScale.z << ")" << std::endl;
-        std::cout << "  Bump Multiplier: " << props.bumpMultiplier << std::endl;
+        if (our::g_debugMode) std::cout << "  Ambient: (" << props.ambient.x << ", " << props.ambient.y << ", " << props.ambient.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Diffuse: (" << props.diffuse.x << ", " << props.diffuse.y << ", " << props.diffuse.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Specular: (" << props.specular.x << ", " << props.specular.y << ", " << props.specular.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Shininess: " << props.shininess << std::endl;
+        if (our::g_debugMode) std::cout << "  Dissolve: " << props.dissolve << std::endl;
+        if (our::g_debugMode) std::cout << "  Illumination Model: " << props.illuminationModel << std::endl;
+        if (our::g_debugMode) std::cout << "  Diffuse Texture: " << (props.diffuseTexture.empty() ? "(none)" : props.diffuseTexture) << std::endl;
+        if (our::g_debugMode) std::cout << "  Diffuse Texture Scale: (" << props.diffuseTextureScale.x << ", " << props.diffuseTextureScale.y << ", " << props.diffuseTextureScale.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Specular Texture: " << (props.specularTexture.empty() ? "(none)" : props.specularTexture) << std::endl;
+        if (our::g_debugMode) std::cout << "  Specular Texture Scale: (" << props.specularTextureScale.x << ", " << props.specularTextureScale.y << ", " << props.specularTextureScale.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Normal Texture: " << (props.normalTexture.empty() ? "(none)" : props.normalTexture) << std::endl;
+        if (our::g_debugMode) std::cout << "  Normal Texture Scale: (" << props.normalTextureScale.x << ", " << props.normalTextureScale.y << ", " << props.normalTextureScale.z << ")" << std::endl;
+        if (our::g_debugMode) std::cout << "  Bump Multiplier: " << props.bumpMultiplier << std::endl;
 
         MTLMaterialRegistry::getInstance().registerMaterial(mat.name, props);
-        std::cout << "=== Registration Complete ===\n"
+        if (our::g_debugMode) std::cout << "=== Registration Complete ===\n"
                   << std::endl;
     }
 

@@ -30,3 +30,6 @@ docs/
 
 # imgcmp tool
 scripts/imgcmp.exe
+
+# Release packages
+Slender-Release/

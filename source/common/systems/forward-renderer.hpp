@@ -58,6 +58,10 @@ namespace our
         StaticPostprocessUniforms postprocessUniforms;
         // Fog control
         bool fogEnabled = true;
+        glm::vec3 fogColor = glm::vec3(0.02f, 0.02f, 0.02f);
+        float fogStart = 30.0f;
+        float fogEnd = 100.0f;
+        float horizonThreshold = 0.3f;
         // Spotlight cookie texture
         Texture2D* spotlightCookie = nullptr;
         // Cached camera and player component pointers
