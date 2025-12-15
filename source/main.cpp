@@ -12,6 +12,7 @@
 #include "states/play-state.hpp"
 #include "states/settings-state.hpp"
 #include "states/win-state.hpp"
+#include "common/debug-utils.hpp"
 
 // Helper function to find config file in multiple locations
 std::string findConfigFile(const std::string& specified_path, const char* argv0) {
@@ -81,6 +82,9 @@ int main(int argc, char** argv) {
     nlohmann::json app_config =
         nlohmann::json::parse(file_in, nullptr, true, true);
     file_in.close();
+
+    // Set debug mode from config (default: false)
+    our::setDebugMode(app_config.value("debug_mode", false));
 
     // Create the application
     our::Application app(app_config);

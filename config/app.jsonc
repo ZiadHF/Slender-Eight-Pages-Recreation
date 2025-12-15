@@ -1,4 +1,5 @@
 {
+    "debug_mode": false,
     "start-scene": "menu",
     "window": {
         "title": "Slender - The Eight Pages",
@@ -12,7 +13,15 @@
         "renderer": {
             "sky": "assets/textures/sky.png",
             "postprocess": "assets/shaders/postprocess/static.frag",
-            "fog_enabled": true
+            "fog_enabled": true,
+            "fog_color": [
+                0.02,
+                0.02,
+                0.02
+            ],
+            "fog_start": 30.0,
+            "fog_end": 100.0,
+            "horizon_threshold": 0.3
         },
         "assets": {
             "shaders": {
@@ -61,7 +70,6 @@
                 "BranchMat_diffuse": "assets/textures/BranchMat_diffuse.png",
                 "Grass": "assets/textures/Grass.png",
                 "fence11_271": "assets/textures/fence11_271.png"
-                 
             },
             "meshes": {
                 "map": {
@@ -84,7 +92,7 @@
                 "default": {}
             },
             "materials": {
-                "Material":{
+                "Material": {
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
@@ -104,7 +112,7 @@
                     "texture": "SiloRust_05_Baked",
                     "sampler": "default"
                 },
-                "Material.001":{
+                "Material.001": {
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
@@ -124,7 +132,7 @@
                     "texture": "SiloRust_05_Baked",
                     "sampler": "default"
                 },
-                  "Material.002":{
+                "Material.002": {
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
@@ -144,7 +152,7 @@
                     "texture": "SiloRust_05_Baked",
                     "sampler": "default"
                 },
-                  "Material.003":{
+                "Material.003": {
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
@@ -164,7 +172,7 @@
                     "texture": "SiloRust_05_Baked",
                     "sampler": "default"
                 },
-                  "Material.004":{
+                "Material.004": {
                     "type": "lit",
                     "shader": "lit",
                     "pipelineState": {
@@ -934,9 +942,17 @@
                         "audioType": "STATIC"
                     },
                     {
+                        "type": "Audio Controller",
+                        "audioType": "STAMINA"
+                    },
+                    {
                         "type": "Player Component",
                         "walkSpeed": 4.0,
-                        "sprintSpeedup": 2.0
+                        "sprintSpeedup": 2.0,
+                        "maxStamina": 100.0,
+                        "staminaDrainRate": 7.0,
+                        "staminaRegenRate": 5.0,
+                        "staminaRegenDelay": 1.5
                     }
                 ],
                 "children": [
@@ -968,9 +984,10 @@
                                 ],
                                 "innerConeAngle": 25.0,
                                 "outerConeAngle": 40.0,
-                                "flickerMode": "none",
-                                "flickerIntensity": 1.1,
-                                "flickerFrequency": 0.5
+                                "flickerEnabled": true,
+                                "flickerIntensity": 0.5,
+                                "flickerSpeed": 8.0,
+                                "flickerRandomness": 0.9
                             }
                         ]
                     }
@@ -987,9 +1004,9 @@
                         "type": "Light",
                         "lightType": "directional",
                         "color": [
-                            0.1,
-                            0.1,
-                            0.1
+                            0.05,
+                            0.05,
+                            0.05
                         ],
                         "direction": [
                             0.3,
@@ -1271,13 +1288,6 @@
                         "type": "Mesh Renderer",
                         "mesh": "slender",
                         "material": "Slenderman"
-                    },
-                    {
-                        "type": "Audio Controller",
-                        "audioType": "JUMPSCARE",
-                        "audioFile": "assets/sounds/slender-jumpscare.wav",
-                        "loop": false,
-                        "volume": 0.7
                     },
                     {
                         "type": "Audio Controller",

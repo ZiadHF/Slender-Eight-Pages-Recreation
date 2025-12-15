@@ -8,7 +8,5 @@ namespace our {
         if(!data.is_object()) return;
         rotationSensitivity = data.value("rotationSensitivity", rotationSensitivity);
         fovSensitivity = data.value("fovSensitivity", fovSensitivity);
-        // positionSensitivity = data.value("positionSensitivity", positionSensitivity);
-        // speedupFactor = data.value("speedupFactor", speedupFactor);
     }
 }

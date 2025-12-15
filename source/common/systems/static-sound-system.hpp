@@ -2,6 +2,7 @@
 #include "../components/audio-controller.hpp"
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
+#include "../debug-utils.hpp"
 
 namespace our {
 class StaticSoundSystem {
@@ -24,8 +25,10 @@ class StaticSoundSystem {
                     if (audio->getAudioType() == AudioType::STATIC) {
                         staticSound = audio;
                         staticSound->volume = 0.5f;
-                        std::cout << "Static sound audio controller found."
-                                  << std::endl;
+                        if (our::g_debugMode) {
+                            std::cout << "Static sound audio controller found."
+                                      << std::endl;
+                        }
                         break;
                     }
                 }

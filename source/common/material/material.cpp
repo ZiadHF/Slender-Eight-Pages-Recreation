@@ -4,6 +4,7 @@
 #include "../texture/texture-utils.hpp"
 #include "deserialize-utils.hpp"
 #include "mtl-material-registry.hpp"
+#include "../debug-utils.hpp"
 #include <iostream>
 namespace our
 {
@@ -154,7 +155,7 @@ namespace our
     // Priority for color values: 1. MTL file values (highest), 2. JSON values, 3. Class defaults
     void LitMaterial::deserialize(const nlohmann::json &data)
     {
-        std::cout << "Deserializing LitMaterial: " << materialName << std::endl;
+        if (our::g_debugMode) std::cout << "Deserializing LitMaterial: " << materialName << std::endl;
         TexturedMaterial::deserialize(data);
         if (!data.is_object())
             return;
@@ -163,23 +164,23 @@ namespace our
         std::optional<MTLMaterialProperties> mtlProps;
         if (!materialName.empty())
         {
-            std::cout << "Looking up MTL Material: " << materialName << std::endl;
+            if (our::g_debugMode) std::cout << "Looking up MTL Material: " << materialName << std::endl;
             mtlProps = MTLMaterialRegistry::getInstance().getMaterial(materialName);
             if (mtlProps.has_value())
             {
-                std::cout << "MTL Material found: " << materialName << std::endl;
+                if (our::g_debugMode) std::cout << "MTL Material found: " << materialName << std::endl;
             }
             else
             {
-                std::cout << "MTL Material not found: " << materialName << std::endl;
+                if (our::g_debugMode) std::cout << "MTL Material not found: " << materialName << std::endl;
             }
         }
 
         // Apply MTL values first for color properties (highest priority if they exist)
         if (mtlProps.has_value())
         {
-            std::cout << "Applying MTL Material properties for: " << materialName << std::endl;
-            std::cout << "MTL NAME IS: " << mtlProps->name << std::endl;
+            if (our::g_debugMode) std::cout << "Applying MTL Material properties for: " << materialName << std::endl;
+            if (our::g_debugMode) std::cout << "MTL NAME IS: " << mtlProps->name << std::endl;
             ambient = mtlProps->ambient;
             diffuse = mtlProps->diffuse;
             specular = mtlProps->specular;
@@ -190,13 +191,13 @@ namespace our
             specularTextureScale = mtlProps->specularTextureScale;
             normalTextureScale = mtlProps->normalTextureScale;
             bumpMultiplier = mtlProps->bumpMultiplier;
-            std::cout << "Applied texture scale: (" << diffuseTextureScale.x << ", " << diffuseTextureScale.y << ", " << diffuseTextureScale.z << ")" << std::endl;
+            if (our::g_debugMode) std::cout << "Applied texture scale: (" << diffuseTextureScale.x << ", " << diffuseTextureScale.y << ", " << diffuseTextureScale.z << ")" << std::endl;
         }
 
         // JSON values only override color properties if MTL wasn't found (fallback/defaults)
         if (!mtlProps.has_value())
         {
-            std::cout << "Applying JSON Material properties for: " << materialName << std::endl;
+            if (our::g_debugMode) std::cout << "Applying JSON Material properties for: " << materialName << std::endl;
             // Parse ambient color from JSON
             if (data.contains("ambient"))
             {
@@ -232,10 +233,10 @@ namespace our
             normalMapPath = mtlProps->normalTexture;
         }
         if (!normalMapPath.empty()) {
-            std::cout << "Loading normal map: " << normalMapPath << std::endl;
+            if (our::g_debugMode) std::cout << "Loading normal map: " << normalMapPath << std::endl;
             normalMap = texture_utils::loadImage(normalMapPath, true);
             hasNormalMap = (normalMap != nullptr);
-            std::cout << "Normal map loaded: " << (hasNormalMap ? "yes" : "no") << std::endl;
+            if (our::g_debugMode) std::cout << "Normal map loaded: " << (hasNormalMap ? "yes" : "no") << std::endl;
         }
         
         // Specular map: JSON takes priority over MTL
@@ -244,10 +245,10 @@ namespace our
             specularMapPath = mtlProps->specularTexture;
         }
         if (!specularMapPath.empty()) {
-            std::cout << "Loading specular map: " << specularMapPath << std::endl;
+            if (our::g_debugMode) std::cout << "Loading specular map: " << specularMapPath << std::endl;
             specularMap = texture_utils::loadImage(specularMapPath, true);
             hasSpecularMap = (specularMap != nullptr);
-            std::cout << "Specular map loaded: " << (hasSpecularMap ? "yes" : "no") << std::endl;
+            if (our::g_debugMode) std::cout << "Specular map loaded: " << (hasSpecularMap ? "yes" : "no") << std::endl;
         }
         
         // Roughness map: JSON takes priority over MTL
@@ -256,10 +257,10 @@ namespace our
             roughnessMapPath = mtlProps->roughnessTexture;
         }
         if (!roughnessMapPath.empty()) {
-            std::cout << "Loading roughness map: " << roughnessMapPath << std::endl;
+            if (our::g_debugMode) std::cout << "Loading roughness map: " << roughnessMapPath << std::endl;
             roughnessMap = texture_utils::loadImage(roughnessMapPath, true);
             hasRoughnessMap = (roughnessMap != nullptr);
-            std::cout << "Roughness map loaded: " << (hasRoughnessMap ? "yes" : "no") << std::endl;
+            if (our::g_debugMode) std::cout << "Roughness map loaded: " << (hasRoughnessMap ? "yes" : "no") << std::endl;
         }
         
         // Ambient occlusion map: JSON takes priority over MTL
@@ -268,10 +269,10 @@ namespace our
             aoMapPath = mtlProps->aoTexture;
         }
         if (!aoMapPath.empty()) {
-            std::cout << "Loading AO map: " << aoMapPath << std::endl;
+            if (our::g_debugMode) std::cout << "Loading AO map: " << aoMapPath << std::endl;
             aoMap = texture_utils::loadImage(aoMapPath, true);
             hasAoMap = (aoMap != nullptr);
-            std::cout << "AO map loaded: " << (hasAoMap ? "yes" : "no") << std::endl;
+            if (our::g_debugMode) std::cout << "AO map loaded: " << (hasAoMap ? "yes" : "no") << std::endl;
         }
         
         // Emissive map: JSON takes priority over MTL
@@ -280,10 +281,10 @@ namespace our
             emissiveMapPath = mtlProps->emissiveTexture;
         }
         if (!emissiveMapPath.empty()) {
-            std::cout << "Loading emissive map: " << emissiveMapPath << std::endl;
+            if (our::g_debugMode) std::cout << "Loading emissive map: " << emissiveMapPath << std::endl;
             emissiveMap = texture_utils::loadImage(emissiveMapPath, true);
             hasEmissiveMap = (emissiveMap != nullptr);
-            std::cout << "Emissive map loaded: " << (hasEmissiveMap ? "yes" : "no") << std::endl;
+            if (our::g_debugMode) std::cout << "Emissive map loaded: " << (hasEmissiveMap ? "yes" : "no") << std::endl;
         }
     }
 

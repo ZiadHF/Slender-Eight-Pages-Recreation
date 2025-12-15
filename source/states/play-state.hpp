@@ -18,6 +18,8 @@
 #include <json/json.hpp>
 
 #include "../common/systems/text-renderer.hpp"
+#include "../common/debug-utils.hpp"
+
 
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
@@ -568,7 +570,7 @@ class Playstate : public our::State {
         }
 
         // DEBUG: Print position
-        if (keyboard.justPressed(GLFW_KEY_P)) {
+        if (our::g_debugMode && keyboard.justPressed(GLFW_KEY_P)) {
             std::cout << "Player Position: (" << cameraPos.x << ", " << cameraPos.y
                       << ", " << cameraPos.z << ")\n";
         }

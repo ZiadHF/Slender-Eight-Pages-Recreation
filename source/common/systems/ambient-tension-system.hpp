@@ -2,6 +2,7 @@
 #include "../components/audio-controller.hpp"
 #include "../components/slenderman.hpp"
 #include "../ecs/world.hpp"
+#include "../debug-utils.hpp"
 
 namespace our {
 
@@ -23,9 +24,12 @@ class AmbientTensionSystem {
                 for (auto* audio : audioComponents) {
                     if (audio->getAudioType() == AudioType::AMBIENCE) {
                         ambienceAudio = audio;
-                        ambienceAudio->volume = 0.4f;
-                        std::cout << "Ambient tension audio controller found."
-                                  << std::endl;
+                        ambienceAudio->volume = 0.15f;
+                        if (our::g_debugMode) {
+                            std::cout
+                                << "Ambient tension audio controller found."
+                                << std::endl;
+                        }
                         break;
                     }
                 }
@@ -42,7 +46,7 @@ class AmbientTensionSystem {
             if (firstPlay) {
                 // First time, just play directly
                 if (ambienceAudio->initializeMusic(audioFile.c_str(), true)) {
-                    ambienceAudio->setVolume(0.1f);
+                    ambienceAudio->setVolume(0.15f);
                     ambienceAudio->playMusic();
                 }
                 firstPlay = false;

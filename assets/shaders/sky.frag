@@ -19,7 +19,6 @@ uniform bool fog_enabled = true;
 void main(){
     vec4 result = tint * fs_in.color * texture(tex, fs_in.tex_coord);
     
-    // Apply fog only if enabled
     if (fog_enabled) {
         // Use the sphere's local Y coordinate to determine if we're at horizon level
         // For a sphere centered at origin with radius ~1: Y ranges from -1 (straight down) to +1 (straight up)

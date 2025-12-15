@@ -13,6 +13,9 @@
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
 #include "physics-system.hpp"
+#include "../debug-utils.hpp"
+
+
 namespace our {
 
 // The free camera controller system is responsible for moving every entity
@@ -142,8 +145,10 @@ class FreeCameraControllerSystem {
             // pos.y = glm::max(pos.y, 2.0f);
             pos.y += 2.0f;  // Spawn above ground to let gravity pull down
             physics->initializePlayerCollider(pos, 0.4f, playerEyeHeight);
+            if (our::g_debugMode) {
             std::cout << "Player collider initialized at: " << pos.x << ", "
                       << pos.y << ", " << pos.z << std::endl;
+            }
         }
 
         glm::vec3& position = entity->localTransform.position;
@@ -166,11 +171,24 @@ class FreeCameraControllerSystem {
 
         // Set sprinting speed and state
         glm::vec3 current_sensitivity = playerComp->walkSpeed;
-        if (isKeyPressed("sprint")) {
-            current_sensitivity *= playerComp->sprintSpeedup;
-            playerComp->isSprinting = true;
+        if (isKeyPressed("sprint") && playerComp->isMoving) {
+            if (playerComp->stamina > 0.0f) {
+                current_sensitivity *= playerComp->sprintSpeedup;
+                playerComp->isSprinting = true;
+            }
+            else {
+                playerComp->isSprinting = false;
+            }
+            playerComp->stamina = std::max(0.0f, playerComp->stamina - playerComp->staminaDrainRate * deltaTime);
+            playerComp->staminaRegenTimer = playerComp->staminaRegenDelay; // Reset regen delay
         } else {
             playerComp->isSprinting = false;
+            // Only regenerate after delay has passed
+            if (playerComp->staminaRegenTimer > 0.0f) {
+                playerComp->staminaRegenTimer -= deltaTime;
+            } else {
+                playerComp->stamina = std::min(playerComp->maxStamina, playerComp->stamina + playerComp->staminaRegenRate * deltaTime);
+            }
         }
 
         // Flashlight toggle
