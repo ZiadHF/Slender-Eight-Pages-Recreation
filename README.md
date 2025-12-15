@@ -13,7 +13,7 @@ A fan-made OpenGL recreation of the classic indie horror experience "Slender: Th
 - **Adaptive AI** — Slenderman difficulty scales with pages collected and time played
 - **Flashlight Cookie** — Projected spotlight texture for realistic flashlight effect
 - **Postprocessing** — Static noise, vignette, and health-based visual effects
-- **3D Spatial Audio** — Positional sound for immersive atmosphere
+- **Audio** — Sounds for immersive atmosphere
 - **Config-Driven** — Levels and assets defined in JSON for easy customization
 
 ## Gameplay
