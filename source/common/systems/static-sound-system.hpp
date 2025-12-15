@@ -24,8 +24,10 @@ class StaticSoundSystem {
                     if (audio->getAudioType() == AudioType::STATIC) {
                         staticSound = audio;
                         staticSound->volume = 0.5f;
-                        std::cout << "Static sound audio controller found."
-                                  << std::endl;
+                        if (our::g_debugMode) {
+                            std::cout << "Static sound audio controller found."
+                                      << std::endl;
+                        }
                         break;
                     }
                 }

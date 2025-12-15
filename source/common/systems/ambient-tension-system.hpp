@@ -24,8 +24,11 @@ class AmbientTensionSystem {
                     if (audio->getAudioType() == AudioType::AMBIENCE) {
                         ambienceAudio = audio;
                         ambienceAudio->volume = 0.15f;
-                        std::cout << "Ambient tension audio controller found."
-                                  << std::endl;
+                        if (our::g_debugMode) {
+                            std::cout
+                                << "Ambient tension audio controller found."
+                                << std::endl;
+                        }
                         break;
                     }
                 }

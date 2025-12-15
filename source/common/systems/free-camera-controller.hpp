@@ -142,8 +142,10 @@ class FreeCameraControllerSystem {
             // pos.y = glm::max(pos.y, 2.0f);
             pos.y += 2.0f;  // Spawn above ground to let gravity pull down
             physics->initializePlayerCollider(pos, 0.4f, playerEyeHeight);
+            if (our::g_debugMode) {
             std::cout << "Player collider initialized at: " << pos.x << ", "
                       << pos.y << ", " << pos.z << std::endl;
+            }
         }
 
         glm::vec3& position = entity->localTransform.position;

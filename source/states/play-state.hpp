@@ -156,7 +156,7 @@ class Playstate : public our::State {
         }
 
         // DEBUG: Print position
-        if (keyboard.justPressed(GLFW_KEY_P)) {
+        if (our::g_debugMode && keyboard.justPressed(GLFW_KEY_P)) {
             std::cout << "Player Position: (" << cameraPos.x << ", " << cameraPos.y
                       << ", " << cameraPos.z << ")\n";
         }
