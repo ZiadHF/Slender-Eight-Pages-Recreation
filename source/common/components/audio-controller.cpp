@@ -218,8 +218,8 @@ void AudioController::deserialize(const nlohmann::json& data) {
             audioType = AudioType::MUSIC;
         } else if (typeStr == "AMBIENCE") {
             audioType = AudioType::AMBIENCE;
-        } else if (typeStr == "JUMPSCARE") {
-            audioType = AudioType::JUMP_SCARE;
+        } else if (typeStr == "STAMINA") {
+            audioType = AudioType::STAMINA;
         } else if (typeStr == "WALKING") {
             audioType = AudioType::WALKING;
         } else if (typeStr == "FLASHLIGHT") {

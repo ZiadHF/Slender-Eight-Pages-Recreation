@@ -7,7 +7,6 @@
 #include "../asset-loader.hpp"
 #include "../common/components/instanced-renderer.hpp"
 #include "../components/player.hpp"
-#include "../components/camera.hpp"
 
 #include <glad/gl.h>
 #include <vector>
