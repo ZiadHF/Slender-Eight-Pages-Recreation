@@ -11,6 +11,7 @@
 #include "../components/slenderman.hpp"
 #include "../ecs/world.hpp"
 #include "physics-system.hpp"
+#include "../debug-utils.hpp"
 
 namespace our {
 class SlendermanAISystem {

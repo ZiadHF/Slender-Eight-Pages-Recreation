@@ -4,6 +4,7 @@
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
 #include "./physics-system.hpp"
+#include "../debug-utils.hpp"
 
 namespace our {
 class FootstepSystem {

@@ -2,6 +2,7 @@
 #include "../components/audio-controller.hpp"
 #include "../components/slenderman.hpp"
 #include "../ecs/world.hpp"
+#include "../debug-utils.hpp"
 
 namespace our {
 

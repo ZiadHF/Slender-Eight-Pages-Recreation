@@ -6,6 +6,8 @@
 #include <random>
 
 #include "../texture/texture-utils.hpp"
+#include "../debug-utils.hpp"
+
 namespace our {
 std::vector<TreeInstance> generateFromMap(const std::string& mapFilename,
                                           glm::vec2 worldSize, float density,

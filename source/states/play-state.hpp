@@ -16,6 +16,9 @@
 #include <systems/static-sound-system.hpp>
 
 #include "../common/systems/text-renderer.hpp"
+#include "../common/debug-utils.hpp"
+
+
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State {
     our::World world;

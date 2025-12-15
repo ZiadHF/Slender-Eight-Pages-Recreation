@@ -14,6 +14,7 @@
 #include "../common/ecs/entity.hpp"
 #include "../common/systems/text-renderer.hpp"
 #include "physics-system.hpp"
+#include "../debug-utils.hpp"
 
 namespace our {
 

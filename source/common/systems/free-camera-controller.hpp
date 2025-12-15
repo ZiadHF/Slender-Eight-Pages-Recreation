@@ -13,6 +13,9 @@
 #include "../components/player.hpp"
 #include "../ecs/world.hpp"
 #include "physics-system.hpp"
+#include "../debug-utils.hpp"
+
+
 namespace our {
 
 // The free camera controller system is responsible for moving every entity
