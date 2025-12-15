@@ -109,7 +109,6 @@ void main(){
         : specular_color;
     
     // Roughness to shininess conversion: shininess = 2 / roughness^4 - 2
-    // Inverse: roughness = pow(2 / (shininess + 2), 0.25)
     float material_shininess = hasRoughnessMap 
         ? (2.0 / pow(clamp(texture(roughnessMap, scaled_tex_coord).r, 0.001, 0.999), 4.0) - 2.0)
         : shininess;
@@ -129,15 +128,14 @@ void main(){
     vec3 view_dir = normalize(camera_position-fs_in.world_position);
     
     // No ambient light - only flashlight illuminates (horror game atmosphere)
-    // Start with emissive only (if present)
     vec3 result = material_emissive;
     //Loop over all lights to add their effects to our rendered pixel
     for (int i = 0;i< light_count && i<MAX_LIGHTS;i++){
         vec3 light_direction;
         float attenuation = 1.0;
         if(lights[i].type == LIGHT_DIRECTIONAL){
-            // We assume directional light like sun or such does not attenuate
-            // Global Illumination as an example
+            // Global illumination is assumed not to attenuate, so we use it directly
+            
             light_direction = -normalize(lights[i].direction);
         }
         else{
@@ -187,10 +185,13 @@ void main(){
         }
         }
         // Diffuse: using abs() for two-sided lighting (lights surfaces regardless of normal direction)
+        // This was done as a design choice to mitigate a bug with our normal maps causing some things in house 
+        // To be seen as backfaces, original equation was this: float diff = max(0.0, dot(normal, light_direction)); 
         float  diff = abs(dot(normal, light_direction));
         vec3 diffuse = diff * material_diffuse * lights[i].color;
         
         // Specular - only if illuminationModel is 2 (full Blinn-Phong)
+        // A lot of models do not have specular components for very basic lighting
         vec3 specular = vec3(0.0);
         if (illuminationModel == 2) {
             vec3 halfway = normalize(light_direction+view_dir);

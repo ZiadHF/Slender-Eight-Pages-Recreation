@@ -19,6 +19,13 @@ void ForwardRenderer::initialize(glm::ivec2 windowSize,
 
         // Read fog configuration
         this->fogEnabled = config.value("fog_enabled", true);
+        if (config.contains("fog_color")) {
+            auto& fc = config["fog_color"];
+            this->fogColor = glm::vec3(fc[0].get<float>(), fc[1].get<float>(), fc[2].get<float>());
+        }
+        this->fogStart = config.value("fog_start", 30.0f);
+        this->fogEnd = config.value("fog_end", 100.0f);
+        this->horizonThreshold = config.value("horizon_threshold", 0.3f);
 
         // Load spotlight cookie texture
         this->spotlightCookie = texture_utils::loadImage("assets/textures/flashlight_cookie.png");
@@ -280,6 +287,9 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                 command.material->shader->set("camera_position", eye);
                 command.material->shader->set("light_count", (int)lightCommands.size());
                 command.material->shader->set("fog_enabled", fogEnabled);
+                command.material->shader->set("fog_color", fogColor);
+                command.material->shader->set("fog_start", fogStart);
+                command.material->shader->set("fog_end", fogEnd);
                 
                 // Bind spotlight cookie texture
                 if (spotlightCookie) {
@@ -380,6 +390,9 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                         submeshMaterial->shader->set("camera_position", eye);
                         submeshMaterial->shader->set("light_count", (int)lightCommands.size());
                         submeshMaterial->shader->set("fog_enabled", fogEnabled);
+                        submeshMaterial->shader->set("fog_color", fogColor);
+                        submeshMaterial->shader->set("fog_start", fogStart);
+                        submeshMaterial->shader->set("fog_end", fogEnd);
                         
                         // Bind spotlight cookie texture
                         if (spotlightCookie) {
@@ -422,6 +435,9 @@ void ForwardRenderer::render(World* world, float deltaTime) {
                     instancedRenderer->material->shader->set("camera_position", eye);
                     instancedRenderer->material->shader->set("light_count", (int)lightCommands.size());
                     instancedRenderer->material->shader->set("fog_enabled", fogEnabled);
+                    instancedRenderer->material->shader->set("fog_color", fogColor);
+                    instancedRenderer->material->shader->set("fog_start", fogStart);
+                    instancedRenderer->material->shader->set("fog_end", fogEnd);
                     
                     // Bind spotlight cookie texture
                     if (spotlightCookie) {
@@ -460,8 +476,9 @@ void ForwardRenderer::render(World* world, float deltaTime) {
         this->skyMaterial->setup();
 
         // Set fog uniforms for sky
-        skyMaterial->shader->set("fog_color", glm::vec3(0.02f, 0.02f, 0.02f));
+        skyMaterial->shader->set("fog_color", fogColor);
         skyMaterial->shader->set("fog_enabled", fogEnabled);
+        skyMaterial->shader->set("horizon_threshold", horizonThreshold);
         skyMaterial->shader->set("apply_fog", true);
 
         // Get the camera position
@@ -498,6 +515,10 @@ void ForwardRenderer::render(World* world, float deltaTime) {
             {
                 command.material->shader->set("camera_position", eye);
                 command.material->shader->set("light_count", (int)lightCommands.size());
+                command.material->shader->set("fog_enabled", fogEnabled);
+                command.material->shader->set("fog_color", fogColor);
+                command.material->shader->set("fog_start", fogStart);
+                command.material->shader->set("fog_end", fogEnd);
                 
                 // Bind spotlight cookie texture
                 if (spotlightCookie) {
