@@ -219,8 +219,8 @@ class SlendermanAISystem {
                     static_cast<int>(gameTime / 90.0f),
                 slenderComp->maxAIValue);
 
-            // Teleport if randomValue is less than or equal to currentAIValue
-            if (randomValue <= slenderComp->currentAIValue) {
+            // Teleport if randomValue is less than to currentAIValue (stops any teleporting at level = 0)
+            if (randomValue < slenderComp->currentAIValue) {
                 // Calculate aggressiveness ratio (higher = more aggressive)
                 float aggressivenessRatio =
                     static_cast<float>(slenderComp->currentAIValue) /
