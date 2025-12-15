@@ -14,6 +14,7 @@
 #include "../common/ecs/entity.hpp"
 #include "../common/systems/text-renderer.hpp"
 #include "physics-system.hpp"
+ 
 
 namespace our {
 
@@ -25,7 +26,7 @@ class PageSystem {
         int totalPages = 0;
     std::vector<Entity*> spawnedPages;
     our::ShaderProgram* pageShader = nullptr;
-
+    float pageSphereSize = 0.275f;
         // Physics reference
     PhysicsSystem* physics = nullptr;
     // Text renderer reference
@@ -36,6 +37,17 @@ class PageSystem {
 
     // Raycast parameters
     float interactionDistance = 1.5f;  // Max distance player can interact
+
+   
+    bool debugMode = true; // Toggle for debug visualization
+
+    // Store camera info for debug rendering
+    glm::vec3 lastCameraPos = glm::vec3(0);
+    glm::vec3 lastCameraForward = glm::vec3(0, 0, -1);
+    
+    // Track if currently looking at a collectible page
+    bool canCollectPage = false;
+    float closestPageDistance = -1.0f;
 
     void initialize(World* world, PhysicsSystem* physicsSystem,
                     TextRenderer* textRenderer,
@@ -231,7 +243,7 @@ class PageSystem {
 
             // Add a sphere collider for the page
         btRigidBody* body = physics->addStaticSphere(
-                pagePos, interactionDistance,
+                pagePos, pageSphereSize,
             entity  // Store entity pointer for identification
             );
 
@@ -242,27 +254,31 @@ class PageSystem {
     void update(World* world, float deltaTime, const glm::vec3& cameraPos,
                 const glm::vec3& cameraForward, bool interactPressed) {
         if (!player || !physics) return;
+        // Store camera info for debug rendering
+        lastCameraPos = cameraPos;
+        lastCameraForward = cameraForward;
 
         auto* playerComp = player->getComponent<PlayerComponent>();
         if (!playerComp) return;
 
-            // Only check for interaction when player presses interact key
-        if (!interactPressed) return;
 
-            // Raycast from camera position in camera forward direction
-            RaycastResult hit =
-                physics->raycast(cameraPos, cameraForward, interactionDistance);
+        // Raycast to check if looking at a page
+        RaycastResult hit =
+            physics->raycast(cameraPos, cameraForward, interactionDistance);
 
         if (hit.hit && hit.userData) {
-                // Check if we hit a page entity
             Entity* hitEntity = static_cast<Entity*>(hit.userData);
             auto* pageComp = hitEntity->getComponent<PageComponent>();
-
             if (pageComp && !pageComp->isCollected) {
+                canCollectPage = true;
+                
+                // Only collect if interact was pressed
+                if (interactPressed) {
                     collectPage(hitEntity, pageComp, playerComp);
                 }
             }
         }
+    }
 
     void collectPage(Entity* entity, PageComponent* pageComp,
                      PlayerComponent* playerComp) {

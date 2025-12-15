@@ -166,11 +166,24 @@ class FreeCameraControllerSystem {
 
         // Set sprinting speed and state
         glm::vec3 current_sensitivity = playerComp->walkSpeed;
-        if (isKeyPressed("sprint")) {
-            current_sensitivity *= playerComp->sprintSpeedup;
-            playerComp->isSprinting = true;
+        if (isKeyPressed("sprint") && playerComp->isMoving) {
+            if (playerComp->stamina > 0.0f) {
+                current_sensitivity *= playerComp->sprintSpeedup;
+                playerComp->isSprinting = true;
+            }
+            else {
+                playerComp->isSprinting = false;
+            }
+            playerComp->stamina = std::max(0.0f, playerComp->stamina - playerComp->staminaDrainRate * deltaTime);
+            playerComp->staminaRegenTimer = playerComp->staminaRegenDelay; // Reset regen delay
         } else {
             playerComp->isSprinting = false;
+            // Only regenerate after delay has passed
+            if (playerComp->staminaRegenTimer > 0.0f) {
+                playerComp->staminaRegenTimer -= deltaTime;
+            } else {
+                playerComp->stamina = std::min(playerComp->maxStamina, playerComp->stamina + playerComp->staminaRegenRate * deltaTime);
+            }
         }
 
         // Flashlight toggle

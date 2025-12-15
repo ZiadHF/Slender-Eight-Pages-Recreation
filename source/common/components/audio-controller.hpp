@@ -19,7 +19,7 @@ namespace our {
 enum class AudioType {
     MUSIC,
     AMBIENCE,
-    JUMP_SCARE,
+    STAMINA,
     WALKING,
     FLASHLIGHT,
     PAGE_COLLECT,
@@ -54,6 +54,7 @@ class AudioController : public Component {
     static std::string getID() { return "Audio Controller"; }
 
     AudioType getAudioType() const { return audioType; }
+    bool isMusicStarted() const { return musicStarted; }
 
     AudioController();
     ~AudioController();

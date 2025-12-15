@@ -934,9 +934,17 @@
                         "audioType": "STATIC"
                     },
                     {
+                        "type": "Audio Controller",
+                        "audioType": "STAMINA"
+                    },
+                    {
                         "type": "Player Component",
                         "walkSpeed": 4.0,
-                        "sprintSpeedup": 2.0
+                        "sprintSpeedup": 2.0,
+                        "maxStamina": 100.0,
+                        "staminaDrainRate": 7.0,
+                        "staminaRegenRate": 5.0,
+                        "staminaRegenDelay": 1.5
                     }
                 ],
                 "children": [
@@ -1271,13 +1279,6 @@
                         "type": "Mesh Renderer",
                         "mesh": "slender",
                         "material": "Slenderman"
-                    },
-                    {
-                        "type": "Audio Controller",
-                        "audioType": "JUMPSCARE",
-                        "audioFile": "assets/sounds/slender-jumpscare.wav",
-                        "loop": false,
-                        "volume": 0.7
                     },
                     {
                         "type": "Audio Controller",
