@@ -115,11 +115,11 @@ class PlayerComponent : public Component {
         maxHealth = data.value("maxHealth", maxHealth);
         healthRegenRate = data.value("healthRegenRate", healthRegenRate);
 
+        // Movement speeds
         if (data.contains("walkSpeed")) {
             float speed = data["walkSpeed"];
             walkSpeed = glm::vec3(speed);
         }
-        
         if (data.contains("sprintSpeedup")) {
             float speedup = data["sprintSpeedup"];
             sprintSpeedup = glm::vec3(speedup);

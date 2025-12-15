@@ -927,15 +927,11 @@
                     },
                     {
                         "type": "Audio Controller",
-                        "audioType": "FLASHLIGHT",
-                        "loop": false,
-                        "volume": 0.5
+                        "audioType": "FLASHLIGHT"
                     },
                     {
                         "type": "Audio Controller",
-                        "audioType": "WALKING",
-                        "loop": false,
-                        "volume": 0.5
+                        "audioType": "WALKING"
                     },
                     {
                         "type": "Audio Controller",
@@ -947,6 +943,8 @@
                     },
                     {
                         "type": "Player Component",
+                        "maxHealth": 100.0,
+                        "healthRegenRate": 5.0,
                         "walkSpeed": 4.0,
                         "sprintSpeedup": 2.0,
                         "maxStamina": 100.0,
@@ -1025,9 +1023,7 @@
                 "components": [
                     {
                         "type": "Audio Controller",
-                        "audioType": "PAGE_COLLECT",
-                        "volume": 0.7,
-                        "loop": false
+                        "audioType": "PAGE_COLLECT"
                     },
                     {
                         "type": "Page Spawner Component",
@@ -1229,6 +1225,8 @@
                         "pageTextures": [
                             "assets/textures/pages/page1.png",
                             "assets/textures/pages/page2.png",
+                            "assets/textures/pages/page3.png",
+                            "assets/textures/pages/page4.png",
                             "assets/textures/pages/smpage1.png",
                             "assets/textures/pages/smpage2.png",
                             "assets/textures/pages/smpage3.png",

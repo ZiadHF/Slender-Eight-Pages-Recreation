@@ -4,7 +4,9 @@ namespace our {
       public:
         // Total number of pages in the game
         int totalPages = 0;
+        // Spawn points and their rotations
         std::vector<std::pair<glm::vec3, glm::vec3>> spawnPoints;
+        // List of page texture filenames
         std::vector<std::string> pageTextures;
 
         static std::string getID() {
