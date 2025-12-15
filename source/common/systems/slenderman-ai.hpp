@@ -136,7 +136,7 @@ class SlendermanAISystem {
         glm::vec3 slenderPos =
             glm::vec3(slenderman->getLocalToWorldMatrix()[3]);
         float distance = glm::length(playerPos - slenderPos);
-
+        
         playerComp->distanceToSlenderman = distance;
 
         // Make slender always face the player
@@ -194,7 +194,10 @@ class SlendermanAISystem {
                       << ", InFrustum: " << isInFrustum
                       << ", IsLooking: " << isPlayerLooking
                       << ", IsInProximity: " << isPlayerInProximity
-                      << ", PlayerHealth: " << playerComp->health << std::endl;
+                      << ", PlayerHealth: " << playerComp->health 
+                      << ", gameTime/60: " << static_cast<int>(gameTime / 60.0f) 
+                      <<" , currentAIValue: " << slenderComp->currentAIValue <<
+                      std::endl;
         }
 
         // Teleportation logic
@@ -215,8 +218,8 @@ class SlendermanAISystem {
             // Check if teleportation should occur
             // AI value increases with pages collected and time played
             slenderComp->currentAIValue = std::min(
-                slenderComp->startingAIValue + playerComp->collectedPages +
-                    static_cast<int>(gameTime / 90.0f),
+                slenderComp->startingAIValue + playerComp->collectedPages*2 +
+                    static_cast<int>(gameTime / 60.0f),
                 slenderComp->maxAIValue);
 
             // Teleport if randomValue is less than to currentAIValue (stops any teleporting at level = 0)

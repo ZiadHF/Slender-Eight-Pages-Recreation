@@ -23,7 +23,7 @@ class AmbientTensionSystem {
                 for (auto* audio : audioComponents) {
                     if (audio->getAudioType() == AudioType::AMBIENCE) {
                         ambienceAudio = audio;
-                        ambienceAudio->volume = 0.4f;
+                        ambienceAudio->volume = 0.15f;
                         std::cout << "Ambient tension audio controller found."
                                   << std::endl;
                         break;
@@ -42,7 +42,7 @@ class AmbientTensionSystem {
             if (firstPlay) {
                 // First time, just play directly
                 if (ambienceAudio->initializeMusic(audioFile.c_str(), true)) {
-                    ambienceAudio->setVolume(0.1f);
+                    ambienceAudio->setVolume(0.15f);
                     ambienceAudio->playMusic();
                 }
                 firstPlay = false;
