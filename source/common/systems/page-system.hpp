@@ -26,7 +26,7 @@ class PageSystem {
     int totalPages = 0;
     std::vector<Entity*> spawnedPages;
     our::ShaderProgram* pageShader = nullptr;
-    float pageSphereSize = 0.275f;
+    float pageSphereSize = 0.5f;
     // Physics reference
     PhysicsSystem* physics = nullptr;
     // Text renderer reference
@@ -36,17 +36,11 @@ class PageSystem {
     std::unordered_map<Entity*, btRigidBody*> pageColliders;
 
     // Raycast parameters
-    float interactionDistance = 1.5f;  // Max distance player can interact
-
-    bool debugMode = true;  // Toggle for debug visualization
+    float interactionDistance = 1.7f;  // Max distance player can interact
 
     // Store camera info for debug rendering
     glm::vec3 lastCameraPos = glm::vec3(0);
     glm::vec3 lastCameraForward = glm::vec3(0, 0, -1);
-
-    // Track if currently looking at a collectible page
-    bool canCollectPage = false;
-    float closestPageDistance = -1.0f;
 
     void initialize(World* world, PhysicsSystem* physicsSystem,
                     TextRenderer* textRenderer,
@@ -273,8 +267,6 @@ class PageSystem {
             Entity* hitEntity = static_cast<Entity*>(hit.userData);
             auto* pageComp = hitEntity->getComponent<PageComponent>();
             if (pageComp && !pageComp->isCollected) {
-                canCollectPage = true;
-
                 // Only collect if interact was pressed
                 if (interactPressed) {
                     collectPage(hitEntity, pageComp, playerComp);

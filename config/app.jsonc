@@ -4,10 +4,10 @@
     "window": {
         "title": "Slender - The Eight Pages",
         "size": {
-            "width": 1280,
-            "height": 720
+            "width": 1980,
+            "height": 1080
         },
-        "fullscreen": false
+        "fullscreen": true
     },
     "scene": {
         "renderer": {

@@ -246,7 +246,7 @@ class SlendermanAISystem {
                 // More aggressive = spawn closer to player
                 float minSpawnDist =
                     slenderComp->closeDistance + 4.0f;  // Never spawn too close
-                float maxSpawnDist = slenderComp->detectionDistance * 3.0f;
+                float maxSpawnDist = slenderComp->detectionDistance * 2.0f;
                 float targetDist =
                     glm::mix(maxSpawnDist, minSpawnDist, aggressivenessRatio);
 
